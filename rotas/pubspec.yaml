@@ -1,0 +1,38 @@
+name: calculadora
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/number 0.png
+    - assets/number 1.png
+    - assets/number 2.png
+    - assets/number 3.png
+    - assets/number 4.png
+    - assets/number 5.png
+    - assets/number 6.png
+    - assets/number 7.png
+    - assets/number 8.png
+    - assets/number 9.png
+    - assets/operator division.png
+    - assets/operator minus.png
+    - assets/operator multiplication.png
+    - assets/operator plus.png
+    - assets/operator equal.png
