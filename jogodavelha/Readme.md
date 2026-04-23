@@ -138,8 +138,6 @@
 | **GitHub** | [github.com/ImArthz](https://github.com/ImArthz) |
 | **Curso / Instituição** | Engenharia da Computação – CEFET-MG |
 
-> ⚠️ **Para usar este markdown com seus próprios dados:**  
-> Substitua a URL da imagem, o nome, o e‑mail e o link do GitHub pelos seus.
  -------------------------------------------------------------------
  📌 INFORMAÇÕES RELEVANTES ADICIONAIS
  -------------------------------------------------------------------
