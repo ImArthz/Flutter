@@ -23,6 +23,8 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Item {
   String id;
@@ -54,16 +56,11 @@ class Item {
 }
 
 void main() {
-  runApp(
-     MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: JsonGenerator(),
-    ),
-  );
+  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: JsonGenerator()));
 }
 
 class JsonGenerator extends StatefulWidget {
-   JsonGenerator({super.key});
+  const JsonGenerator({super.key});
 
   @override
   State<JsonGenerator> createState() => _JsonGeneratorState();
@@ -86,7 +83,7 @@ class _JsonGeneratorState extends State<JsonGenerator> {
       'https://api.json-generator.com/templates/2Dql-W9dyJBZ/data',
     );
 
-     const token = '8669zehx27wi9u4riq4gnie3qlsj1i54bdipqf1y';
+    const token = '8669zehx27wi9u4riq4gnie3qlsj1i54bdipqf1y';
 
     try {
       final response = await http.get(
@@ -129,18 +126,12 @@ class _JsonGeneratorState extends State<JsonGenerator> {
   @override
   Widget build(BuildContext context) {
     if (carregando) {
-      return  Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     if (lista.isEmpty) {
-      return  Scaffold(
-        body: Center(
-          child: Text("Nenhum dado encontrado"),
-        ),
+      return const Scaffold(
+        body: Center(child: Text("Nenhum dado encontrado")),
       );
     }
 
@@ -148,22 +139,33 @@ class _JsonGeneratorState extends State<JsonGenerator> {
 
     return Scaffold(
       appBar: AppBar(
-        title:  Text('Projeto Json Generator Pdm'),
+        title: const Text('Projeto Json Generator Pdm'),
         centerTitle: true,
         backgroundColor: Colors.blue,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.info_outline),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SobrePage()),
+              );
+            },
+          ),
+        ],
       ),
       backgroundColor: Colors.grey[200],
       body: Padding(
-        padding:  EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: Column(
           children: [
             Container(
               width: double.infinity,
-              padding:  EdgeInsets.all(14),
+              padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(14),
-                boxShadow:  [
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.black26,
                     blurRadius: 8,
@@ -173,43 +175,49 @@ class _JsonGeneratorState extends State<JsonGenerator> {
               ),
               child: Column(
                 children: [
-                   Text(
+                  const Text(
                     'App de cadastro',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                   SizedBox(height: 12),
+
+                  const SizedBox(height: 12),
+
                   CircleAvatar(
                     radius: 42,
                     backgroundImage: NetworkImage(atual.fotoPerfil),
                   ),
-                   SizedBox(height: 12),
-                  Text(
-                    "ID: ${atual.id}",
-                    style:  TextStyle(fontSize: 14),
-                  ),
-                   SizedBox(height: 4),
+
+                  const SizedBox(height: 12),
+
+                  Text("ID: ${atual.id}", style: const TextStyle(fontSize: 14)),
+
+                  const SizedBox(height: 4),
+
                   Text(
                     "Nome: ${atual.nome}",
-                    style:  TextStyle(fontSize: 15),
+                    style: const TextStyle(fontSize: 15),
                   ),
-                   SizedBox(height: 4),
+
+                  const SizedBox(height: 4),
+
                   Text(
                     "Telefone: ${atual.telefone}",
-                    style:  TextStyle(fontSize: 15),
+                    style: const TextStyle(fontSize: 15),
                   ),
-                   SizedBox(height: 4),
+
+                  const SizedBox(height: 4),
+
                   Text(
                     "Endereço: ${atual.endereco}",
                     textAlign: TextAlign.center,
-                    style:  TextStyle(fontSize: 14),
+                    style: const TextStyle(fontSize: 14),
                   ),
-                   SizedBox(height: 10),
+
+                  const SizedBox(height: 10),
+
                   Container(
                     width: double.infinity,
-                    padding:  EdgeInsets.symmetric(
+                    padding: const EdgeInsets.symmetric(
                       horizontal: 10,
                       vertical: 8,
                     ),
@@ -221,10 +229,12 @@ class _JsonGeneratorState extends State<JsonGenerator> {
                     child: Text(
                       atual.observacao,
                       textAlign: TextAlign.center,
-                      style:  TextStyle(fontSize: 13),
+                      style: const TextStyle(fontSize: 13),
                     ),
                   ),
-                   SizedBox(height: 12),
+
+                  const SizedBox(height: 12),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -243,16 +253,18 @@ class _JsonGeneratorState extends State<JsonGenerator> {
                                   selecionarItem(index - 1);
                                 }
                               : null,
-                          child:  Text("<<<"),
+                          child: const Text("<<<"),
                         ),
                       ),
+
                       Text(
                         "${index + 1} / ${lista.length}",
-                        style:  TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),
                       ),
+
                       SizedBox(
                         width: 68,
                         height: 32,
@@ -268,7 +280,7 @@ class _JsonGeneratorState extends State<JsonGenerator> {
                                   selecionarItem(index + 1);
                                 }
                               : null,
-                          child:  Text(">>>"),
+                          child: const Text(">>>"),
                         ),
                       ),
                     ],
@@ -276,7 +288,9 @@ class _JsonGeneratorState extends State<JsonGenerator> {
                 ],
               ),
             ),
-             SizedBox(height: 10),
+
+            const SizedBox(height: 10),
+
             Expanded(
               child: ListView.builder(
                 itemCount: lista.length,
@@ -285,27 +299,25 @@ class _JsonGeneratorState extends State<JsonGenerator> {
                   bool selecionado = i == selectedIndex;
 
                   return Padding(
-                    padding:  EdgeInsets.only(bottom: 8),
+                    padding: const EdgeInsets.only(bottom: 8),
                     child: InkWell(
                       borderRadius: BorderRadius.circular(12),
                       onTap: () {
                         selecionarItem(i);
                       },
                       child: AnimatedContainer(
-                        duration:  Duration(milliseconds: 200),
-                        padding:  EdgeInsets.all(8),
+                        duration: const Duration(milliseconds: 200),
+                        padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                           color: selecionado
                               ? Colors.blue.withOpacity(0.12)
                               : Colors.white,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: selecionado
-                                ? Colors.blue
-                                : Colors.black12,
+                            color: selecionado ? Colors.blue : Colors.black12,
                             width: selecionado ? 1.5 : 1,
                           ),
-                          boxShadow:  [
+                          boxShadow: const [
                             BoxShadow(
                               color: Colors.black12,
                               blurRadius: 4,
@@ -325,7 +337,9 @@ class _JsonGeneratorState extends State<JsonGenerator> {
                                 fit: BoxFit.cover,
                               ),
                             ),
-                             SizedBox(width: 10),
+
+                            const SizedBox(width: 10),
+
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -333,43 +347,47 @@ class _JsonGeneratorState extends State<JsonGenerator> {
                                 children: [
                                   Text(
                                     item.nome,
-                                    style:  TextStyle(
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
                                     ),
                                   ),
-                                   SizedBox(height: 3),
+
+                                  const SizedBox(height: 3),
+
                                   Text(
                                     item.telefone,
-                                    style:  TextStyle(fontSize: 13),
+                                    style: const TextStyle(fontSize: 13),
                                   ),
-                                   SizedBox(height: 3),
+
+                                  const SizedBox(height: 3),
+
                                   Text(
                                     item.endereco,
-                                    style:  TextStyle(fontSize: 13),
+                                    style: const TextStyle(fontSize: 13),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                   SizedBox(height: 6),
+
+                                  const SizedBox(height: 6),
+
                                   Container(
                                     width: double.infinity,
-                                    padding:  EdgeInsets.symmetric(
+                                    padding: const EdgeInsets.symmetric(
                                       horizontal: 8,
                                       vertical: 6,
                                     ),
                                     decoration: BoxDecoration(
                                       color: Colors.grey[100],
                                       borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                        color: Colors.black12,
-                                      ),
+                                      border: Border.all(color: Colors.black12),
                                     ),
                                     child: Text(
                                       item.observacao,
                                       textAlign: TextAlign.center,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
-                                      style:  TextStyle(fontSize: 12),
+                                      style: const TextStyle(fontSize: 12),
                                     ),
                                   ),
                                 ],
@@ -381,6 +399,205 @@ class _JsonGeneratorState extends State<JsonGenerator> {
                     ),
                   );
                 },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ================= SOBRE =================
+
+class SobrePage extends StatelessWidget {
+  const SobrePage({super.key});
+
+  Future<void> abrirRepositorio() async {
+    final Uri url = Uri.parse(
+      'https://github.com/ImArthz/Flutter/tree/master/jsongenerator',
+    );
+
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  Future<void> abrirGithub() async {
+    final Uri url = Uri.parse('https://github.com/ImArthz');
+
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Sobre o Projeto'),
+        centerTitle: true,
+        backgroundColor: Colors.blue,
+      ),
+      backgroundColor: Colors.grey[200],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(25),
+              decoration: const BoxDecoration(
+                color: Colors.blue,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(22),
+                  bottomRight: Radius.circular(22),
+                ),
+              ),
+              child: Column(
+                children: [
+                  const CircleAvatar(
+                    radius: 55,
+                    backgroundImage: NetworkImage(
+                      'https://avatars.githubusercontent.com/u/135072001?v=4',
+                    ),
+                  ),
+
+                  const SizedBox(height: 15),
+
+                  const Text(
+                    'ImArthz',
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  const Text(
+                    'Projeto Flutter utilizando Json Generator',
+                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            Padding(
+              padding: const EdgeInsets.all(14),
+              child: Container(
+                padding: const EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(18),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 6,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    const Row(
+                      children: [
+                        Icon(Icons.code, color: Colors.blue),
+                        SizedBox(width: 8),
+                        Text(
+                          'Guia / Repositório',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 14),
+
+                    const Text(
+                      'Neste repositório você encontra o código completo do app, exemplos utilizando Json Generator, Flutter e consumo de API.',
+                      style: TextStyle(fontSize: 14),
+                      textAlign: TextAlign.justify,
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    // BOTÃO REPOSITÓRIO
+                    InkWell(
+                      borderRadius: BorderRadius.circular(14),
+                      onTap: abrirRepositorio,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 14,
+                          horizontal: 14,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.folder_open, color: Colors.white),
+                            SizedBox(width: 10),
+                            Text(
+                              'Abrir Repositório',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 12),
+
+                    // BOTÃO GITHUB
+                    InkWell(
+                      borderRadius: BorderRadius.circular(14),
+                      onTap: abrirGithub,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 14,
+                          horizontal: 14,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.person, color: Colors.white),
+                            SizedBox(width: 10),
+                            Text(
+                              'Meu GitHub',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 14),
+
+                    
+                  ],
+                ),
               ),
             ),
           ],
