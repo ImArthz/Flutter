@@ -60,41 +60,41 @@ Utilizado para atualização dinâmica da interface durante:
 ## Consumo de API REST
 
 A aplicação utiliza requisição HTTP GET para acessar dados externos:
-
+```
 final response = await http.get(uri);
-
+```
 -------------------------------------------------------------------
 
 ## Desserialização JSON
 
 Os dados recebidos são convertidos em objetos Dart através do método:
-
+```
 factory Item.fromJson(Map<String, dynamic> dados)
-
+```
 -------------------------------------------------------------------
 
 ## ListView.builder
 
 Renderização otimizada para grandes quantidades de dados.
-
+```
 ListView.builder(
   itemCount: lista.length,
 )
-
+```
 -------------------------------------------------------------------
 
 ## Navegação entre telas
 
 Implementada utilizando:
-
+```
 Navigator.push()
-
+```
 -------------------------------------------------------------------
 
 # Estrutura dos Dados
 
 Cada registro possui:
-
+```
 {
   "id": 1,
   "nome": "João Silva",
@@ -103,7 +103,7 @@ Cada registro possui:
   "fotoPerfil": "https://picsum.photos/200",
   "observacao": "Usuário cadastrado."
 }
-
+```
 -------------------------------------------------------------------
 
 # Interface
@@ -138,40 +138,40 @@ O aplicativo possui:
 -------------------------------------------------------------------
 
 # Dependências
-
+```
 dependencies:
   flutter:
     sdk: flutter
 
   http: ^1.2.1
   url_launcher: ^6.2.5
-
+```
 -------------------------------------------------------------------
 
 # Como Executar
 
 ## 1. Clone o repositório
-
+```bash
 git clone https://github.com/ImArthz/Flutter.git
-
+```
 -------------------------------------------------------------------
 
 ## 2. Entre na pasta
-
+```
 cd Flutter/jsongenerator
-
+```
 -------------------------------------------------------------------
 
 ## 3. Instale as dependências
-
+```
 flutter pub get
-
+```
 -------------------------------------------------------------------
 
 ## 4. Execute o projeto
-
+```
 flutter run
-
+```
 -------------------------------------------------------------------
 # Autor
 
