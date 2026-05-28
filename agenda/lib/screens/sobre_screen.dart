@@ -34,7 +34,7 @@ class SobreScreen extends StatelessWidget {
               const SizedBox(height: 24),
               ElevatedButton.icon(
                 onPressed: () => _launchUrl(
-                    'https://github.com/ImArthz/Flutter/tree/master/jsongenerator'),
+                    'https://github.com/ImArthz/Flutter/tree/master/agenda'),
                 icon: const Icon(Icons.folder_open),
                 label: const Text('Repositório do Projeto'),
               ),

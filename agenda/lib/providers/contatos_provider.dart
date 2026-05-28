@@ -1,6 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart';
 import '../models/contato.dart';
-
 class ContatosProvider extends ChangeNotifier {
   List<Contato> _contatos = [];
   int _currentIndex = 0;
@@ -105,4 +108,28 @@ class ContatosProvider extends ChangeNotifier {
   List<Map<String, dynamic>> toJsonList() {
     return _contatos.map((c) => c.toJson()).toList();
   }
+  Future<void> reloadFromLocalFile() async {
+    try {
+      final dir = await getApplicationDocumentsDirectory();
+      final file = File('${dir.path}/contatos_salvos.json');
+      if (await file.exists()) {
+        final jsonString = await file.readAsString();
+        final List<dynamic> jsonList = json.decode(jsonString);
+        _contatos = jsonList.map((e) => Contato.fromJson(e)).toList();
+      } else {
+        // Carrega do asset
+        final assetString = await rootBundle.loadString('assets/data/contatos.json');
+        final List<dynamic> jsonList = json.decode(assetString);
+        _contatos = jsonList.map((e) => Contato.fromJson(e)).toList();
+      }
+      // Ajusta o índice atual para não ficar fora da lista
+      if (_currentIndex >= _contatos.length) {
+        _currentIndex = _contatos.isEmpty ? 0 : _contatos.length - 1;
+      }
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Erro ao recarregar: $e');
+    }
+  }
 }
+

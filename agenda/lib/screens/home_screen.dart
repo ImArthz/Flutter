@@ -23,7 +23,9 @@ class HomeScreen extends StatelessWidget {
             onPressed: () {
               provider.deleteCurrent();
               Navigator.pop(ctx);
-              onDelete();
+              onDelete(); // volta para a aba Início
+              // Recarrega do arquivo para garantir consistência
+              provider.reloadFromLocalFile();
             },
             child: const Text('Excluir', style: TextStyle(color: Colors.red)),
           ),
@@ -32,13 +34,17 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  void _editar(BuildContext context, int index) {
-    Navigator.push(
+  void _editar(BuildContext context, int index) async {
+    // Aguarda o retorno da tela de edição
+    await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (_) => EditarContatoScreen(index: index),
       ),
     );
+    // Após editar (ou mesmo se voltar sem salvar), recarrega do disco
+    final provider = context.read<ContatosProvider>();
+    provider.reloadFromLocalFile();
   }
 
   @override
@@ -46,7 +52,16 @@ class HomeScreen extends StatelessWidget {
     final provider = context.watch<ContatosProvider>();
     if (provider.contatos.isEmpty) {
       return Scaffold(
-        appBar: AppBar(title: const Text('Contato')),
+        appBar: AppBar(
+          title: const Text('Contato'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.refresh),
+              tooltip: 'Recarregar',
+              onPressed: () => provider.reloadFromLocalFile(),
+            ),
+          ],
+        ),
         body: const Center(child: Text('Nenhum contato cadastrado.')),
       );
     }
@@ -59,6 +74,11 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Contato'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            tooltip: 'Recarregar',
+            onPressed: () => provider.reloadFromLocalFile(),
+          ),
           IconButton(
             icon: const Icon(Icons.edit),
             tooltip: 'Editar',
@@ -75,9 +95,12 @@ class HomeScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            _buildProfileImage(contato.fotoPerfil),
+            // Foto de perfil com fallback
+            _buildProfileImage(contato.fotoPerfil, contato.id),
             const SizedBox(height: 20),
+            // Campos com key única para forçar recriação ao mudar de contato
             TextFormField(
+              key: ValueKey('nome_${contato.id}'),
               initialValue: contato.nome,
               readOnly: true,
               decoration: const InputDecoration(
@@ -85,6 +108,7 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             TextFormField(
+              key: ValueKey('tel_${contato.id}'),
               initialValue: contato.telefone,
               readOnly: true,
               decoration: const InputDecoration(
@@ -92,6 +116,7 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             TextFormField(
+              key: ValueKey('end_${contato.id}'),
               initialValue: contato.endereco,
               readOnly: true,
               decoration: const InputDecoration(
@@ -99,6 +124,7 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             TextFormField(
+              key: ValueKey('obs_${contato.id}'),
               initialValue: contato.observacao,
               readOnly: true,
               maxLines: 3,
@@ -106,6 +132,7 @@ class HomeScreen extends StatelessWidget {
                   labelText: 'Observações', border: OutlineInputBorder()),
             ),
             const SizedBox(height: 20),
+            // Navegação
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -152,7 +179,8 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileImage(String path) {
+  // Adicionei o parâmetro 'id' para usar na key, mas não é obrigatório
+  Widget _buildProfileImage(String path, String id) {
     ImageProvider provider;
     if (path.startsWith('http')) {
       provider = NetworkImage(path);
@@ -163,6 +191,7 @@ class HomeScreen extends StatelessWidget {
     }
 
     return ClipOval(
+      key: ValueKey('foto_$id'), // também forçará atualização da imagem
       child: Image(
         image: provider,
         width: 120,
