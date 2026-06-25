@@ -8,6 +8,7 @@ import '../models/venda_model.dart';
 import '../providers/carrinho_provider.dart';
 import '../providers/usuario_provider.dart';
 import '../providers/auth_provider.dart';
+import '../widgets/drawer_widget.dart';
 
 class VendasScreen extends StatefulWidget {
   @override
@@ -19,6 +20,7 @@ class _VendasScreenState extends State<VendasScreen> {
   Cliente? _clienteSelecionado;
   Produto? _produtoSelecionado;
   int _quantidade = 1;
+  bool _isFinalizando = false; // <-- DECLARADO
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +38,7 @@ class _VendasScreenState extends State<VendasScreen> {
           ),
         ],
       ),
+      drawer: DrawerWidget(),
       body: Column(
         children: [
           // Selecionar Cliente
@@ -51,16 +54,25 @@ class _VendasScreenState extends State<VendasScreen> {
                     SizedBox(height: 8),
                     _clienteSelecionado == null
                         ? ElevatedButton.icon(
-                            onPressed: _selecionarCliente,
+                            onPressed: _isFinalizando
+                                ? null
+                                : _selecionarCliente,
                             icon: Icon(Icons.person_add),
                             label: Text('Selecionar Cliente'),
                           )
                         : ListTile(
-                            title: Text(_clienteSelecionado!.nome, style: TextStyle(color: Colors.white)),
+                            title: Text(
+                              _clienteSelecionado!.nome,
+                              style: TextStyle(color: Colors.white),
+                            ),
                             subtitle: Text('CPF: ${_clienteSelecionado!.cpf}'),
                             trailing: IconButton(
                               icon: Icon(Icons.close, color: Colors.red),
-                              onPressed: () => setState(() => _clienteSelecionado = null),
+                              onPressed: _isFinalizando
+                                  ? null
+                                  : () => setState(
+                                      () => _clienteSelecionado = null,
+                                    ),
                             ),
                           ),
                   ],
@@ -80,15 +92,19 @@ class _VendasScreenState extends State<VendasScreen> {
                     Expanded(
                       child: _produtoSelecionado == null
                           ? ElevatedButton.icon(
-                              onPressed: _selecionarProduto,
+                              onPressed: _isFinalizando
+                                  ? null
+                                  : _selecionarProduto,
                               icon: Icon(Icons.add_shopping_cart),
                               label: Text('Adicionar Produto'),
                             )
                           : Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(_produtoSelecionado!.descricao,
-                                    style: TextStyle(color: Colors.white)),
+                                Text(
+                                  _produtoSelecionado!.descricao,
+                                  style: TextStyle(color: Colors.white),
+                                ),
                                 Text(
                                   'Preço: R\$ ${_produtoSelecionado!.precoUnitario.toStringAsFixed(2)}',
                                   style: TextStyle(color: Colors.white70),
@@ -96,32 +112,61 @@ class _VendasScreenState extends State<VendasScreen> {
                                 Row(
                                   children: [
                                     IconButton(
-                                      icon: Icon(Icons.remove, color: Colors.white),
-                                      onPressed: () {
-                                        if (_quantidade > 1) setState(() => _quantidade--);
-                                      },
+                                      icon: Icon(
+                                        Icons.remove,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: _isFinalizando
+                                          ? null
+                                          : () {
+                                              if (_quantidade > 1)
+                                                setState(() => _quantidade--);
+                                            },
                                     ),
-                                    Text('$_quantidade', style: TextStyle(color: Colors.white, fontSize: 18)),
+                                    Text(
+                                      '$_quantidade',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                      ),
+                                    ),
                                     IconButton(
-                                      icon: Icon(Icons.add, color: Colors.white),
-                                      onPressed: () => setState(() => _quantidade++),
+                                      icon: Icon(
+                                        Icons.add,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: _isFinalizando
+                                          ? null
+                                          : () => setState(() => _quantidade++),
                                     ),
                                     SizedBox(width: 16),
                                     ElevatedButton(
-                                      onPressed: () {
-                                        if (_produtoSelecionado != null) {
-                                          carrinho.adicionarItem(_produtoSelecionado!, _quantidade);
-                                          setState(() {
-                                            _produtoSelecionado = null;
-                                            _quantidade = 1;
-                                          });
-                                        }
-                                      },
+                                      onPressed: _isFinalizando
+                                          ? null
+                                          : () {
+                                              if (_produtoSelecionado != null) {
+                                                carrinho.adicionarItem(
+                                                  _produtoSelecionado!,
+                                                  _quantidade,
+                                                );
+                                                setState(() {
+                                                  _produtoSelecionado = null;
+                                                  _quantidade = 1;
+                                                });
+                                              }
+                                            },
                                       child: Text('Adicionar'),
                                     ),
                                     IconButton(
-                                      icon: Icon(Icons.close, color: Colors.red),
-                                      onPressed: () => setState(() => _produtoSelecionado = null),
+                                      icon: Icon(
+                                        Icons.close,
+                                        color: Colors.red,
+                                      ),
+                                      onPressed: _isFinalizando
+                                          ? null
+                                          : () => setState(
+                                              () => _produtoSelecionado = null,
+                                            ),
                                     ),
                                   ],
                                 ),
@@ -137,22 +182,35 @@ class _VendasScreenState extends State<VendasScreen> {
           // Lista do Carrinho
           Expanded(
             child: carrinho.itens.isEmpty
-                ? Center(child: Text('Carrinho vazio', style: TextStyle(color: Colors.white54)))
+                ? Center(
+                    child: Text(
+                      'Carrinho vazio',
+                      style: TextStyle(color: Colors.white54),
+                    ),
+                  )
                 : ListView.builder(
                     itemCount: carrinho.itens.length,
                     itemBuilder: (ctx, index) {
                       var item = carrinho.itens[index];
                       return Card(
-                        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                        margin: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 4,
+                        ),
                         child: ListTile(
-                          title: Text(item.descricao, style: TextStyle(color: Colors.white)),
+                          title: Text(
+                            item.descricao,
+                            style: TextStyle(color: Colors.white),
+                          ),
                           subtitle: Text(
                             'Qtd: ${item.quantidade} x R\$ ${item.precoUnitario.toStringAsFixed(2)} = R\$ ${item.subtotal.toStringAsFixed(2)}',
                             style: TextStyle(color: Colors.white70),
                           ),
                           trailing: IconButton(
                             icon: Icon(Icons.delete, color: Colors.red),
-                            onPressed: () => carrinho.removerItem(item.idProduto),
+                            onPressed: _isFinalizando
+                                ? null
+                                : () => carrinho.removerItem(item.idProduto),
                           ),
                         ),
                       );
@@ -179,11 +237,22 @@ class _VendasScreenState extends State<VendasScreen> {
                   ),
                 ),
                 ElevatedButton.icon(
-                  onPressed: carrinho.itens.isEmpty || _clienteSelecionado == null
+                  onPressed:
+                      (carrinho.itens.isEmpty ||
+                          _clienteSelecionado == null ||
+                          _isFinalizando)
                       ? null
                       : () => _finalizarVenda(carrinho, usuarioProvider, auth),
-                  icon: Icon(Icons.check),
-                  label: Text('Finalizar Venda'),
+                  icon: _isFinalizando
+                      ? SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : Icon(Icons.check),
+                  label: Text(
+                    _isFinalizando ? 'Finalizando...' : 'Finalizar Venda',
+                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF00BCD4),
                   ),
@@ -199,16 +268,19 @@ class _VendasScreenState extends State<VendasScreen> {
   Future<void> _selecionarCliente() async {
     final clientes = await _firestore.streamClientes().first;
     if (clientes.docs.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Nenhum cliente cadastrado!')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Nenhum cliente cadastrado!')));
       return;
     }
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
         backgroundColor: Color(0xFF1E1E1E),
-        title: Text('Selecione um Cliente', style: TextStyle(color: Colors.white)),
+        title: Text(
+          'Selecione um Cliente',
+          style: TextStyle(color: Colors.white),
+        ),
         content: Container(
           width: double.maxFinite,
           child: ListView.builder(
@@ -218,7 +290,10 @@ class _VendasScreenState extends State<VendasScreen> {
               var data = clientes.docs[index].data() as Map<String, dynamic>;
               var cliente = Cliente.fromMap(clientes.docs[index].id, data);
               return ListTile(
-                title: Text(cliente.nome, style: TextStyle(color: Colors.white)),
+                title: Text(
+                  cliente.nome,
+                  style: TextStyle(color: Colors.white),
+                ),
                 subtitle: Text('CPF: ${cliente.cpf}'),
                 onTap: () {
                   setState(() => _clienteSelecionado = cliente);
@@ -235,16 +310,19 @@ class _VendasScreenState extends State<VendasScreen> {
   Future<void> _selecionarProduto() async {
     final produtos = await _firestore.streamProdutos().first;
     if (produtos.docs.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Nenhum produto cadastrado!')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Nenhum produto cadastrado!')));
       return;
     }
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
         backgroundColor: Color(0xFF1E1E1E),
-        title: Text('Selecione um Produto', style: TextStyle(color: Colors.white)),
+        title: Text(
+          'Selecione um Produto',
+          style: TextStyle(color: Colors.white),
+        ),
         content: Container(
           width: double.maxFinite,
           child: ListView.builder(
@@ -254,7 +332,10 @@ class _VendasScreenState extends State<VendasScreen> {
               var data = produtos.docs[index].data() as Map<String, dynamic>;
               var produto = Produto.fromMap(produtos.docs[index].id, data);
               return ListTile(
-                title: Text(produto.descricao, style: TextStyle(color: Colors.white)),
+                title: Text(
+                  produto.descricao,
+                  style: TextStyle(color: Colors.white),
+                ),
                 subtitle: Text(
                   'Estoque: ${produto.quantidadeEstoque} | R\$ ${produto.precoUnitario.toStringAsFixed(2)}',
                 ),
@@ -270,7 +351,33 @@ class _VendasScreenState extends State<VendasScreen> {
     );
   }
 
-  Future<void> _finalizarVenda(CarrinhoProvider carrinho, UsuarioProvider usuario, AuthProvider auth) async {
+  Future<void> _finalizarVenda(
+    CarrinhoProvider carrinho,
+    UsuarioProvider usuario,
+    AuthProvider auth,
+  ) async {
+    if (_clienteSelecionado == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Selecione um cliente!'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    if (carrinho.itens.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Carrinho vazio!'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    setState(() => _isFinalizando = true);
+
     try {
       final venda = Venda(
         id: '',
@@ -280,16 +387,31 @@ class _VendasScreenState extends State<VendasScreen> {
         itens: List.from(carrinho.itens),
         total: carrinho.total,
       );
+
       await _firestore.finalizarVenda(venda);
       carrinho.limparCarrinho();
       setState(() => _clienteSelecionado = null);
+
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Venda finalizada com sucesso!'), backgroundColor: Colors.green),
+        const SnackBar(
+          content: Text('Venda finalizada com sucesso!'),
+          backgroundColor: Colors.green,
+        ),
       );
     } catch (e) {
+      String mensagem = e.toString();
+      if (mensagem.contains('permission-denied')) {
+        mensagem = 'Erro de permissão. Verifique as regras do Firestore.';
+      } else if (mensagem.contains('Estoque insuficiente')) {
+        mensagem = mensagem.replaceFirst('Exception: ', '');
+      } else if (mensagem.contains('Dart exception')) {
+        mensagem = 'Erro interno: $e';
+      }
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erro: $e'), backgroundColor: Colors.red),
+        SnackBar(content: Text('Erro: $mensagem'), backgroundColor: Colors.red),
       );
+    } finally {
+      setState(() => _isFinalizando = false);
     }
   }
 }

@@ -5,6 +5,7 @@ import '../services/firestore_service.dart';
 import '../models/produto_model.dart';
 import '../providers/usuario_provider.dart';
 import '../widgets/custom_text_field.dart';
+import '../widgets/drawer_widget.dart';
 
 class ProdutosScreen extends StatefulWidget {
   @override
@@ -144,6 +145,7 @@ class _ProdutosScreenState extends State<ProdutosScreen> {
             ),
         ],
       ),
+      drawer: DrawerWidget(),
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore.streamProdutos(),
         builder: (context, snapshot) {

@@ -4,8 +4,13 @@ import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'providers/auth_provider.dart';
 import 'providers/usuario_provider.dart';
+import 'providers/carrinho_provider.dart';
 import 'screens/login_screen.dart';
 import 'screens/home_screen.dart';
+import 'screens/vendas_screen.dart';              // <-- IMPORTANTE
+import 'screens/clientes_screen.dart';            // <-- IMPORTANTE
+import 'screens/produtos_screen.dart';            // <-- IMPORTANTE
+import 'screens/gerenciar_usuarios_screen.dart';  // <-- IMPORTANTE
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +25,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => UsuarioProvider()),
+        ChangeNotifierProvider(create: (_) => CarrinhoProvider()),
       ],
       child: MaterialApp(
         title: 'GameStore Vendas',
@@ -79,12 +85,19 @@ class MyApp extends StatelessWidget {
             elevation: 4,
           ),
         ),
+        routes: {
+          '/home': (context) => HomeScreen(),
+          '/vendas': (context) => VendasScreen(),
+          '/clientes': (context) => ClientesScreen(),
+          '/produtos': (context) => ProdutosScreen(),
+          '/gerenciar_usuarios': (context) => GerenciarUsuariosScreen(),
+        },
         home: Consumer<AuthProvider>(
           builder: (context, auth, _) {
             if (auth.user != null) {
-              return  HomeScreen();
+              return HomeScreen();
             } else {
-              return  LoginScreen();
+              return LoginScreen();
             }
           },
         ),

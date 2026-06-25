@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../services/firestore_service.dart';
 import '../models/cliente_model.dart';
 import '../widgets/custom_text_field.dart';
+import '../widgets/drawer_widget.dart';
 
 class ClientesScreen extends StatefulWidget {
   @override
@@ -16,7 +17,7 @@ class _ClientesScreenState extends State<ClientesScreen> {
   final _cpfController = TextEditingController();
   final _telefoneController = TextEditingController();
   final _enderecoController = TextEditingController();
-  String? _editingId; // Armazena ID do cliente em edição
+  String? _editingId;
 
   @override
   void dispose() {
@@ -126,6 +127,7 @@ class _ClientesScreenState extends State<ClientesScreen> {
           ),
         ],
       ),
+      drawer: DrawerWidget(),
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore.streamClientes(),
         builder: (context, snapshot) {

@@ -70,32 +70,51 @@ class FirestoreService {
     return null;
   }
 
-  // -------------------- VENDAS --------------------
   Future<void> finalizarVenda(Venda venda) async {
-    await _firestore.runTransaction((transaction) async {
-      // 1. Salvar a venda
-      DocumentReference vendaRef = _firestore.collection('vendas').doc();
-      transaction.set(vendaRef, venda.toMap());
+  try {
+    print('🟢 Iniciando finalização da venda (batch)...');
 
-      // 2. Atualizar estoque para cada item
-      for (var item in venda.itens) {
-        DocumentReference prodRef = _firestore.collection('produtos').doc(item.idProduto);
-        DocumentSnapshot prodSnap = await transaction.get(prodRef);
-        if (!prodSnap.exists) {
-          throw Exception('Produto não encontrado: ${item.descricao}');
-        }
-        int estoqueAtual = prodSnap.get('quantidadeEstoque') ?? 0;
-        if (estoqueAtual < item.quantidade) {
-          throw Exception('Estoque insuficiente para ${item.descricao}');
-        }
-        transaction.update(prodRef, {
-          'quantidadeEstoque': estoqueAtual - item.quantidade,
-        });
+    // Verifica se os itens têm IDs válidos
+    for (var item in venda.itens) {
+      if (item.idProduto.isEmpty) {
+        throw Exception('ID do produto vazio para ${item.descricao}');
       }
-    });
-  }
+    }
 
-  Stream<QuerySnapshot> streamVendas() {
-    return _firestore.collection('vendas').snapshots();
+    // Usando WriteBatch em vez de transação para evitar possíveis problemas de concorrência
+    WriteBatch batch = _firestore.batch();
+
+    // 1. Salvar a venda
+    DocumentReference vendaRef = _firestore.collection('vendas').doc();
+    batch.set(vendaRef, venda.toMap());
+
+    // 2. Atualizar estoque
+    for (var item in venda.itens) {
+      DocumentReference prodRef = _firestore.collection('produtos').doc(item.idProduto);
+      DocumentSnapshot prodSnap = await prodRef.get();
+      if (!prodSnap.exists) {
+        throw Exception('Produto não encontrado: ${item.descricao}');
+      }
+      int estoqueAtual = prodSnap.get('quantidadeEstoque') ?? 0;
+      if (estoqueAtual < item.quantidade) {
+        throw Exception('Estoque insuficiente para ${item.descricao} (disponível: $estoqueAtual, necessário: ${item.quantidade})');
+      }
+      int novoEstoque = estoqueAtual - item.quantidade;
+      batch.update(prodRef, {
+        'quantidadeEstoque': novoEstoque,
+      });
+    }
+
+    // Executa o batch
+    await batch.commit();
+    print('✅ Venda finalizada com sucesso!');
+  } catch (e) {
+    print('❌ ERRO NA FINALIZAÇÃO: $e');
+    if (e is FirebaseException) {
+      print('Código do erro: ${e.code}');
+      print('Mensagem: ${e.message}');
+    }
+    rethrow;
   }
+}
 }

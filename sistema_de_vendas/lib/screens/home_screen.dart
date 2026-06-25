@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Color(0xFF1E1E1E),
         selectedItemColor: Color(0xFF7B2FBE),
         unselectedItemColor: Colors.white54,
-        items: [
+        items: const [
           BottomNavigationBarItem(icon: Icon(Icons.shopping_cart), label: 'Vendas'),
           BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Clientes'),
           BottomNavigationBarItem(icon: Icon(Icons.inventory), label: 'Produtos'),

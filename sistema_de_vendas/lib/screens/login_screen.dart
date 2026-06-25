@@ -29,15 +29,19 @@ class _LoginScreenState extends State<LoginScreen> {
       final auth = Provider.of<AuthProvider>(context, listen: false);
       await auth.login(_emailController.text, _senhaController.text);
       
-      // Carrega dados do usuário logado
       final user = auth.user;
       if (user != null) {
         final usuarioProvider = Provider.of<UsuarioProvider>(context, listen: false);
         usuarioProvider.carregarUsuario(user.uid);
       }
     } catch (e) {
+      String mensagem = e.toString().replaceFirst('Exception: ', '');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erro: $e'), backgroundColor: Colors.red),
+        SnackBar(
+          content: Text(mensagem, style: TextStyle(color: Colors.white)),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 4),
+        ),
       );
     } finally {
       setState(() => _isLoading = false);
