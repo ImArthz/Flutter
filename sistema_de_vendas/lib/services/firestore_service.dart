@@ -117,4 +117,90 @@ class FirestoreService {
     rethrow;
   }
 }
+// NOVAS FUNÇÕES - Adicione dentro da classe FirestoreService
+
+// -------------------- VENDAS --------------------
+Stream<QuerySnapshot> streamVendas() {
+  return _firestore.collection('vendas')
+    .orderBy('data', descending: true)
+    .snapshots();
+}
+
+Future<List<Venda>> getVendasPorCliente(String idCliente) async {
+  QuerySnapshot snapshot = await _firestore
+    .collection('vendas')
+    .where('idCliente', isEqualTo: idCliente)
+    .orderBy('data', descending: true)
+    .get();
+  
+  return snapshot.docs.map((doc) {
+    return Venda.fromMap(doc.id, doc.data() as Map<String, dynamic>);
+  }).toList();
+}
+
+Future<List<Venda>> getVendasPorPeriodo(DateTime inicio, DateTime fim) async {
+  QuerySnapshot snapshot = await _firestore
+    .collection('vendas')
+    .where('data', isGreaterThanOrEqualTo: Timestamp.fromDate(inicio))
+    .where('data', isLessThanOrEqualTo: Timestamp.fromDate(fim))
+    .orderBy('data', descending: true)
+    .get();
+  
+  return snapshot.docs.map((doc) {
+    return Venda.fromMap(doc.id, doc.data() as Map<String, dynamic>);
+  }).toList();
+}
+
+Future<double> getSaldoAtual() async {
+  // Pega todas as vendas (entradas)
+  QuerySnapshot vendasSnapshot = await _firestore
+    .collection('vendas')
+    .where('status', isEqualTo: 'finalizada')
+    .get();
+  
+  double totalEntradas = 0;
+  for (var doc in vendasSnapshot.docs) {
+    totalEntradas += (doc['total'] ?? 0).toDouble();
+  }
+  
+  // Pega todas as retiradas (saídas)
+  QuerySnapshot retiradasSnapshot = await _firestore
+    .collection('financeiro')
+    .where('tipo', isEqualTo: 'saida')
+    .get();
+  
+  double totalSaidas = 0;
+  for (var doc in retiradasSnapshot.docs) {
+    totalSaidas += (doc['valor'] ?? 0).toDouble();
+  }
+  
+  return totalEntradas - totalSaidas;
+}
+
+Future<void> registrarRetirada({
+  required double valor,
+  required String descricao,
+  required String responsavel,
+}) async {
+  await _firestore.collection('financeiro').add({
+    'tipo': 'saida',
+    'valor': valor,
+    'descricao': descricao,
+    'data': Timestamp.now(),
+    'responsavel': responsavel,
+  });
+}
+
+Stream<QuerySnapshot> streamFinanceiro() {
+  return _firestore.collection('financeiro')
+    .orderBy('data', descending: true)
+    .snapshots();
+}
+
+// -------------------- USUÁRIO (atualização com foto) --------------------
+Future<void> atualizarFotoBase64(String uid, String fotoBase64) async {
+  await _firestore.collection('usuarios').doc(uid).update({
+    'fotoBase64': fotoBase64,
+  });
+}
 }

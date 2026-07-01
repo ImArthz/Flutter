@@ -51,7 +51,7 @@ class ContatosProvider extends ChangeNotifier {
     }
   }
 
-  // NOVO MÉTODO: atualiza pelo índice, sem depender do estado atual
+  
   void updateAtIndex(int index, Contato updated) {
     if (index >= 0 && index < _contatos.length) {
       _contatos[index] = updated;

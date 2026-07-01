@@ -2,8 +2,9 @@ class Usuario {
   final String uid;
   final String nome;
   final String email;
-  final String nivel; // 'A', 'B', 'gerente'
+  final String nivel;
   final bool ativo;
+  final String? fotoBase64;   // <-- alterado
 
   Usuario({
     required this.uid,
@@ -11,6 +12,7 @@ class Usuario {
     required this.email,
     required this.nivel,
     this.ativo = true,
+    this.fotoBase64,           // <-- alterado
   });
 
   Map<String, dynamic> toMap() {
@@ -19,6 +21,7 @@ class Usuario {
       'email': email,
       'nivel': nivel,
       'ativo': ativo,
+      'fotoBase64': fotoBase64,   // <-- alterado
     };
   }
 
@@ -29,6 +32,7 @@ class Usuario {
       email: map['email'] ?? '',
       nivel: map['nivel'] ?? 'B',
       ativo: map['ativo'] ?? true,
+      fotoBase64: map['fotoBase64'],   // <-- alterado
     );
   }
 }

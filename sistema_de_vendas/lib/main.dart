@@ -11,6 +11,7 @@ import 'screens/vendas_screen.dart';              // <-- IMPORTANTE
 import 'screens/clientes_screen.dart';            // <-- IMPORTANTE
 import 'screens/produtos_screen.dart';            // <-- IMPORTANTE
 import 'screens/gerenciar_usuarios_screen.dart';  // <-- IMPORTANTE
+import 'screens/perfil_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -91,6 +92,7 @@ class MyApp extends StatelessWidget {
           '/clientes': (context) => ClientesScreen(),
           '/produtos': (context) => ProdutosScreen(),
           '/gerenciar_usuarios': (context) => GerenciarUsuariosScreen(),
+           '/perfil': (context) => PerfilScreen(),
         },
         home: Consumer<AuthProvider>(
           builder: (context, auth, _) {

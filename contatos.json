@@ -1,0 +1,1602 @@
+[
+  {
+    "id": "1",
+    "nome": "Heloísa Nogueira",
+    "telefone": "(95) 8907-8211",
+    "endereco": "Rua dos Pinheiros, 84",
+    "fotoPerfil": "https://picsum.photos/seed/cgr8736sti/200/200",
+    "observacao": "Assinatura premium"
+  },
+  {
+    "id": "2",
+    "nome": "Maitê Nogueira",
+    "telefone": "(50) 1579-4889",
+    "endereco": "Rua XV de Novembro, 566",
+    "fotoPerfil": "https://picsum.photos/seed/m4z8l0wn3e/200/200",
+    "observacao": "Cliente desde 2020"
+  },
+  {
+    "id": "3",
+    "nome": "Pedro Tavares",
+    "telefone": "(91) 1027-5464",
+    "endereco": "Rua XV de Novembro, 134",
+    "fotoPerfil": "https://picsum.photos/seed/baefhc7u6i/200/200",
+    "observacao": "Revisão de contrato"
+  },
+  {
+    "id": "4",
+    "nome": "Henrique Rodrigues",
+    "telefone": "(38) 6615-3174",
+    "endereco": "Av. Brasil, 434",
+    "fotoPerfil": "https://picsum.photos/seed/279kzvwr1s/200/200",
+    "observacao": "Revisão de contrato"
+  },
+  {
+    "id": "5",
+    "nome": "Davi Vasconcelos",
+    "telefone": "(13) 1732-4576",
+    "endereco": "Rua Oscar Freire, 274",
+    "fotoPerfil": "https://picsum.photos/seed/2q0vlpogmw/200/200",
+    "observacao": "Fornecedor parceiro"
+  },
+  {
+    "id": "6",
+    "nome": "Natália Tavares",
+    "telefone": "(92) 7702-6508",
+    "endereco": "Rua Oscar Freire, 30",
+    "fotoPerfil": "https://picsum.photos/seed/qt3gjfx5dk/200/200",
+    "observacao": "Ligar apenas em caso de urgência"
+  },
+  {
+    "id": "7",
+    "nome": "Larissa Ribeiro",
+    "telefone": "(74) 3789-7010",
+    "endereco": "Rua Cardoso de Almeida, 878",
+    "fotoPerfil": "https://picsum.photos/seed/sw8njtyd34/200/200",
+    "observacao": "Cliente desde 2020"
+  },
+  {
+    "id": "8",
+    "nome": "Maitê Monteiro",
+    "telefone": "(31) 5533-7205",
+    "endereco": "Av. Paulista, 109",
+    "fotoPerfil": "https://picsum.photos/seed/4mh85b0l8t/200/200",
+    "observacao": "Primeiro contato em fevereiro/23"
+  },
+  {
+    "id": "9",
+    "nome": "Davi Duarte",
+    "telefone": "(30) 5183-3117",
+    "endereco": "Rua Teodoro Sampaio, 714",
+    "fotoPerfil": "https://picsum.photos/seed/wcnn7mv7s0/200/200",
+    "observacao": "Não atende depois das 18h"
+  },
+  {
+    "id": "10",
+    "nome": "Letícia Meireles",
+    "telefone": "(51) 4989-9006",
+    "endereco": "Alameda Santos, 731",
+    "fotoPerfil": "https://picsum.photos/seed/cqbcq0uoq7/200/200",
+    "observacao": "VIP"
+  },
+  {
+    "id": "11",
+    "nome": "Clara Nogueira",
+    "telefone": "(78) 5642-9642",
+    "endereco": "Av. Paulista, 820",
+    "fotoPerfil": "https://picsum.photos/seed/k8n387khw6/200/200",
+    "observacao": "Enviar catálogo atualizado"
+  },
+  {
+    "id": "12",
+    "nome": "Valentina Costa",
+    "telefone": "(94) 1942-2723",
+    "endereco": "Rua Sete de Setembro, 253",
+    "fotoPerfil": "https://picsum.photos/seed/k6vjrj783d/200/200",
+    "observacao": "Indicação do João"
+  },
+  {
+    "id": "13",
+    "nome": "Vinícius Borges",
+    "telefone": "(53) 6265-5549",
+    "endereco": "Rua Sete de Setembro, 947",
+    "fotoPerfil": "https://picsum.photos/seed/ui3usywxco/200/200",
+    "observacao": "Indicação do João"
+  },
+  {
+    "id": "14",
+    "nome": "Thiago Santana",
+    "telefone": "(29) 4074-1336",
+    "endereco": "Rua dos Pinheiros, 376",
+    "fotoPerfil": "https://picsum.photos/seed/2wt0q6x4co/200/200",
+    "observacao": "Cliente desde 2020"
+  },
+  {
+    "id": "15",
+    "nome": "Henrique Figueiredo",
+    "telefone": "(68) 8459-9513",
+    "endereco": "Av. Paulista, 476",
+    "fotoPerfil": "https://picsum.photos/seed/ufhfq1c3vq/200/200",
+    "observacao": "Ligar apenas em caso de urgência"
+  },
+  {
+    "id": "16",
+    "nome": "Bianca Souza",
+    "telefone": "(80) 6811-6559",
+    "endereco": "Rua dos Pinheiros, 804",
+    "fotoPerfil": "https://picsum.photos/seed/d83xpky8hq/200/200",
+    "observacao": "Segunda via do boleto"
+  },
+  {
+    "id": "17",
+    "nome": "Marcelo Rodrigues",
+    "telefone": "(59) 7504-4690",
+    "endereco": "Alameda Santos, 620",
+    "fotoPerfil": "https://picsum.photos/seed/tvpfzt9ivi/200/200",
+    "observacao": "Atendimento prioritário"
+  },
+  {
+    "id": "18",
+    "nome": "Enzo Campos",
+    "telefone": "(25) 8102-3294",
+    "endereco": "Alameda Santos, 708",
+    "fotoPerfil": "https://picsum.photos/seed/dgfj20o8fy/200/200",
+    "observacao": "Desconto especial aplicado"
+  },
+  {
+    "id": "19",
+    "nome": "Larissa Pereira",
+    "telefone": "(88) 7093-4474",
+    "endereco": "Rua Cardoso de Almeida, 457",
+    "fotoPerfil": "https://picsum.photos/seed/3vh6s7lie4/200/200",
+    "observacao": "Primeiro contato em fevereiro/23"
+  },
+  {
+    "id": "20",
+    "nome": "Vanessa Monteiro",
+    "telefone": "(17) 8340-9252",
+    "endereco": "Praça da Sé, 647",
+    "fotoPerfil": "https://picsum.photos/seed/0v4y0sa5fb/200/200",
+    "observacao": "Assinatura premium"
+  },
+  {
+    "id": "21",
+    "nome": "Manuela Nascimento",
+    "telefone": "(51) 1275-9883",
+    "endereco": "Alameda Santos, 129",
+    "fotoPerfil": "https://picsum.photos/seed/jqk5dotnte/200/200",
+    "observacao": "Ligar apenas em caso de urgência"
+  },
+  {
+    "id": "22",
+    "nome": "Letícia Pereira",
+    "telefone": "(89) 4666-8203",
+    "endereco": "Rua Oscar Freire, 949",
+    "fotoPerfil": "https://picsum.photos/seed/f7yxn3xgn4/200/200",
+    "observacao": "Não atende depois das 18h"
+  },
+  {
+    "id": "23",
+    "nome": "Henrique Borges",
+    "telefone": "(81) 4423-4833",
+    "endereco": "Rua Cardoso de Almeida, 918",
+    "fotoPerfil": "https://picsum.photos/seed/7dqeun4t8h/200/200",
+    "observacao": "Primeiro contato em fevereiro/23"
+  },
+  {
+    "id": "24",
+    "nome": "Heloísa Peixoto",
+    "telefone": "(25) 5283-8977",
+    "endereco": "Rua Augusta, 55",
+    "fotoPerfil": "https://picsum.photos/seed/bii5g78plf/200/200",
+    "observacao": "VIP"
+  },
+  {
+    "id": "25",
+    "nome": "José Mendes",
+    "telefone": "(26) 1581-5331",
+    "endereco": "Rua das Flores, 105",
+    "fotoPerfil": "https://picsum.photos/seed/2rgvp93jy6/200/200",
+    "observacao": "Enviar catálogo atualizado"
+  },
+  {
+    "id": "26",
+    "nome": "Isabela Farias",
+    "telefone": "(57) 6529-3548",
+    "endereco": "Praça da Sé, 55",
+    "fotoPerfil": "https://picsum.photos/seed/77qwk0cmra/200/200",
+    "observacao": "Desconto especial aplicado"
+  },
+  {
+    "id": "27",
+    "nome": "Marcelo Mendes",
+    "telefone": "(94) 6580-9538",
+    "endereco": "Rua Sete de Setembro, 887",
+    "fotoPerfil": "https://picsum.photos/seed/92tzven8e2/200/200",
+    "observacao": "Primeiro contato em fevereiro/23"
+  },
+  {
+    "id": "28",
+    "nome": "Benício Santos",
+    "telefone": "(49) 3131-5813",
+    "endereco": "Rua XV de Novembro, 809",
+    "fotoPerfil": "https://picsum.photos/seed/w2ordcc897/200/200",
+    "observacao": "Segunda via do boleto"
+  },
+  {
+    "id": "29",
+    "nome": "Amanda Lima",
+    "telefone": "(72) 1703-8628",
+    "endereco": "Av. Ipiranga, 152",
+    "fotoPerfil": "https://picsum.photos/seed/xf5t51s0ip/200/200",
+    "observacao": "Entregar no período da manhã"
+  },
+  {
+    "id": "30",
+    "nome": "Francisca Carvalho",
+    "telefone": "(36) 1258-2955",
+    "endereco": "Av. Ipiranga, 775",
+    "fotoPerfil": "https://picsum.photos/seed/xu3mthhm7e/200/200",
+    "observacao": "Desconto especial aplicado"
+  },
+  {
+    "id": "31",
+    "nome": "Manuela Rocha",
+    "telefone": "(69) 9847-4959",
+    "endereco": "Av. Ipiranga, 54",
+    "fotoPerfil": "https://picsum.photos/seed/ryrbnzn74o/200/200",
+    "observacao": "Assinatura premium"
+  },
+  {
+    "id": "32",
+    "nome": "Arthur Oliveira",
+    "telefone": "(61) 6264-6626",
+    "endereco": "Rua XV de Novembro, 115",
+    "fotoPerfil": "https://picsum.photos/seed/es63ezae2l/200/200",
+    "observacao": "Assinatura premium"
+  },
+  {
+    "id": "33",
+    "nome": "Manuela Neves",
+    "telefone": "(15) 6091-5537",
+    "endereco": "Rua da Consolação, 795",
+    "fotoPerfil": "https://picsum.photos/seed/pj89sbyo7q/200/200",
+    "observacao": "Indicação do João"
+  },
+  {
+    "id": "34",
+    "nome": "Pedro Figueiredo",
+    "telefone": "(73) 5520-4072",
+    "endereco": "Rua Sete de Setembro, 241",
+    "fotoPerfil": "https://picsum.photos/seed/48d2njmeus/200/200",
+    "observacao": "Primeiro contato em fevereiro/23"
+  },
+  {
+    "id": "35",
+    "nome": "Bianca Brito",
+    "telefone": "(66) 8121-8393",
+    "endereco": "Rua Cardoso de Almeida, 665",
+    "fotoPerfil": "https://picsum.photos/seed/6ybkyf1f1z/200/200",
+    "observacao": "Fornecedor parceiro"
+  },
+  {
+    "id": "36",
+    "nome": "Natália Lopes",
+    "telefone": "(41) 2038-7447",
+    "endereco": "Av. Rebouças, 255",
+    "fotoPerfil": "https://picsum.photos/seed/4xz2116d6t/200/200",
+    "observacao": "Revisão de contrato"
+  },
+  {
+    "id": "37",
+    "nome": "Vinícius Brito",
+    "telefone": "(81) 1702-5189",
+    "endereco": "Praça da Sé, 266",
+    "fotoPerfil": "https://picsum.photos/seed/d359ksb6zp/200/200",
+    "observacao": "Prefere contato por e-mail"
+  },
+  {
+    "id": "38",
+    "nome": "Isabela Meireles",
+    "telefone": "(58) 1775-3160",
+    "endereco": "Rua Cardoso de Almeida, 167",
+    "fotoPerfil": "https://picsum.photos/seed/aujjv986al/200/200",
+    "observacao": "VIP"
+  },
+  {
+    "id": "39",
+    "nome": "Vanessa Nogueira",
+    "telefone": "(84) 9388-4654",
+    "endereco": "Av. Rebouças, 781",
+    "fotoPerfil": "https://picsum.photos/seed/vn6z5vit66/200/200",
+    "observacao": "Prefere contato por e-mail"
+  },
+  {
+    "id": "40",
+    "nome": "Sofia Brito",
+    "telefone": "(23) 1709-1335",
+    "endereco": "Rua Augusta, 833",
+    "fotoPerfil": "https://picsum.photos/seed/lumiwtyi5j/200/200",
+    "observacao": "VIP"
+  },
+  {
+    "id": "41",
+    "nome": "Pedro Oliveira",
+    "telefone": "(93) 5982-3791",
+    "endereco": "Rua XV de Novembro, 736",
+    "fotoPerfil": "https://picsum.photos/seed/kvu32yqafp/200/200",
+    "observacao": "Entregar no período da manhã"
+  },
+  {
+    "id": "42",
+    "nome": "Daniel Alves",
+    "telefone": "(15) 5393-2737",
+    "endereco": "Rua Oscar Freire, 565",
+    "fotoPerfil": "https://picsum.photos/seed/kgp94wz4pi/200/200",
+    "observacao": "Desconto especial aplicado"
+  },
+  {
+    "id": "43",
+    "nome": "Sofia Borges",
+    "telefone": "(70) 2585-2183",
+    "endereco": "Rua das Flores, 804",
+    "fotoPerfil": "https://picsum.photos/seed/lb5k7jpoez/200/200",
+    "observacao": "Não atende depois das 18h"
+  },
+  {
+    "id": "44",
+    "nome": "Natália Farias",
+    "telefone": "(44) 4377-9888",
+    "endereco": "Rua Augusta, 8",
+    "fotoPerfil": "https://picsum.photos/seed/s8wfiyj162/200/200",
+    "observacao": "Prefere contato por e-mail"
+  },
+  {
+    "id": "45",
+    "nome": "Larissa Meireles",
+    "telefone": "(81) 2306-5247",
+    "endereco": "Av. Ipiranga, 290",
+    "fotoPerfil": "https://picsum.photos/seed/g9os5nsez2/200/200",
+    "observacao": "Atendimento prioritário"
+  },
+  {
+    "id": "46",
+    "nome": "Maitê Lima",
+    "telefone": "(31) 2495-9669",
+    "endereco": "Rua da Consolação, 48",
+    "fotoPerfil": "https://picsum.photos/seed/ss9rexkaqi/200/200",
+    "observacao": "Assinatura premium"
+  },
+  {
+    "id": "47",
+    "nome": "Benício Vasconcelos",
+    "telefone": "(48) 9052-7614",
+    "endereco": "Rua dos Pinheiros, 693",
+    "fotoPerfil": "https://picsum.photos/seed/79pxum4nfr/200/200",
+    "observacao": "Ligar apenas em caso de urgência"
+  },
+  {
+    "id": "48",
+    "nome": "Clara Tavares",
+    "telefone": "(50) 6066-9542",
+    "endereco": "Rua da Consolação, 540",
+    "fotoPerfil": "https://picsum.photos/seed/ppzf7dx7py/200/200",
+    "observacao": "Atendimento prioritário"
+  },
+  {
+    "id": "49",
+    "nome": "Benício Nunes",
+    "telefone": "(74) 4366-5428",
+    "endereco": "Rua Augusta, 228",
+    "fotoPerfil": "https://picsum.photos/seed/hosoehnm1j/200/200",
+    "observacao": "Indicação do João"
+  },
+  {
+    "id": "50",
+    "nome": "Juliana Araújo",
+    "telefone": "(93) 7909-1305",
+    "endereco": "Av. Paulista, 906",
+    "fotoPerfil": "https://picsum.photos/seed/2nmk85nt4m/200/200",
+    "observacao": "Desconto especial aplicado"
+  },
+  {
+    "id": "51",
+    "nome": "Leonardo Ribeiro",
+    "telefone": "(12) 7666-9549",
+    "endereco": "Rua Augusta, 681",
+    "fotoPerfil": "https://picsum.photos/seed/5xhd15dn34/200/200",
+    "observacao": "Não atende depois das 18h"
+  },
+  {
+    "id": "52",
+    "nome": "Manuela Borges",
+    "telefone": "(84) 2212-8405",
+    "endereco": "Rua XV de Novembro, 895",
+    "fotoPerfil": "https://picsum.photos/seed/4v68f7ekrd/200/200",
+    "observacao": "Cliente desde 2020"
+  },
+  {
+    "id": "53",
+    "nome": "Antônio Gonçalves",
+    "telefone": "(88) 2527-4459",
+    "endereco": "Rua das Flores, 593",
+    "fotoPerfil": "https://picsum.photos/seed/rk7huxi7df/200/200",
+    "observacao": "Indicação do João"
+  },
+  {
+    "id": "54",
+    "nome": "Vinícius Santana",
+    "telefone": "(50) 1563-3443",
+    "endereco": "Av. Ipiranga, 47",
+    "fotoPerfil": "https://picsum.photos/seed/1qmme5j8g7/200/200",
+    "observacao": "Entregar no período da manhã"
+  },
+  {
+    "id": "55",
+    "nome": "Valentina Cardoso",
+    "telefone": "(28) 9546-7885",
+    "endereco": "Rua Augusta, 80",
+    "fotoPerfil": "https://picsum.photos/seed/2h0mpcej3a/200/200",
+    "observacao": "Indicação do João"
+  },
+  {
+    "id": "56",
+    "nome": "Lorena Mendes",
+    "telefone": "(59) 6937-5583",
+    "endereco": "Av. Brasil, 98",
+    "fotoPerfil": "https://picsum.photos/seed/68f6ppsyj7/200/200",
+    "observacao": "Atendimento prioritário"
+  },
+  {
+    "id": "57",
+    "nome": "Natália Borges",
+    "telefone": "(50) 8364-2421",
+    "endereco": "Av. Ipiranga, 375",
+    "fotoPerfil": "https://picsum.photos/seed/boto005ipg/200/200",
+    "observacao": "Primeiro contato em fevereiro/23"
+  },
+  {
+    "id": "58",
+    "nome": "Gustavo Meireles",
+    "telefone": "(28) 2348-1716",
+    "endereco": "Av. Brasil, 413",
+    "fotoPerfil": "https://picsum.photos/seed/arotsiyb2n/200/200",
+    "observacao": "Indicação do João"
+  },
+  {
+    "id": "59",
+    "nome": "Cauã Freitas",
+    "telefone": "(48) 7896-9192",
+    "endereco": "Rua Augusta, 789",
+    "fotoPerfil": "https://picsum.photos/seed/2ijag6vtzt/200/200",
+    "observacao": "Entregar no período da manhã"
+  },
+  {
+    "id": "60",
+    "nome": "Vanessa Cardoso",
+    "telefone": "(67) 1599-1166",
+    "endereco": "Rua Sete de Setembro, 754",
+    "fotoPerfil": "https://picsum.photos/seed/c3eeya2uxz/200/200",
+    "observacao": "Assinatura premium"
+  },
+  {
+    "id": "61",
+    "nome": "Leonardo Santana",
+    "telefone": "(92) 7945-9985",
+    "endereco": "Rua Augusta, 353",
+    "fotoPerfil": "https://picsum.photos/seed/pwxi0whbt1/200/200",
+    "observacao": "Ligar apenas em caso de urgência"
+  },
+  {
+    "id": "62",
+    "nome": "Carlos Martins",
+    "telefone": "(73) 8989-4603",
+    "endereco": "Rua Oscar Freire, 649",
+    "fotoPerfil": "https://picsum.photos/seed/g0be7cwjib/200/200",
+    "observacao": "Entregar no período da manhã"
+  },
+  {
+    "id": "63",
+    "nome": "Leonardo Vieira",
+    "telefone": "(33) 3363-3664",
+    "endereco": "Av. Brasil, 888",
+    "fotoPerfil": "https://picsum.photos/seed/1ba2bmoqai/200/200",
+    "observacao": "Primeiro contato em fevereiro/23"
+  },
+  {
+    "id": "64",
+    "nome": "Isabela Teixeira",
+    "telefone": "(86) 1423-7943",
+    "endereco": "Av. Ipiranga, 177",
+    "fotoPerfil": "https://picsum.photos/seed/4fj96rgkv6/200/200",
+    "observacao": "Indicação do João"
+  },
+  {
+    "id": "65",
+    "nome": "Carlos Mendes",
+    "telefone": "(88) 5270-8670",
+    "endereco": "Av. Rebouças, 425",
+    "fotoPerfil": "https://picsum.photos/seed/f5c1u3mmbv/200/200",
+    "observacao": "VIP"
+  },
+  {
+    "id": "66",
+    "nome": "Arthur Rodrigues",
+    "telefone": "(85) 1006-6573",
+    "endereco": "Rua da Consolação, 806",
+    "fotoPerfil": "https://picsum.photos/seed/f7un07fr50/200/200",
+    "observacao": "Prefere contato por e-mail"
+  },
+  {
+    "id": "67",
+    "nome": "Henrique Pereira",
+    "telefone": "(85) 4655-4110",
+    "endereco": "Alameda Santos, 392",
+    "fotoPerfil": "https://picsum.photos/seed/weyaw51ryl/200/200",
+    "observacao": "Entregar no período da manhã"
+  },
+  {
+    "id": "68",
+    "nome": "Amanda Vasconcelos",
+    "telefone": "(90) 2332-4074",
+    "endereco": "Av. Ipiranga, 899",
+    "fotoPerfil": "https://picsum.photos/seed/caf05erzgu/200/200",
+    "observacao": "Assinatura premium"
+  },
+  {
+    "id": "69",
+    "nome": "Juliana Borges",
+    "telefone": "(91) 5097-2065",
+    "endereco": "Av. Rebouças, 936",
+    "fotoPerfil": "https://picsum.photos/seed/qthijbwb33/200/200",
+    "observacao": "Desconto especial aplicado"
+  },
+  {
+    "id": "70",
+    "nome": "Ricardo Rocha",
+    "telefone": "(95) 3596-4396",
+    "endereco": "Av. Paulista, 550",
+    "fotoPerfil": "https://picsum.photos/seed/v58w9vfi8m/200/200",
+    "observacao": "Primeiro contato em fevereiro/23"
+  },
+  {
+    "id": "71",
+    "nome": "Thiago Farias",
+    "telefone": "(37) 3773-3471",
+    "endereco": "Rua XV de Novembro, 991",
+    "fotoPerfil": "https://picsum.photos/seed/74wxhn5c5c/200/200",
+    "observacao": "VIP"
+  },
+  {
+    "id": "72",
+    "nome": "Sofia Ribeiro",
+    "telefone": "(52) 3689-6299",
+    "endereco": "Rua Teodoro Sampaio, 393",
+    "fotoPerfil": "https://picsum.photos/seed/yi9og9g5cr/200/200",
+    "observacao": "VIP"
+  },
+  {
+    "id": "73",
+    "nome": "Emanuelly Cardoso",
+    "telefone": "(16) 4131-9646",
+    "endereco": "Rua Cardoso de Almeida, 340",
+    "fotoPerfil": "https://picsum.photos/seed/ez57ly00rv/200/200",
+    "observacao": "Não atende depois das 18h"
+  },
+  {
+    "id": "74",
+    "nome": "Manuela Barbosa",
+    "telefone": "(83) 6825-7967",
+    "endereco": "Rua Augusta, 71",
+    "fotoPerfil": "https://picsum.photos/seed/5r4kbfghvo/200/200",
+    "observacao": "VIP"
+  },
+  {
+    "id": "75",
+    "nome": "Davi Leão",
+    "telefone": "(92) 9240-4467",
+    "endereco": "Rua Teodoro Sampaio, 766",
+    "fotoPerfil": "https://picsum.photos/seed/nubjwu5hn0/200/200",
+    "observacao": "VIP"
+  },
+  {
+    "id": "76",
+    "nome": "Pedro Pires",
+    "telefone": "(66) 8054-2849",
+    "endereco": "Rua Sete de Setembro, 987",
+    "fotoPerfil": "https://picsum.photos/seed/n4d95fkths/200/200",
+    "observacao": "Prefere contato por e-mail"
+  },
+  {
+    "id": "77",
+    "nome": "Leonardo Carvalho",
+    "telefone": "(60) 4585-6860",
+    "endereco": "Av. Rebouças, 413",
+    "fotoPerfil": "https://picsum.photos/seed/c6pa40rpuw/200/200",
+    "observacao": "Desconto especial aplicado"
+  },
+  {
+    "id": "78",
+    "nome": "Thiago Moraes",
+    "telefone": "(70) 5106-4240",
+    "endereco": "Rua Sete de Setembro, 745",
+    "fotoPerfil": "https://picsum.photos/seed/dikp5ngn9a/200/200",
+    "observacao": "Enviar catálogo atualizado"
+  },
+  {
+    "id": "79",
+    "nome": "Lucas Oliveira",
+    "telefone": "(62) 4077-6909",
+    "endereco": "Rua dos Pinheiros, 74",
+    "fotoPerfil": "https://picsum.photos/seed/p1165sq8ob/200/200",
+    "observacao": "Entregar no período da manhã"
+  },
+  {
+    "id": "80",
+    "nome": "Bruno Lima",
+    "telefone": "(73) 4678-9804",
+    "endereco": "Rua XV de Novembro, 404",
+    "fotoPerfil": "https://picsum.photos/seed/517sq8k3yq/200/200",
+    "observacao": "Assinatura premium"
+  },
+  {
+    "id": "81",
+    "nome": "Cauã Borges",
+    "telefone": "(27) 8209-8846",
+    "endereco": "Av. Ipiranga, 664",
+    "fotoPerfil": "https://picsum.photos/seed/tq99tnk7t8/200/200",
+    "observacao": "Atendimento prioritário"
+  },
+  {
+    "id": "82",
+    "nome": "Antônio Rodrigues",
+    "telefone": "(22) 3586-2408",
+    "endereco": "Rua da Consolação, 260",
+    "fotoPerfil": "https://picsum.photos/seed/7vmr8f4r4f/200/200",
+    "observacao": "Segunda via do boleto"
+  },
+  {
+    "id": "83",
+    "nome": "Heloísa Barros",
+    "telefone": "(90) 1210-9537",
+    "endereco": "Av. Paulista, 443",
+    "fotoPerfil": "https://picsum.photos/seed/dd5b8q7l6v/200/200",
+    "observacao": "Cliente desde 2020"
+  },
+  {
+    "id": "84",
+    "nome": "Cauã Farias",
+    "telefone": "(38) 2016-1663",
+    "endereco": "Rua Sete de Setembro, 850",
+    "fotoPerfil": "https://picsum.photos/seed/rh8m1tewu0/200/200",
+    "observacao": "Primeiro contato em fevereiro/23"
+  },
+  {
+    "id": "85",
+    "nome": "Rafaela Neves",
+    "telefone": "(21) 6154-8053",
+    "endereco": "Av. Paulista, 552",
+    "fotoPerfil": "https://picsum.photos/seed/hknfxku0nj/200/200",
+    "observacao": "Fornecedor parceiro"
+  },
+  {
+    "id": "86",
+    "nome": "Natália Souza",
+    "telefone": "(20) 8640-6164",
+    "endereco": "Av. Ipiranga, 627",
+    "fotoPerfil": "https://picsum.photos/seed/j034nrmua5/200/200",
+    "observacao": "Não atende depois das 18h"
+  },
+  {
+    "id": "87",
+    "nome": "Patrícia Barros",
+    "telefone": "(24) 2003-5432",
+    "endereco": "Rua Augusta, 824",
+    "fotoPerfil": "https://picsum.photos/seed/3ieswvt7b2/200/200",
+    "observacao": "Cliente desde 2020"
+  },
+  {
+    "id": "88",
+    "nome": "Davi Santos",
+    "telefone": "(21) 7769-8237",
+    "endereco": "Av. Rebouças, 732",
+    "fotoPerfil": "https://picsum.photos/seed/zfkl5rgb8c/200/200",
+    "observacao": "Prefere contato por e-mail"
+  },
+  {
+    "id": "89",
+    "nome": "Ricardo Santana",
+    "telefone": "(46) 5555-7576",
+    "endereco": "Rua Sete de Setembro, 428",
+    "fotoPerfil": "https://picsum.photos/seed/rvytc9f751/200/200",
+    "observacao": "VIP"
+  },
+  {
+    "id": "90",
+    "nome": "Maria Barbosa",
+    "telefone": "(73) 4922-7443",
+    "endereco": "Rua Cardoso de Almeida, 47",
+    "fotoPerfil": "https://picsum.photos/seed/fehvvd84av/200/200",
+    "observacao": "Primeiro contato em fevereiro/23"
+  },
+  {
+    "id": "91",
+    "nome": "José Figueiredo",
+    "telefone": "(80) 8453-3609",
+    "endereco": "Rua Oscar Freire, 786",
+    "fotoPerfil": "https://picsum.photos/seed/mlc6s46yd3/200/200",
+    "observacao": "Cliente desde 2020"
+  },
+  {
+    "id": "92",
+    "nome": "Marcelo Monteiro",
+    "telefone": "(22) 8694-3996",
+    "endereco": "Rua XV de Novembro, 290",
+    "fotoPerfil": "https://picsum.photos/seed/n7kf666boi/200/200",
+    "observacao": "Primeiro contato em fevereiro/23"
+  },
+  {
+    "id": "93",
+    "nome": "Bianca Leão",
+    "telefone": "(46) 3811-8905",
+    "endereco": "Rua Augusta, 786",
+    "fotoPerfil": "https://picsum.photos/seed/0pg2lc3l02/200/200",
+    "observacao": "Enviar catálogo atualizado"
+  },
+  {
+    "id": "94",
+    "nome": "Arthur Moraes",
+    "telefone": "(87) 8090-1194",
+    "endereco": "Rua XV de Novembro, 57",
+    "fotoPerfil": "https://picsum.photos/seed/zh04ys7zc2/200/200",
+    "observacao": "Prefere contato por e-mail"
+  },
+  {
+    "id": "95",
+    "nome": "Carlos Borges",
+    "telefone": "(65) 9944-8110",
+    "endereco": "Rua dos Pinheiros, 320",
+    "fotoPerfil": "https://picsum.photos/seed/nxcpx64myc/200/200",
+    "observacao": "Fornecedor parceiro"
+  },
+  {
+    "id": "96",
+    "nome": "Daniel Leão",
+    "telefone": "(50) 4167-8052",
+    "endereco": "Rua Teodoro Sampaio, 58",
+    "fotoPerfil": "https://picsum.photos/seed/dd9w2bxaig/200/200",
+    "observacao": "Primeiro contato em fevereiro/23"
+  },
+  {
+    "id": "97",
+    "nome": "Francisca Duarte",
+    "telefone": "(60) 7802-9979",
+    "endereco": "Rua Augusta, 151",
+    "fotoPerfil": "https://picsum.photos/seed/xa0as9tgbj/200/200",
+    "observacao": "Assinatura premium"
+  },
+  {
+    "id": "98",
+    "nome": "Bianca Pereira",
+    "telefone": "(68) 4943-7984",
+    "endereco": "Rua XV de Novembro, 751",
+    "fotoPerfil": "https://picsum.photos/seed/vkymi9f28l/200/200",
+    "observacao": "Primeiro contato em fevereiro/23"
+  },
+  {
+    "id": "99",
+    "nome": "Felipe Teixeira",
+    "telefone": "(79) 2917-1242",
+    "endereco": "Av. Ipiranga, 627",
+    "fotoPerfil": "https://picsum.photos/seed/5cc21y6pcn/200/200",
+    "observacao": "Enviar catálogo atualizado"
+  },
+  {
+    "id": "100",
+    "nome": "Lorena Ribeiro",
+    "telefone": "(51) 5221-9063",
+    "endereco": "Av. Brasil, 307",
+    "fotoPerfil": "https://picsum.photos/seed/arfptoqrbq/200/200",
+    "observacao": "Fornecedor parceiro"
+  },
+  {
+    "id": "101",
+    "nome": "Carolina Gonçalves",
+    "telefone": "(15) 1402-2970",
+    "endereco": "Alameda Santos, 738",
+    "fotoPerfil": "https://picsum.photos/seed/47ezqar066/200/200",
+    "observacao": "Primeiro contato em fevereiro/23"
+  },
+  {
+    "id": "102",
+    "nome": "Patrícia Costa",
+    "telefone": "(74) 6043-1365",
+    "endereco": "Rua XV de Novembro, 970",
+    "fotoPerfil": "https://picsum.photos/seed/y9t2716b5p/200/200",
+    "observacao": "Atendimento prioritário"
+  },
+  {
+    "id": "103",
+    "nome": "Fernanda Rocha",
+    "telefone": "(84) 1806-4119",
+    "endereco": "Rua Cardoso de Almeida, 395",
+    "fotoPerfil": "https://picsum.photos/seed/0a41kqqmlr/200/200",
+    "observacao": "Atendimento prioritário"
+  },
+  {
+    "id": "104",
+    "nome": "Gabriela Santos",
+    "telefone": "(79) 6652-5588",
+    "endereco": "Rua Sete de Setembro, 964",
+    "fotoPerfil": "https://picsum.photos/seed/a1pexmodl0/200/200",
+    "observacao": "Fornecedor parceiro"
+  },
+  {
+    "id": "105",
+    "nome": "Vinícius Tavares",
+    "telefone": "(43) 3981-1001",
+    "endereco": "Av. Brasil, 543",
+    "fotoPerfil": "https://picsum.photos/seed/ya5zqp72rb/200/200",
+    "observacao": "Cliente desde 2020"
+  },
+  {
+    "id": "106",
+    "nome": "Valentina Borges",
+    "telefone": "(67) 8736-2624",
+    "endereco": "Av. Brasil, 631",
+    "fotoPerfil": "https://picsum.photos/seed/ghkcav7ya2/200/200",
+    "observacao": "Desconto especial aplicado"
+  },
+  {
+    "id": "107",
+    "nome": "Rafaela Alves",
+    "telefone": "(60) 7410-1889",
+    "endereco": "Av. Paulista, 837",
+    "fotoPerfil": "https://picsum.photos/seed/k8jtmtjun4/200/200",
+    "observacao": "VIP"
+  },
+  {
+    "id": "108",
+    "nome": "Felipe Borges",
+    "telefone": "(60) 5444-2582",
+    "endereco": "Rua Cardoso de Almeida, 683",
+    "fotoPerfil": "https://picsum.photos/seed/qnohd4papd/200/200",
+    "observacao": "Cliente desde 2020"
+  },
+  {
+    "id": "109",
+    "nome": "Gustavo Cardoso",
+    "telefone": "(11) 8132-2937",
+    "endereco": "Rua dos Pinheiros, 268",
+    "fotoPerfil": "https://picsum.photos/seed/5r0qm1vek1/200/200",
+    "observacao": "Assinatura premium"
+  },
+  {
+    "id": "110",
+    "nome": "Camila Duarte",
+    "telefone": "(28) 2670-7152",
+    "endereco": "Av. Brasil, 344",
+    "fotoPerfil": "https://picsum.photos/seed/0vak3mszyh/200/200",
+    "observacao": "Atendimento prioritário"
+  },
+  {
+    "id": "111",
+    "nome": "Lucas Mendes",
+    "telefone": "(70) 5641-3591",
+    "endereco": "Av. Ipiranga, 168",
+    "fotoPerfil": "https://picsum.photos/seed/mibug775rz/200/200",
+    "observacao": "Não atende depois das 18h"
+  },
+  {
+    "id": "112",
+    "nome": "Felipe Nunes",
+    "telefone": "(12) 1899-9794",
+    "endereco": "Rua Teodoro Sampaio, 554",
+    "fotoPerfil": "https://picsum.photos/seed/oitvdjuuvx/200/200",
+    "observacao": "Indicação do João"
+  },
+  {
+    "id": "113",
+    "nome": "Juliana Costa",
+    "telefone": "(71) 1006-7316",
+    "endereco": "Praça da Sé, 828",
+    "fotoPerfil": "https://picsum.photos/seed/uzo5v7xd38/200/200",
+    "observacao": "Ligar apenas em caso de urgência"
+  },
+  {
+    "id": "114",
+    "nome": "Davi Brito",
+    "telefone": "(14) 8509-6187",
+    "endereco": "Av. Paulista, 980",
+    "fotoPerfil": "https://picsum.photos/seed/eg1o5814k8/200/200",
+    "observacao": "Segunda via do boleto"
+  },
+  {
+    "id": "115",
+    "nome": "Felipe Rocha",
+    "telefone": "(22) 8501-9287",
+    "endereco": "Av. Paulista, 796",
+    "fotoPerfil": "https://picsum.photos/seed/qdtht6xtfu/200/200",
+    "observacao": "VIP"
+  },
+  {
+    "id": "116",
+    "nome": "Felipe Gonçalves",
+    "telefone": "(23) 6349-3382",
+    "endereco": "Rua Augusta, 584",
+    "fotoPerfil": "https://picsum.photos/seed/f42qdvpmau/200/200",
+    "observacao": "VIP"
+  },
+  {
+    "id": "117",
+    "nome": "Bianca Peixoto",
+    "telefone": "(70) 3825-9693",
+    "endereco": "Rua da Consolação, 648",
+    "fotoPerfil": "https://picsum.photos/seed/6bxl2zz4or/200/200",
+    "observacao": "Atendimento prioritário"
+  },
+  {
+    "id": "118",
+    "nome": "Maitê Gonçalves",
+    "telefone": "(91) 3309-1970",
+    "endereco": "Av. Paulista, 907",
+    "fotoPerfil": "https://picsum.photos/seed/aqv4sv4hir/200/200",
+    "observacao": "Não atende depois das 18h"
+  },
+  {
+    "id": "119",
+    "nome": "Rafaela Lopes",
+    "telefone": "(96) 5809-7662",
+    "endereco": "Rua XV de Novembro, 712",
+    "fotoPerfil": "https://picsum.photos/seed/z3u6f956oi/200/200",
+    "observacao": "Cliente desde 2020"
+  },
+  {
+    "id": "120",
+    "nome": "Clara Rodrigues",
+    "telefone": "(28) 5618-6298",
+    "endereco": "Rua Cardoso de Almeida, 998",
+    "fotoPerfil": "https://picsum.photos/seed/1gxtacl3wq/200/200",
+    "observacao": "Revisão de contrato"
+  },
+  {
+    "id": "121",
+    "nome": "Isabela Freitas",
+    "telefone": "(19) 8212-5873",
+    "endereco": "Rua Teodoro Sampaio, 467",
+    "fotoPerfil": "https://picsum.photos/seed/2lprn7lxud/200/200",
+    "observacao": "Cliente desde 2020"
+  },
+  {
+    "id": "122",
+    "nome": "Enzo Barbosa",
+    "telefone": "(15) 6452-5280",
+    "endereco": "Av. Paulista, 821",
+    "fotoPerfil": "https://picsum.photos/seed/ppdehxnz6f/200/200",
+    "observacao": "Não atende depois das 18h"
+  },
+  {
+    "id": "123",
+    "nome": "Maria Leão",
+    "telefone": "(79) 6154-1327",
+    "endereco": "Rua das Flores, 916",
+    "fotoPerfil": "https://picsum.photos/seed/00s78fp6t4/200/200",
+    "observacao": "Ligar apenas em caso de urgência"
+  },
+  {
+    "id": "124",
+    "nome": "Maria Rodrigues",
+    "telefone": "(52) 3629-6544",
+    "endereco": "Rua dos Pinheiros, 175",
+    "fotoPerfil": "https://picsum.photos/seed/g4q0nd8j3l/200/200",
+    "observacao": "Enviar catálogo atualizado"
+  },
+  {
+    "id": "125",
+    "nome": "Bruno Ribeiro",
+    "telefone": "(65) 1134-3675",
+    "endereco": "Rua Teodoro Sampaio, 390",
+    "fotoPerfil": "https://picsum.photos/seed/8y9ekvp68k/200/200",
+    "observacao": "Cliente desde 2020"
+  },
+  {
+    "id": "126",
+    "nome": "Lucas Nascimento",
+    "telefone": "(60) 6559-3692",
+    "endereco": "Av. Ipiranga, 906",
+    "fotoPerfil": "https://picsum.photos/seed/6s5d53h2m9/200/200",
+    "observacao": "Enviar catálogo atualizado"
+  },
+  {
+    "id": "127",
+    "nome": "Pedro Lima",
+    "telefone": "(75) 3146-3416",
+    "endereco": "Av. Rebouças, 526",
+    "fotoPerfil": "https://picsum.photos/seed/igo1ozryxb/200/200",
+    "observacao": "Assinatura premium"
+  },
+  {
+    "id": "128",
+    "nome": "Enzo Costa",
+    "telefone": "(84) 3234-3806",
+    "endereco": "Av. Ipiranga, 560",
+    "fotoPerfil": "https://picsum.photos/seed/u83yiyunsk/200/200",
+    "observacao": "Enviar catálogo atualizado"
+  },
+  {
+    "id": "129",
+    "nome": "Carlos Moraes",
+    "telefone": "(26) 6069-2858",
+    "endereco": "Av. Paulista, 295",
+    "fotoPerfil": "https://picsum.photos/seed/4kn2ez73xd/200/200",
+    "observacao": "Desconto especial aplicado"
+  },
+  {
+    "id": "130",
+    "nome": "Vanessa Nascimento",
+    "telefone": "(40) 8512-1396",
+    "endereco": "Av. Paulista, 930",
+    "fotoPerfil": "https://picsum.photos/seed/da8smn7g7t/200/200",
+    "observacao": "Ligar apenas em caso de urgência"
+  },
+  {
+    "id": "131",
+    "nome": "Henrique Peixoto",
+    "telefone": "(40) 3088-2287",
+    "endereco": "Rua Sete de Setembro, 795",
+    "fotoPerfil": "https://picsum.photos/seed/vc2c6bmpuy/200/200",
+    "observacao": "Ligar apenas em caso de urgência"
+  },
+  {
+    "id": "132",
+    "nome": "Francisca Barros",
+    "telefone": "(73) 3870-5559",
+    "endereco": "Av. Paulista, 371",
+    "fotoPerfil": "https://picsum.photos/seed/tvdq15mvgz/200/200",
+    "observacao": "Não atende depois das 18h"
+  },
+  {
+    "id": "133",
+    "nome": "Enzo Ribeiro",
+    "telefone": "(34) 9627-3107",
+    "endereco": "Praça da Sé, 77",
+    "fotoPerfil": "https://picsum.photos/seed/0wdwfwafqg/200/200",
+    "observacao": "Desconto especial aplicado"
+  },
+  {
+    "id": "134",
+    "nome": "Benício Teixeira",
+    "telefone": "(13) 5536-9839",
+    "endereco": "Alameda Santos, 625",
+    "fotoPerfil": "https://picsum.photos/seed/l30w2o5lkn/200/200",
+    "observacao": "Revisão de contrato"
+  },
+  {
+    "id": "135",
+    "nome": "Vinícius Vieira",
+    "telefone": "(47) 5958-7051",
+    "endereco": "Praça da Sé, 943",
+    "fotoPerfil": "https://picsum.photos/seed/olftums5bj/200/200",
+    "observacao": "Não atende depois das 18h"
+  },
+  {
+    "id": "136",
+    "nome": "Sofia Teixeira",
+    "telefone": "(83) 8217-9945",
+    "endereco": "Alameda Santos, 399",
+    "fotoPerfil": "https://picsum.photos/seed/bnwpdqaxnc/200/200",
+    "observacao": "Revisão de contrato"
+  },
+  {
+    "id": "137",
+    "nome": "Rafaela Leão",
+    "telefone": "(23) 4473-2759",
+    "endereco": "Rua Sete de Setembro, 568",
+    "fotoPerfil": "https://picsum.photos/seed/t1k8i1pvap/200/200",
+    "observacao": "Cliente desde 2020"
+  },
+  {
+    "id": "138",
+    "nome": "Valentina Lima",
+    "telefone": "(56) 6072-1677",
+    "endereco": "Rua Oscar Freire, 426",
+    "fotoPerfil": "https://picsum.photos/seed/3rqsplcb6u/200/200",
+    "observacao": "Ligar apenas em caso de urgência"
+  },
+  {
+    "id": "139",
+    "nome": "João Farias",
+    "telefone": "(85) 6639-2662",
+    "endereco": "Rua da Consolação, 277",
+    "fotoPerfil": "https://picsum.photos/seed/gmstpqb9bj/200/200",
+    "observacao": "Revisão de contrato"
+  },
+  {
+    "id": "140",
+    "nome": "Gustavo Costa",
+    "telefone": "(30) 3000-7278",
+    "endereco": "Rua Augusta, 649",
+    "fotoPerfil": "https://picsum.photos/seed/2lhqv7rz40/200/200",
+    "observacao": "Assinatura premium"
+  },
+  {
+    "id": "141",
+    "nome": "Ricardo Barros",
+    "telefone": "(34) 3580-1415",
+    "endereco": "Rua das Flores, 613",
+    "fotoPerfil": "https://picsum.photos/seed/jkprhiiwi7/200/200",
+    "observacao": "Cliente desde 2020"
+  },
+  {
+    "id": "142",
+    "nome": "Gabriela Cardoso",
+    "telefone": "(14) 6980-8161",
+    "endereco": "Rua Oscar Freire, 763",
+    "fotoPerfil": "https://picsum.photos/seed/7sfa94ds76/200/200",
+    "observacao": "Assinatura premium"
+  },
+  {
+    "id": "143",
+    "nome": "João Carvalho",
+    "telefone": "(43) 6372-4321",
+    "endereco": "Rua XV de Novembro, 998",
+    "fotoPerfil": "https://picsum.photos/seed/oj70hvwidm/200/200",
+    "observacao": "Assinatura premium"
+  },
+  {
+    "id": "144",
+    "nome": "Henrique Teixeira",
+    "telefone": "(87) 9108-9787",
+    "endereco": "Rua dos Pinheiros, 112",
+    "fotoPerfil": "https://picsum.photos/seed/5ze5jitwxu/200/200",
+    "observacao": "Entregar no período da manhã"
+  },
+  {
+    "id": "145",
+    "nome": "Eduardo Barbosa",
+    "telefone": "(35) 3415-4404",
+    "endereco": "Rua dos Pinheiros, 484",
+    "fotoPerfil": "https://picsum.photos/seed/eafkgi5gte/200/200",
+    "observacao": "Não atende depois das 18h"
+  },
+  {
+    "id": "146",
+    "nome": "Maitê Ribeiro",
+    "telefone": "(56) 3966-9612",
+    "endereco": "Rua Teodoro Sampaio, 339",
+    "fotoPerfil": "https://picsum.photos/seed/en7lzgcj1r/200/200",
+    "observacao": "Assinatura premium"
+  },
+  {
+    "id": "147",
+    "nome": "Carolina Rocha",
+    "telefone": "(25) 5906-9449",
+    "endereco": "Rua dos Pinheiros, 527",
+    "fotoPerfil": "https://picsum.photos/seed/gjrai2n4nw/200/200",
+    "observacao": "Revisão de contrato"
+  },
+  {
+    "id": "148",
+    "nome": "Lucas Pires",
+    "telefone": "(78) 3396-9110",
+    "endereco": "Rua Sete de Setembro, 660",
+    "fotoPerfil": "https://picsum.photos/seed/aj2spm95vy/200/200",
+    "observacao": "Desconto especial aplicado"
+  },
+  {
+    "id": "149",
+    "nome": "Valentina Tavares",
+    "telefone": "(83) 7810-9547",
+    "endereco": "Praça da Sé, 627",
+    "fotoPerfil": "https://picsum.photos/seed/nj20l8aqyh/200/200",
+    "observacao": "Indicação do João"
+  },
+  {
+    "id": "150",
+    "nome": "Rafaela Rocha",
+    "telefone": "(87) 9320-6236",
+    "endereco": "Rua Augusta, 917",
+    "fotoPerfil": "https://picsum.photos/seed/uwvmjyn0lh/200/200",
+    "observacao": "Cliente desde 2020"
+  },
+  {
+    "id": "151",
+    "nome": "Gabriela Leão",
+    "telefone": "(25) 3841-5120",
+    "endereco": "Alameda Santos, 390",
+    "fotoPerfil": "https://picsum.photos/seed/nh4ikqrx0z/200/200",
+    "observacao": "Fornecedor parceiro"
+  },
+  {
+    "id": "152",
+    "nome": "Carlos Ribeiro",
+    "telefone": "(62) 9750-6043",
+    "endereco": "Av. Paulista, 99",
+    "fotoPerfil": "https://picsum.photos/seed/p2th2wp12k/200/200",
+    "observacao": "Primeiro contato em fevereiro/23"
+  },
+  {
+    "id": "153",
+    "nome": "Cauã Araújo",
+    "telefone": "(39) 6362-6626",
+    "endereco": "Rua das Flores, 512",
+    "fotoPerfil": "https://picsum.photos/seed/fgau8clh2c/200/200",
+    "observacao": "Fornecedor parceiro"
+  },
+  {
+    "id": "154",
+    "nome": "Francisca Lopes",
+    "telefone": "(45) 6502-5046",
+    "endereco": "Rua XV de Novembro, 132",
+    "fotoPerfil": "https://picsum.photos/seed/889otwcxlh/200/200",
+    "observacao": "Entregar no período da manhã"
+  },
+  {
+    "id": "155",
+    "nome": "Amanda Mendes",
+    "telefone": "(94) 3512-7811",
+    "endereco": "Av. Brasil, 44",
+    "fotoPerfil": "https://picsum.photos/seed/qe3r969j1w/200/200",
+    "observacao": "Assinatura premium"
+  },
+  {
+    "id": "156",
+    "nome": "Leonardo Cunha",
+    "telefone": "(79) 1719-7956",
+    "endereco": "Av. Paulista, 388",
+    "fotoPerfil": "https://picsum.photos/seed/lh71c9hl3i/200/200",
+    "observacao": "Desconto especial aplicado"
+  },
+  {
+    "id": "157",
+    "nome": "Felipe Alves",
+    "telefone": "(54) 7527-1257",
+    "endereco": "Rua Oscar Freire, 654",
+    "fotoPerfil": "https://picsum.photos/seed/yysl90b4up/200/200",
+    "observacao": "VIP"
+  },
+  {
+    "id": "158",
+    "nome": "Manuela Costa",
+    "telefone": "(26) 1678-5297",
+    "endereco": "Rua Teodoro Sampaio, 360",
+    "fotoPerfil": "https://picsum.photos/seed/xpxif8ki19/200/200",
+    "observacao": "Atendimento prioritário"
+  },
+  {
+    "id": "159",
+    "nome": "Carlos Souza",
+    "telefone": "(61) 9451-5614",
+    "endereco": "Rua dos Pinheiros, 895",
+    "fotoPerfil": "https://picsum.photos/seed/o8z4p7flus/200/200",
+    "observacao": "Fornecedor parceiro"
+  },
+  {
+    "id": "160",
+    "nome": "Fernanda Monteiro",
+    "telefone": "(27) 7308-1943",
+    "endereco": "Av. Paulista, 559",
+    "fotoPerfil": "https://picsum.photos/seed/whg7bgghej/200/200",
+    "observacao": "Fornecedor parceiro"
+  },
+  {
+    "id": "161",
+    "nome": "Amanda Monteiro",
+    "telefone": "(56) 4864-5427",
+    "endereco": "Av. Ipiranga, 639",
+    "fotoPerfil": "https://picsum.photos/seed/2bxkfzflf2/200/200",
+    "observacao": "Revisão de contrato"
+  },
+  {
+    "id": "162",
+    "nome": "Bianca Cardoso",
+    "telefone": "(11) 9728-1751",
+    "endereco": "Rua Oscar Freire, 28",
+    "fotoPerfil": "https://picsum.photos/seed/7j9pn3yv7n/200/200",
+    "observacao": "Enviar catálogo atualizado"
+  },
+  {
+    "id": "163",
+    "nome": "Manuela Santana",
+    "telefone": "(59) 4357-5612",
+    "endereco": "Rua Teodoro Sampaio, 66",
+    "fotoPerfil": "https://picsum.photos/seed/cqj307p8x2/200/200",
+    "observacao": "Revisão de contrato"
+  },
+  {
+    "id": "164",
+    "nome": "Davi Pereira",
+    "telefone": "(17) 4261-2017",
+    "endereco": "Rua Cardoso de Almeida, 669",
+    "fotoPerfil": "https://picsum.photos/seed/wwbeewihgo/200/200",
+    "observacao": "Primeiro contato em fevereiro/23"
+  },
+  {
+    "id": "165",
+    "nome": "Manuela Figueiredo",
+    "telefone": "(89) 4616-3396",
+    "endereco": "Av. Rebouças, 552",
+    "fotoPerfil": "https://picsum.photos/seed/iytz0wu3t9/200/200",
+    "observacao": "Revisão de contrato"
+  },
+  {
+    "id": "166",
+    "nome": "Felipe Lima",
+    "telefone": "(18) 6929-7929",
+    "endereco": "Av. Ipiranga, 762",
+    "fotoPerfil": "https://picsum.photos/seed/wukxb87go6/200/200",
+    "observacao": "VIP"
+  },
+  {
+    "id": "167",
+    "nome": "Enzo Rocha",
+    "telefone": "(36) 5311-4720",
+    "endereco": "Av. Brasil, 489",
+    "fotoPerfil": "https://picsum.photos/seed/l9xajcg3kc/200/200",
+    "observacao": "Indicação do João"
+  },
+  {
+    "id": "168",
+    "nome": "Juliana Gonçalves",
+    "telefone": "(97) 3523-4366",
+    "endereco": "Av. Brasil, 724",
+    "fotoPerfil": "https://picsum.photos/seed/i4ger2a2fo/200/200",
+    "observacao": "Primeiro contato em fevereiro/23"
+  },
+  {
+    "id": "169",
+    "nome": "Maitê Vasconcelos",
+    "telefone": "(40) 9532-9646",
+    "endereco": "Rua XV de Novembro, 419",
+    "fotoPerfil": "https://picsum.photos/seed/st4zc2vtsy/200/200",
+    "observacao": "Cliente desde 2020"
+  },
+  {
+    "id": "170",
+    "nome": "Arthur Souza",
+    "telefone": "(33) 9325-1054",
+    "endereco": "Av. Paulista, 607",
+    "fotoPerfil": "https://picsum.photos/seed/t6kbasem8w/200/200",
+    "observacao": "Segunda via do boleto"
+  },
+  {
+    "id": "171",
+    "nome": "Bruno Pires",
+    "telefone": "(64) 1314-8806",
+    "endereco": "Alameda Santos, 567",
+    "fotoPerfil": "https://picsum.photos/seed/3k9kuuftz8/200/200",
+    "observacao": "Atendimento prioritário"
+  },
+  {
+    "id": "172",
+    "nome": "Thiago Duarte",
+    "telefone": "(31) 1998-8334",
+    "endereco": "Rua XV de Novembro, 994",
+    "fotoPerfil": "https://picsum.photos/seed/1mc5kckn6u/200/200",
+    "observacao": "Ligar apenas em caso de urgência"
+  },
+  {
+    "id": "173",
+    "nome": "Vinícius Nogueira",
+    "telefone": "(91) 9355-3823",
+    "endereco": "Rua Augusta, 522",
+    "fotoPerfil": "https://picsum.photos/seed/fh7s0bx8fi/200/200",
+    "observacao": "Prefere contato por e-mail"
+  },
+  {
+    "id": "174",
+    "nome": "Lorena Tavares",
+    "telefone": "(71) 8251-2313",
+    "endereco": "Rua XV de Novembro, 265",
+    "fotoPerfil": "https://picsum.photos/seed/4s0qjjgkhv/200/200",
+    "observacao": "Fornecedor parceiro"
+  },
+  {
+    "id": "175",
+    "nome": "Carlos Rodrigues",
+    "telefone": "(71) 2890-5742",
+    "endereco": "Rua Teodoro Sampaio, 629",
+    "fotoPerfil": "https://picsum.photos/seed/hso7hlzdje/200/200",
+    "observacao": "Desconto especial aplicado"
+  },
+  {
+    "id": "176",
+    "nome": "Natália Santana",
+    "telefone": "(62) 5030-4593",
+    "endereco": "Rua Sete de Setembro, 675",
+    "fotoPerfil": "https://picsum.photos/seed/7z7w1t440m/200/200",
+    "observacao": "Prefere contato por e-mail"
+  },
+  {
+    "id": "177",
+    "nome": "Natália Brito",
+    "telefone": "(19) 4838-8708",
+    "endereco": "Rua das Flores, 936",
+    "fotoPerfil": "https://picsum.photos/seed/17ql41uyyg/200/200",
+    "observacao": "Atendimento prioritário"
+  },
+  {
+    "id": "178",
+    "nome": "Felipe Moreira",
+    "telefone": "(47) 8447-9212",
+    "endereco": "Av. Rebouças, 171",
+    "fotoPerfil": "https://picsum.photos/seed/4as4apiupg/200/200",
+    "observacao": "Primeiro contato em fevereiro/23"
+  },
+  {
+    "id": "179",
+    "nome": "Carlos Alves",
+    "telefone": "(62) 8948-4278",
+    "endereco": "Rua Sete de Setembro, 539",
+    "fotoPerfil": "https://picsum.photos/seed/tteiyrck84/200/200",
+    "observacao": "Segunda via do boleto"
+  },
+  {
+    "id": "180",
+    "nome": "Emanuelly Figueiredo",
+    "telefone": "(25) 6353-8580",
+    "endereco": "Rua Cardoso de Almeida, 544",
+    "fotoPerfil": "https://picsum.photos/seed/pof3n1kafu/200/200",
+    "observacao": "VIP"
+  },
+  {
+    "id": "181",
+    "nome": "Maitê Peixoto",
+    "telefone": "(13) 7629-6173",
+    "endereco": "Praça da Sé, 407",
+    "fotoPerfil": "https://picsum.photos/seed/13b19evj5p/200/200",
+    "observacao": "Entregar no período da manhã"
+  },
+  {
+    "id": "182",
+    "nome": "Juliana Duarte",
+    "telefone": "(42) 6176-1209",
+    "endereco": "Alameda Santos, 67",
+    "fotoPerfil": "https://picsum.photos/seed/wi21didm4n/200/200",
+    "observacao": "Não atende depois das 18h"
+  },
+  {
+    "id": "183",
+    "nome": "Enzo Freitas",
+    "telefone": "(96) 4299-8365",
+    "endereco": "Rua Sete de Setembro, 500",
+    "fotoPerfil": "https://picsum.photos/seed/6fyp7dv343/200/200",
+    "observacao": "Ligar apenas em caso de urgência"
+  },
+  {
+    "id": "184",
+    "nome": "Manuela Nunes",
+    "telefone": "(87) 9642-4339",
+    "endereco": "Rua Oscar Freire, 625",
+    "fotoPerfil": "https://picsum.photos/seed/z9xt05g3ky/200/200",
+    "observacao": "Fornecedor parceiro"
+  },
+  {
+    "id": "185",
+    "nome": "Antônio Tavares",
+    "telefone": "(74) 4513-8563",
+    "endereco": "Rua Teodoro Sampaio, 672",
+    "fotoPerfil": "https://picsum.photos/seed/861d3sgimq/200/200",
+    "observacao": "Prefere contato por e-mail"
+  },
+  {
+    "id": "186",
+    "nome": "Pedro Souza",
+    "telefone": "(79) 5740-1134",
+    "endereco": "Rua Cardoso de Almeida, 411",
+    "fotoPerfil": "https://picsum.photos/seed/xqw55gm60k/200/200",
+    "observacao": "Segunda via do boleto"
+  },
+  {
+    "id": "187",
+    "nome": "Larissa Mendes",
+    "telefone": "(86) 4991-7457",
+    "endereco": "Av. Brasil, 89",
+    "fotoPerfil": "https://picsum.photos/seed/l6heb39ym1/200/200",
+    "observacao": "Desconto especial aplicado"
+  },
+  {
+    "id": "188",
+    "nome": "Letícia Souza",
+    "telefone": "(84) 8573-4894",
+    "endereco": "Rua Teodoro Sampaio, 177",
+    "fotoPerfil": "https://picsum.photos/seed/mtckc59qte/200/200",
+    "observacao": "Segunda via do boleto"
+  },
+  {
+    "id": "189",
+    "nome": "Henrique Ferreira",
+    "telefone": "(49) 5736-2955",
+    "endereco": "Rua XV de Novembro, 683",
+    "fotoPerfil": "https://picsum.photos/seed/ujlkqh5uf0/200/200",
+    "observacao": "Ligar apenas em caso de urgência"
+  },
+  {
+    "id": "190",
+    "nome": "Patrícia Peixoto",
+    "telefone": "(24) 2644-6816",
+    "endereco": "Praça da Sé, 721",
+    "fotoPerfil": "https://picsum.photos/seed/9eu5lddbo5/200/200",
+    "observacao": "Revisão de contrato"
+  },
+  {
+    "id": "191",
+    "nome": "Vinícius Nascimento",
+    "telefone": "(30) 7802-5262",
+    "endereco": "Rua Teodoro Sampaio, 684",
+    "fotoPerfil": "https://picsum.photos/seed/kntixdewxu/200/200",
+    "observacao": "Ligar apenas em caso de urgência"
+  },
+  {
+    "id": "192",
+    "nome": "Ana Freitas",
+    "telefone": "(45) 3172-9716",
+    "endereco": "Alameda Santos, 16",
+    "fotoPerfil": "https://picsum.photos/seed/l2ipexxc6b/200/200",
+    "observacao": "Ligar apenas em caso de urgência"
+  },
+  {
+    "id": "193",
+    "nome": "Felipe Oliveira",
+    "telefone": "(93) 1483-8808",
+    "endereco": "Rua Teodoro Sampaio, 248",
+    "fotoPerfil": "https://picsum.photos/seed/w3er29s6hx/200/200",
+    "observacao": "Revisão de contrato"
+  },
+  {
+    "id": "194",
+    "nome": "Pedro Mendes",
+    "telefone": "(18) 3652-2835",
+    "endereco": "Rua Augusta, 263",
+    "fotoPerfil": "https://picsum.photos/seed/j9aazqv7eb/200/200",
+    "observacao": "Atendimento prioritário"
+  },
+  {
+    "id": "195",
+    "nome": "Arthur Teixeira",
+    "telefone": "(81) 6575-4895",
+    "endereco": "Praça da Sé, 627",
+    "fotoPerfil": "https://picsum.photos/seed/awds7kypz1/200/200",
+    "observacao": "Enviar catálogo atualizado"
+  },
+  {
+    "id": "196",
+    "nome": "Natália Santos",
+    "telefone": "(60) 2549-8390",
+    "endereco": "Rua da Consolação, 604",
+    "fotoPerfil": "https://picsum.photos/seed/c3zvz4wkeh/200/200",
+    "observacao": "Assinatura premium"
+  },
+  {
+    "id": "197",
+    "nome": "José Peixoto",
+    "telefone": "(90) 9625-9798",
+    "endereco": "Alameda Santos, 202",
+    "fotoPerfil": "https://picsum.photos/seed/l29349ti05/200/200",
+    "observacao": "Atendimento prioritário"
+  },
+  {
+    "id": "198",
+    "nome": "Juliana Ribeiro",
+    "telefone": "(37) 4214-1204",
+    "endereco": "Rua Oscar Freire, 262",
+    "fotoPerfil": "https://picsum.photos/seed/htlwxc2aor/200/200",
+    "observacao": "Entregar no período da manhã"
+  },
+  {
+    "id": "199",
+    "nome": "Lorena Pires",
+    "telefone": "(16) 2517-1034",
+    "endereco": "Praça da Sé, 238",
+    "fotoPerfil": "https://picsum.photos/seed/ioh6royghy/200/200",
+    "observacao": "Indicação do João"
+  },
+  {
+    "id": "200",
+    "nome": "Larissa Brito",
+    "telefone": "(34) 2982-5950",
+    "endereco": "Rua das Flores, 93",
+    "fotoPerfil": "https://picsum.photos/seed/ukbcdzcsk2/200/200",
+    "observacao": "VIP"
+  }
+]

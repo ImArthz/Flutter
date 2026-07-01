@@ -179,7 +179,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Adicionei o parâmetro 'id' para usar na key, mas não é obrigatório
+  
   Widget _buildProfileImage(String path, String id) {
     ImageProvider provider;
     if (path.startsWith('http')) {
@@ -191,7 +191,7 @@ class HomeScreen extends StatelessWidget {
     }
 
     return ClipOval(
-      key: ValueKey('foto_$id'), // também forçará atualização da imagem
+      key: ValueKey('foto_$id'), 
       child: Image(
         image: provider,
         width: 120,

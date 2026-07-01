@@ -1,6 +1,8 @@
 plugins {
-    id 'com.android.application'
-    id 'com.google.gms.google-services'   // ADICIONE ESTA LINHA
+    id("com.android.application")
+    id("kotlin-android")
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id("dev.flutter.flutter-gradle-plugin")
 }
 
 android {
@@ -37,16 +39,6 @@ android {
     }
 }
 
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    
-    // Importar a BoM do Firebase
-    implementation platform('com.google.firebase:firebase-bom:34.15.0')
-
-    // Adicione os SDKs que você vai usar (sem versão, pois a BoM gerencia)
-    implementation 'com.google.firebase:firebase-analytics'
-    implementation 'com.google.firebase:firebase-auth'
-    implementation 'com.google.firebase:firebase-firestore'
-    // Se precisar de armazenamento, adicione também:
-    // implementation 'com.google.firebase:firebase-storage'
+flutter {
+    source = "../.."
 }
