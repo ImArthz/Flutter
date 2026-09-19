@@ -1,0 +1,78 @@
+name: Build APK & LaTeX PDF
+
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'projeto_arvores_avancadas/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build APK and LaTeX
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # --- 1. BUILD FLUTTER APK ---
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+
+      - name: Flutter Pub Get
+        run: |
+          cd projeto_arvores_avancadas/app_flutter
+          flutter pub get
+
+      - name: Build APK
+        run: |
+          cd projeto_arvores_avancadas/app_flutter
+          flutter build apk --release
+
+      - name: Rename APK
+        run: |
+          mv projeto_arvores_avancadas/app_flutter/build/app/outputs/flutter-apk/app-release.apk arvores_app-release.apk
+
+      # --- 2. COMPILE LATEX ---
+      - name: Compile LaTeX Document
+        uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: projeto_arvores_avancadas/artigo_academico
+          root_file: artigo_arvores.tex
+          compiler: pdflatex
+          args: "-interaction=nonstopmode -halt-on-error"
+
+      - name: Move PDF
+        run: |
+          mv projeto_arvores_avancadas/artigo_academico/artigo_arvores.pdf artigo_arvores.pdf
+
+      # --- 3. CREATE RELEASE ---
+      - name: Generate Release Tag
+        id: tag
+        run: echo "RELEASE_TAG=v$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+
+      - name: Release APK and PDF
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: "Latest Auto-Build (${{ env.RELEASE_TAG }})"
+          files: |
+            arvores_app-release.apk
+            artigo_arvores.pdf
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
