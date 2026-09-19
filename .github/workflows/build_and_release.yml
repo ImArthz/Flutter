@@ -34,6 +34,11 @@ jobs:
           flutter-version: '3.24.0'
           channel: 'stable'
 
+      - name: Generate Flutter Shell
+        run: |
+          cd projeto_arvores_avancadas/app_flutter
+          flutter create --org com.arthur.arvores --project-name arvores_app .
+
       - name: Flutter Pub Get
         run: |
           cd projeto_arvores_avancadas/app_flutter
@@ -76,3 +81,4 @@ jobs:
             artigo_arvores.pdf
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
