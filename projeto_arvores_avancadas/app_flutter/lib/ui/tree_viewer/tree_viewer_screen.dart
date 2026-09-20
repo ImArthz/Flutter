@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
-import '../../domain/structures/tree_structure.dart';
 import '../../domain/structures/splay_tree.dart';
 import '../../domain/structures/treap.dart';
 import '../../domain/structures/trie.dart';
