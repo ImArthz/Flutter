@@ -57,7 +57,7 @@ jobs:
           mv projeto_arvores_avancadas/app_flutter/build/app/outputs/flutter-apk/app-release.apk arvores_app-release.apk
 
       # --- 2. COMPILE LATEX ---
-      - name: Compile LaTeX Document
+      - name: Compile LaTeX Document (PT-BR)
         uses: xu-cheng/latex-action@v3
         with:
           working_directory: projeto_arvores_avancadas/artigo_academico
@@ -65,16 +65,25 @@ jobs:
           compiler: pdflatex
           args: "-interaction=nonstopmode -halt-on-error"
 
-      - name: Move PDF
+      - name: Compile LaTeX Document (EN)
+        uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: projeto_arvores_avancadas/artigo_academico
+          root_file: article_trees.tex
+          compiler: pdflatex
+          args: "-interaction=nonstopmode -halt-on-error"
+
+      - name: Move PDFs
         run: |
           mv projeto_arvores_avancadas/artigo_academico/artigo_arvores.pdf artigo_arvores.pdf
+          mv projeto_arvores_avancadas/artigo_academico/article_trees.pdf article_trees.pdf
 
       # --- 3. CREATE RELEASE ---
       - name: Generate Release Tag
         id: tag
         run: echo "RELEASE_TAG=v$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
 
-      - name: Release APK and PDF
+      - name: Release APK and PDFs
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.RELEASE_TAG }}
@@ -82,6 +91,7 @@ jobs:
           files: |
             arvores_app-release.apk
             artigo_arvores.pdf
+            article_trees.pdf
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
 import '../../domain/structures/tree_snapshot.dart';
+import '../../domain/structures/splay_tree.dart';
+import '../../domain/structures/treap.dart';
+import '../../domain/structures/trie.dart';
+import '../../domain/structures/patricia_tree.dart';
+import '../../domain/structures/kd_tree.dart';
+import 'tree_painter.dart';
 
 class TreeViewerScreen extends StatefulWidget {
   final TreeStructure structure;
-  // Instância da árvore correspondente será passada ou criada aqui
-  // Para simplificar no scaffolding, vamos deixar um mock de history
-  
   const TreeViewerScreen({super.key, required this.structure});
 
   @override
@@ -15,32 +18,95 @@ class TreeViewerScreen extends StatefulWidget {
 
 class _TreeViewerScreenState extends State<TreeViewerScreen> {
   final TextEditingController _inputController = TextEditingController();
+  final TextEditingController _inputYController = TextEditingController(); // For KD-Tree Y value
   int _currentStep = 0;
-  List<TreeSnapshot> _history = [];
-
-  // TODO: Conectar com a instância real de cada árvore (SplayTree, Treap, etc.)
   
+  // Generic wrapper to hold the chosen structure
+  dynamic _treeInstance;
+
   @override
   void initState() {
     super.initState();
-    // Inicia com um snapshot vazio
-    _history.add(TreeSnapshot(step: 0, operation: 'init', key: '', inorder: []));
+    _initTree();
+  }
+
+  void _initTree() {
+    switch (widget.structure) {
+      case TreeStructure.splay:
+        _treeInstance = SplayTree<num>();
+        break;
+      case TreeStructure.treap:
+        _treeInstance = Treap<num>();
+        break;
+      case TreeStructure.trie:
+        _treeInstance = Trie();
+        break;
+      case TreeStructure.patricia:
+        _treeInstance = PatriciaTree();
+        break;
+      case TreeStructure.kdTree:
+        _treeInstance = KDTree();
+        break;
+    }
+  }
+
+  List<TreeSnapshot> get _history {
+    if (_treeInstance == null) return [];
+    return _treeInstance!.history;
+  }
+
+  void _syncStep() {
+    setState(() {
+      if (_history.isNotEmpty) {
+        _currentStep = _history.length - 1;
+      }
+    });
+  }
+
+  dynamic _parseInput() {
+    final text = _inputController.text.trim();
+    if (text.isEmpty) return null;
+    
+    if (widget.structure == TreeStructure.kdTree) {
+      final textY = _inputYController.text.trim();
+      final x = double.tryParse(text);
+      final y = double.tryParse(textY);
+      if (x != null && y != null) {
+        return Point2D(x, y);
+      }
+      return null;
+    }
+    
+    if (widget.structure.isStringBased) {
+      return text;
+    } else {
+      return num.tryParse(text);
+    }
   }
 
   void _onInsert() {
-    final val = _inputController.text;
-    if (val.isEmpty) return;
-    // TODO: Chamar insert na arvore correspondente
+    final val = _parseInput();
+    if (val == null) return;
+    _treeInstance!.insert(val);
     _inputController.clear();
-    setState(() {});
+    _inputYController.clear();
+    _syncStep();
   }
 
   void _onSearch() {
-    // TODO
+    final val = _parseInput();
+    if (val == null) return;
+    _treeInstance!.search(val);
+    _syncStep();
   }
 
   void _onDelete() {
-    // TODO
+    final val = _parseInput();
+    if (val == null) return;
+    _treeInstance!.delete(val);
+    _inputController.clear();
+    _inputYController.clear();
+    _syncStep();
   }
 
   @override
@@ -52,16 +118,20 @@ class _TreeViewerScreenState extends State<TreeViewerScreen> {
         title: Text(widget.structure.title),
         actions: [
           IconButton(
-            icon: const Icon(Icons.info_outline),
+            icon: const Icon(Icons.refresh),
+            tooltip: 'Reiniciar Árvore',
             onPressed: () {
-              // TODO: Mostrar dialog com info teórica
+              setState(() {
+                _initTree();
+                _currentStep = 0;
+              });
             },
           )
         ],
       ),
       body: Column(
         children: [
-          // ── VISUALIZADOR DA ÁRVORE (CustomPainter) ──
+          // 🌲🌲 VISUALIZADOR DA ÁRVORE (InteractiveViewer) 🌲🌲
           Expanded(
             child: Container(
               margin: const EdgeInsets.all(16),
@@ -73,21 +143,33 @@ class _TreeViewerScreenState extends State<TreeViewerScreen> {
                   BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 4))
                 ]
               ),
-              child: Center(
-                child: currentSnapshot?.treeMap == null 
-                  ? const Text('Árvore Vazia', style: TextStyle(color: AppColors.textDisabled))
-                  : CustomPaint(
-                      size: const Size(double.infinity, double.infinity),
-                      painter: TreePainter(
-                        treeMap: currentSnapshot!.treeMap, 
-                        nodeColor: widget.structure.color
-                      ),
-                    ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: InteractiveViewer(
+                  constrained: false,
+                  boundaryMargin: const EdgeInsets.all(500),
+                  minScale: 0.1,
+                  maxScale: 2.0,
+                  child: Center(
+                    child: currentSnapshot?.treeMap == null || currentSnapshot?.treeMap!.isEmpty == true
+                      ? const Padding(
+                          padding: EdgeInsets.all(64.0),
+                          child: Text('Árvore Vazia', style: TextStyle(color: AppColors.textDisabled, fontSize: 18)),
+                        )
+                      : CustomPaint(
+                          size: const Size(800, 800), // Base size, can pan around
+                          painter: TreePainter(
+                            treeMap: currentSnapshot!.treeMap, 
+                            nodeColor: widget.structure.color
+                          ),
+                        ),
+                  ),
+                ),
               ),
             ),
           ),
           
-          // ── HISTÓRICO E CONTROLES ──
+          // 🌲🌲 HISTÓRICO E CONTROLES 🌲🌲
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             color: AppColors.surfaceAlt,
@@ -116,7 +198,7 @@ class _TreeViewerScreenState extends State<TreeViewerScreen> {
             ),
           ),
           
-          // ── INFO DO PASSO ──
+          // 🌲🌲 INFO DO PASSO 🌲🌲
           if (currentSnapshot != null)
             Container(
               padding: const EdgeInsets.all(12),
@@ -126,13 +208,17 @@ class _TreeViewerScreenState extends State<TreeViewerScreen> {
                 children: [
                   Text('Operação: ${currentSnapshot.operation.toUpperCase()} | Chave: ${currentSnapshot.key}', 
                     style: const TextStyle(fontWeight: FontWeight.bold)),
-                  Text('Em-ordem: ${currentSnapshot.inorder.join(", ")}', 
-                    style: const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
+                  if (currentSnapshot.inorder.isNotEmpty)
+                    Text('Em-ordem: ${currentSnapshot.inorder.join(", ")}', 
+                      style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                 ],
               ),
             ),
             
-          // ── INPUT (Insert / Search / Delete) ──
+          // 🌲🌲 INPUT (Insert / Search / Delete) 🌲🌲
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
@@ -140,13 +226,26 @@ class _TreeViewerScreenState extends State<TreeViewerScreen> {
                 Expanded(
                   child: TextField(
                     controller: _inputController,
-                    decoration: const InputDecoration(
-                      hintText: 'Digite um valor...',
+                    decoration: InputDecoration(
+                      hintText: widget.structure == TreeStructure.kdTree ? 'X...' : 'Digite o valor...',
                       isDense: true,
                     ),
-                    keyboardType: widget.structure.isStringBased ? TextInputType.text : TextInputType.number,
+                    keyboardType: widget.structure.isStringBased ? TextInputType.text : const TextInputType.numberWithOptions(decimal: true),
                   ),
                 ),
+                if (widget.structure == TreeStructure.kdTree) ...[
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: TextField(
+                      controller: _inputYController,
+                      decoration: const InputDecoration(
+                        hintText: 'Y...',
+                        isDense: true,
+                      ),
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    ),
+                  ),
+                ],
                 const SizedBox(width: 8),
                 ElevatedButton(onPressed: _onInsert, child: const Text('Ins')),
                 const SizedBox(width: 4),
@@ -160,33 +259,4 @@ class _TreeViewerScreenState extends State<TreeViewerScreen> {
       ),
     );
   }
-}
-
-// ── PAINTER BÁSICO (Mock - Será expandido) ──
-class TreePainter extends CustomPainter {
-  final Map<String, dynamic>? treeMap;
-  final Color nodeColor;
-
-  TreePainter({required this.treeMap, required this.nodeColor});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (treeMap == null) return;
-    final paint = Paint()..color = nodeColor..style = PaintingStyle.fill;
-    canvas.drawCircle(Offset(size.width / 2, 40), 20, paint);
-    
-    // Draw text
-    final textPainter = TextPainter(
-      text: TextSpan(text: treeMap!['key']?.toString() ?? 'R', style: const TextStyle(color: Colors.white, fontSize: 16)),
-      textDirection: TextDirection.ltr,
-    );
-    textPainter.layout();
-    textPainter.paint(canvas, Offset(size.width / 2 - textPainter.width / 2, 40 - textPainter.height / 2));
-    
-    // O algoritmo recursivo real de desenho requer calcular larguras. 
-    // Como é extenso, implementaremos a lógica completa em tree_painter.dart
-  }
-
-  @override
-  bool shouldRepaint(covariant TreePainter oldDelegate) => true;
 }
