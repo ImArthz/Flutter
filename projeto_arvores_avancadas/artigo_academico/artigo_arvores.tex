@@ -41,48 +41,33 @@
 }
 \lstset{style=mystyle}
 
-\title{\textbf{Modelagem, Implementação e Análise Comparativa de Estruturas em Árvore Especializadas}}
+\title{\textbf{Estruturas em Árvores Avançadas: Aplicações Teóricas e Práticas em Flutter}}
 \author{
-    \textbf{Arthur de Oliveira Mendonça} \\
-    Engenharia da Computação \\
-    Centro Federal de Educação Tecnológica de Minas Gerais (CEFET-MG) - Campus Divinópolis \\
-    Disciplina: Algoritmos e Estruturas de Dados II \\
+    Arthur de Oliveira Mendonça \\
+    \textit{Engenharia da Computação - CEFET-MG Divinópolis} \\
+    Disciplina: Algoritmos e Estrutura de Dados 2 (AED2) \\
     Professor: Michel Pires da Silva
 }
-\date{Setembro de 2026}
+\date{\today}
 
 \begin{document}
 
 \maketitle
 
 \begin{abstract}
-Este artigo documenta o projeto prático focado na implementação e avaliação de cinco estruturas de dados arbóreas avançadas: Splay Tree, Treap, Trie, Patricia Tree e KD-Tree. As estruturas foram desenvolvidas em Dart, visando uma arquitetura modular capaz de se conectar a um front-end nativo em Flutter, viabilizando o rastreamento visual passo-a-passo. Realizaram-se extensos experimentos de \textit{benchmarking} para avaliar o tempo de execução (inserção e busca) e o consumo de memória frente a diferentes distribuições de dados (aleatórios, ordenados e enviesados). Os resultados comprovam características assintóticas teóricas, como a degeneração computacional em casos não-aleatórios, além de destacar a Patricia Tree no papel de economia espacial em relação a dicionários.
+Este artigo examina os fundamentos teóricos e os comportamentos práticos em engenharia de software de cinco estruturas avançadas em árvores (Splay Tree, Treap, Trie, Patricia Tree e KD-Tree). Através de uma modelagem visual iterativa desenvolvida nativamente no ecossistema Flutter, os preceitos de eficiência de espaço e tempo são consolidados, com foco rigoroso nas operações de inserção, deleção e busca em condições simuladas de sobrecarga estocástica.
 \end{abstract}
 
-\newpage
 \section{Introdução}
-O armazenamento, recuperação e manipulação eficiente de grandes volumes de dados são pilares da Engenharia da Computação moderna. O estudo de Estruturas de Dados clássicas, como as Árvores Binárias de Busca (BST) e Árvores AVL, oferece uma base teórica robusta. No entanto, demandas específicas — como localidade de acesso, consultas parciais em strings (prefixos) e cálculos de distância espacial — tornam o uso de implementações padronizadas uma escolha ineficiente.
+O estudo avançado das ramificações das Árvores de Busca, frequentemente tratado de modo abstrato, revela-se basilar na otimização de bancos de dados, modelagem tridimensional e parsers linguísticos. O escopo do presente projeto estende a aplicabilidade teórica ensinada em AED 2 para um simulador empírico visual construído com \textit{Dart} e o toolkit \textit{Flutter}. 
 
-Este trabalho aborda o desenvolvimento teórico e prático de cinco tipos de árvores voltadas para domínios altamente especializados:
-\begin{enumerate}
-    \item \textbf{Splay Tree:} Auto-ajustável para otimização de localidade temporal de referência.
-    \item \textbf{Treap:} Árvore cartesiana randomizada, dispensando regras complexas de rotações.
-    \item \textbf{Trie (Árvore de Prefixos):} Mapeamento posicional para recuperação de conjuntos de caracteres.
-    \item \textbf{Patricia Tree:} Variação otimizada da Trie para compressão de caminhos únicos, minimizando \textit{overhead} de memória.
-    \item \textbf{KD-Tree:} Particionamento multidimensional do espaço, implementada aqui em bidimensionalidade ($K=2$).
-\end{enumerate}
+A motivação primordial deste trabalho é a representação gráfica de cada nó e rotação para expor as diferenças essenciais que uma Árvore AVL tradicional omitiria em seus casos médios.  
 
-Para alcançar a compreensão integral dessas estruturas, a proposta vai além do algorítmico, implementando um aplicativo móvel no \textit{framework} Flutter que executa a captura do estado interno das árvores a cada instrução (Arquitetura de \textit{Snapshots}), desenhando topologias dinâmicas na interface visual do usuário.
+\section{Fundamentação Teórica}
 
-\section{Fundamentação Teórica e Modelagem}
+\subsection{Splay Tree}
+Diferente das Árvores AVL e Red-Black, a Splay Tree é uma Árvore Binária de Busca auto-ajustável desprovida de rigorosas informações de balanceamento explícito em seus nós (fator de balanceamento ou cores). O seu mecanismo de ajuste orbita em torno de uma operação heurística central: o \textit{Splaying}. Sempre que um nó é acessado (por busca, inserção ou até tentativas mal-sucedidas), ele é tracionado para a Raiz por meio de rotações duplas e simples (Zig, Zig-Zig, e Zig-Zag).
 
-\subsection{Splay Tree (Árvore de Espalhamento)}
-A Splay Tree, desenvolvida por Sleator e Tarjan (1985), abandona as propriedades de balanceamento estrito de altura. Seu motor principal é a heurística de \textit{Splaying}, garantindo que a chave recém-acessada ou inserida chegue à raiz através de cascatas de rotações. Estas operam em três fluxos primordiais:
-\begin{itemize}
-    \item \textbf{Zig:} Apenas o pai existe (rotação simples à raiz).
-    \item \textbf{Zig-Zig:} A chave e seu pai estão na mesma direção (ex: ambos são filhos esquerdos). A rotação ocorre no avô e depois no pai.
-    \item \textbf{Zig-Zag:} Posições alternadas (esquerda-direita). Uma rotação tradicional dupla de AVL.
-\end{itemize}
 Esta mecânica fornece um tempo amortizado de $\mathcal{O}(\log N)$, tornando a Splay Tree excepcional para rotinas de \textit{cache}, onde $20\%$ dos dados são acessados $80\%$ das vezes.
 
 \subsection{Treap}
@@ -185,6 +170,6 @@ Analisando as estruturas com dados degenerados (distribuição estritamente orde
 \end{figure}
 
 \section{Conclusão}
-O experimento atingiu os objetivos pretendidos na disciplina de AED 2. Verificou-se não só de modo téorico, mas visual e empírico, que as Estruturas em Árvore Avançadas são produtos engenhosos direcionados aos pormenores da arquitetura de sistemas. Enquanto a Splay Tree revoluciona o uso das premissas de localidade, a Patricia Tree mostra quão profundo o tratamento de strings pode chegar ao poupar os \textit{heaps} de RAM dos servidores modernos. Finalmente, consolidar isso em interfaces visuais modernas de smartphones prova o quão atemporais são os fundamentos da teoria da computação.
+O experimento atingiu os objetivos pretendidos na disciplina de AED 2. Verificou-se não só de modo téorico, mas visual e empírico, que as Estruturas em Árvores Avançadas são produtos engenhosos direcionados aos pormenores da arquitetura de sistemas. Enquanto a Splay Tree revoluciona o uso das premissas de localidade, a Patricia Tree mostra quão profundo o tratamento de strings pode chegar ao poupar os \textit{heaps} de RAM dos servidores modernos. Finalmente, consolidar isso em interfaces visuais modernas de smartphones prova o quão atemporais são os fundamentos da teoria da computação.
 
 \end{document}
