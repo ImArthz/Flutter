@@ -109,6 +109,19 @@ void _recordHistory(String operation, T key) {
 
 Os Snapshots alimentam o Canvas renderizado pela classe \texttt{TreePainter} que lê de forma recursiva os campos de dicionários `left` e `right` instanciando primitivas visuais.
 
+
+\section{Aplicativo Móvel e Simulador Visual}
+Com o intuito de apresentar as estruturas de dados avançadas de maneira didática e interativa, um aplicativo móvel completo foi desenvolvido utilizando o framework Flutter e a linguagem Dart. O aplicativo conta com uma arquitetura moderna e fluida, implementando os conceitos de Glassmorphism e tipografia limpa.
+
+Através deste aplicativo, o usuário tem a capacidade de:
+\begin{itemize}
+    \item \textbf{Visualização Interativa:} Renderização espacial das árvores em um \textit{Canvas} infinito com opções de zoom e pan.
+    \item \textbf{Simulação Passo a Passo:} Um módulo assíncrono executa operações de inserção, busca e deleção com um \textit{delay} dinâmico (2 segundos). A tela reage refletindo visualmente as alterações, demonstrando graficamente os balanceamentos probabilísticos e estruturais acontecendo em tempo real.
+    \item \textbf{Teoria Integrada:} Telas dedicadas que explicam a lógica matemática por trás das cinco estruturas abordadas no projeto (Splay Tree, Treap, Trie, Patricia Tree e KD-Tree).
+\end{itemize}
+
+Todo o código-fonte do aplicativo, bem como da biblioteca desenvolvida contendo as Árvores, encontra-se totalmente aberto para a comunidade e o projeto completo pode ser acessado diretamente através do repositório no GitHub: \\ \url{https://github.com/ImArthz/Flutter/tree/master/projeto_arvores_avancadas}.
+
 \section{Análise Teórica de Complexidade}
 Abaixo encontra-se a modelagem teórica computacional das estruturas analisadas:
 
