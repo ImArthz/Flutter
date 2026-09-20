@@ -39,6 +39,8 @@ jobs:
         run: |
           cd projeto_arvores_avancadas/app_flutter
           flutter create --org com.arthur.arvores --project-name arvores_app .
+          sed -i 's/id "org.jetbrains.kotlin.android" version ".*"/id "org.jetbrains.kotlin.android" version "1.9.24"/g' android/settings.gradle
+          sed -i "s/ext.kotlin_version = '.*'/ext.kotlin_version = '1.9.24'/g" android/build.gradle 2>/dev/null || true
 
       - name: Flutter Pub Get
         run: |
@@ -82,5 +84,6 @@ jobs:
             artigo_arvores.pdf
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
 
