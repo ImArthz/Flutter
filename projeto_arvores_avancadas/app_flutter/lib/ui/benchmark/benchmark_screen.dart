@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../core/theme/app_theme.dart';
 
@@ -27,7 +27,7 @@ class _BenchmarkScreenState extends State<BenchmarkScreen> {
       setState(() => _progress = i / 10.0);
     }
     
-    // Gerar resultados mockados para exibir no gráfico
+    // Gerar resultados mockados para exibir no grÃ¡fico
     _results = [
       {'struct': 'Splay', 'size': 1000, 'time': 0.012},
       {'struct': 'Splay', 'size': 10000, 'time': 0.035},
@@ -54,7 +54,7 @@ class _BenchmarkScreenState extends State<BenchmarkScreen> {
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
-                    const Text('Configurações', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                    const Text('ConfiguraÃ§Ãµes', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                     const SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -84,7 +84,7 @@ class _BenchmarkScreenState extends State<BenchmarkScreen> {
             const SizedBox(height: 24),
             
             if (_results.isNotEmpty) ...[
-              const Text('Tempo de Inserção vs Tamanho', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              const Text('Tempo de InserÃ§Ã£o vs Tamanho', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
               const SizedBox(height: 16),
               Expanded(
                 child: LineChart(

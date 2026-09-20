@@ -109,6 +109,51 @@ class _TreeViewerScreenState extends State<TreeViewerScreen> {
     _syncStep();
   }
 
+  void _simulateExample() {
+    setState(() {
+      _initTree();
+      _currentStep = 0;
+    });
+    
+    if (widget.structure == TreeStructure.kdTree) {
+      _treeInstance!.insert(Point2D(5, 5));
+      _treeInstance!.insert(Point2D(3, 2));
+      _treeInstance!.insert(Point2D(7, 8));
+      _treeInstance!.insert(Point2D(2, 3));
+      _treeInstance!.insert(Point2D(8, 1));
+    } else if (widget.structure.isStringBased) {
+      _treeInstance!.insert('flutter');
+      _treeInstance!.insert('flutuante');
+      _treeInstance!.insert('arvore');
+      _treeInstance!.insert('arte');
+      _treeInstance!.insert('dart');
+    } else {
+      _treeInstance!.insert(50);
+      _treeInstance!.insert(30);
+      _treeInstance!.insert(70);
+      _treeInstance!.insert(20);
+      _treeInstance!.insert(40);
+      _treeInstance!.insert(60);
+      _treeInstance!.insert(80);
+    }
+    _syncStep();
+  }
+
+  void _showInfoDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Sobre: ${widget.structure.title}'),
+        content: Text(widget.structure.subtitle + '\n\n' +
+            'Complexidade Média: ${widget.structure.avgComplexity}\n\n' +
+            'Pressione "Simular Exemplo" para ver uma demonstração de inserções automáticas.'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Entendi'))
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentSnapshot = _history.isEmpty ? null : _history[_currentStep];
@@ -117,6 +162,16 @@ class _TreeViewerScreenState extends State<TreeViewerScreen> {
       appBar: AppBar(
         title: Text(widget.structure.title),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.info_outline),
+            tooltip: 'Informações',
+            onPressed: _showInfoDialog,
+          ),
+          IconButton(
+            icon: const Icon(Icons.play_circle_outline),
+            tooltip: 'Simular Exemplo',
+            onPressed: _simulateExample,
+          ),
           IconButton(
             icon: const Icon(Icons.refresh),
             tooltip: 'Reiniciar Árvore',
@@ -154,7 +209,7 @@ class _TreeViewerScreenState extends State<TreeViewerScreen> {
                     child: currentSnapshot?.treeMap == null || currentSnapshot?.treeMap!.isEmpty == true
                       ? const Padding(
                           padding: EdgeInsets.all(64.0),
-                          child: Text('Árvore Vazia', style: TextStyle(color: AppColors.textDisabled, fontSize: 18)),
+                          child: Text('Árvore Vazia. Digite um valor ou clique em Simular Exemplo.', style: TextStyle(color: AppColors.textDisabled, fontSize: 18)),
                         )
                       : CustomPaint(
                           size: const Size(800, 800), // Base size, can pan around

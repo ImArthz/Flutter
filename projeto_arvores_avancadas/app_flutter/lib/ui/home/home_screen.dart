@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../core/theme/app_theme.dart';
 import '../tree_viewer/tree_viewer_screen.dart';
+import '../benchmark/benchmark_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -19,18 +20,26 @@ class HomeScreen extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
+            const UserAccountsDrawerHeader(
               decoration: BoxDecoration(
                 color: AppColors.primary,
               ),
-              child: Text(
-                'Menu',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
+              accountName: Text('Arthur de Oliveira Mendonça', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              accountEmail: Text('Engenharia da Computação - CEFET-MG'),
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: NetworkImage('https://github.com/ImArthz.png'),
+                backgroundColor: Colors.white,
               ),
             ),
+            ListTile(
+              leading: const Icon(Icons.speed, color: AppColors.primary),
+              title: const Text('Rodar Benchmarks Internos'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(MaterialPageRoute(builder: (_) => const BenchmarkScreen()));
+              },
+            ),
+            const Divider(),
             ListTile(
               leading: const Icon(Icons.code),
               title: const Text('Repositório no GitHub'),
@@ -39,14 +48,14 @@ class HomeScreen extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.picture_as_pdf),
+              leading: const Icon(Icons.picture_as_pdf, color: Colors.redAccent),
               title: const Text('Artigo Científico (PT-BR)'),
               onTap: () {
                 launchUrl(Uri.parse('https://github.com/ImArthz/Flutter/releases/latest/download/artigo_arvores.pdf'));
               },
             ),
             ListTile(
-              leading: const Icon(Icons.picture_as_pdf),
+              leading: const Icon(Icons.picture_as_pdf, color: Colors.redAccent),
               title: const Text('Scientific Article (EN)'),
               onTap: () {
                 launchUrl(Uri.parse('https://github.com/ImArthz/Flutter/releases/latest/download/article_trees.pdf'));
