@@ -1,28 +1,23 @@
-﻿name: Build APK & LaTeX PDF
+﻿name: Build APK, Windows & LaTeX PDF
 
 on:
   push:
     branches:
       - main
       - master
-    paths:
-      - 'projeto_arvores_avancadas/**'
-      - '.github/workflows/**'
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  build:
+  build-android-pdf:
     name: Build APK and LaTeX
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # --- 1. BUILD FLUTTER APK ---
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
@@ -57,7 +52,6 @@ jobs:
         run: |
           mv projeto_arvores_avancadas/app_flutter/build/app/outputs/flutter-apk/app-release.apk arvores_app-v1.0.3.apk
 
-      # --- 2. COMPILE LATEX ---
       - name: Compile LaTeX Document (PT-BR)
         uses: xu-cheng/latex-action@v3
         with:
@@ -79,16 +73,11 @@ jobs:
           mv projeto_arvores_avancadas/artigo_academico/artigo_arvores.pdf artigo_arvores.pdf
           mv projeto_arvores_avancadas/artigo_academico/article_trees.pdf article_trees.pdf
 
-      # --- 3. CREATE RELEASE ---
-      - name: Generate Release Tag
-        id: tag
-        run: echo "RELEASE_TAG=v$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
-
       - name: Release APK and PDFs
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ env.RELEASE_TAG }}
-          name: "Latest Auto-Build (${{ env.RELEASE_TAG }})"
+          tag_name: "v1.0.3"
+          name: "Versão Final 1.0.3 (AED2)"
           files: |
             arvores_app-v1.0.3.apk
             artigo_arvores.pdf
@@ -96,5 +85,42 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  build-windows:
+    name: Build Windows EXE
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
 
+      - name: Generate Flutter Shell (Windows)
+        run: |
+          cd projeto_arvores_avancadas\app_flutter
+          flutter create --org com.arthur.arvores --project-name arvores_app .
+
+      - name: Flutter Pub Get
+        run: |
+          cd projeto_arvores_avancadas\app_flutter
+          flutter pub get
+
+      - name: Build Windows
+        run: |
+          cd projeto_arvores_avancadas\app_flutter
+          flutter build windows --release
+
+      - name: Zip Output
+        run: Compress-Archive -Path projeto_arvores_avancadas\app_flutter\build\windows\x64\runner\Release\* -DestinationPath arvores_app_windows.zip
+
+      - name: Release Windows App
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "v1.0.3"
+          name: "Versão Final 1.0.3 (AED2)"
+          files: arvores_app_windows.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
