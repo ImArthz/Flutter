@@ -41,6 +41,7 @@ jobs:
           flutter create --org com.arthur.arvores --project-name arvores_app .
           sed -i 's/id "org.jetbrains.kotlin.android" version ".*"/id "org.jetbrains.kotlin.android" version "1.9.24"/g' android/settings.gradle
           sed -i "s/ext.kotlin_version = '.*'/ext.kotlin_version = '1.9.24'/g" android/build.gradle 2>/dev/null || true
+          sed -i '/<application/i \    <uses-permission android:name="android.permission.INTERNET" />' android/app/src/main/AndroidManifest.xml
 
       - name: Flutter Pub Get
         run: |
@@ -54,7 +55,7 @@ jobs:
 
       - name: Rename APK
         run: |
-          mv projeto_arvores_avancadas/app_flutter/build/app/outputs/flutter-apk/app-release.apk arvores_app-v1.0.2.apk
+          mv projeto_arvores_avancadas/app_flutter/build/app/outputs/flutter-apk/app-release.apk arvores_app-v1.0.3.apk
 
       # --- 2. COMPILE LATEX ---
       - name: Compile LaTeX Document (PT-BR)
@@ -89,7 +90,7 @@ jobs:
           tag_name: ${{ env.RELEASE_TAG }}
           name: "Latest Auto-Build (${{ env.RELEASE_TAG }})"
           files: |
-            arvores_app-v1.0.2.apk
+            arvores_app-v1.0.3.apk
             artigo_arvores.pdf
             article_trees.pdf
         env:

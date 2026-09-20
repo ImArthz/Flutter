@@ -25,7 +25,7 @@ class AboutAuthorScreen extends StatelessWidget {
                 ),
                 child: const CircleAvatar(
                   radius: 80,
-                  backgroundImage: NetworkImage('https://avatars.githubusercontent.com/u/135072001?v=4'),
+                  backgroundImage: const NetworkImage('https://avatars.githubusercontent.com/u/135072001?s=400&u=c0236aed9621fc4fbe0823f2bc8d1781c31bcd04&v=4'),
                   backgroundColor: AppColors.border,
                 ),
               ),

@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../../core/theme/app_theme.dart';
 
@@ -11,117 +11,167 @@ class BenchmarkScreen extends StatefulWidget {
 
 class _BenchmarkScreenState extends State<BenchmarkScreen> {
   bool _isRunning = false;
-  double _progress = 0.0;
-  List<dynamic> _results = []; // Mocks de resultados
+  List<FlSpot> _splaySpots = [];
+  List<FlSpot> _treapSpots = [];
+  int _maxElements = 10000;
 
   void _runBenchmark() async {
     setState(() {
       _isRunning = true;
-      _progress = 0.0;
-      _results = [];
+      _splaySpots.clear();
+      _treapSpots.clear();
     });
 
-    // Simulando o processo de benchmark na UI usando Isolates/async
-    for (int i = 1; i <= 10; i++) {
+    // Simulacao de benchmark assintotico
+    for (int i = 1000; i <= _maxElements; i += 2000) {
       await Future.delayed(const Duration(milliseconds: 300));
-      setState(() => _progress = i / 10.0);
-    }
-    
-    // Gerar resultados mockados para exibir no grÃ¡fico
-    _results = [
-      {'struct': 'Splay', 'size': 1000, 'time': 0.012},
-      {'struct': 'Splay', 'size': 10000, 'time': 0.035},
-      {'struct': 'Treap', 'size': 1000, 'time': 0.010},
-      {'struct': 'Treap', 'size': 10000, 'time': 0.028},
-      {'struct': 'Trie', 'size': 1000, 'time': 0.022},
-      {'struct': 'Trie', 'size': 10000, 'time': 0.200},
-    ];
+      
+      final splayTime = (i * 0.05) + (i * 0.01 * (i % 3));
+      final treapTime = (i * 0.04) + (i * 0.005 * (i % 2));
 
-    setState(() => _isRunning = false);
+      setState(() {
+        _splaySpots.add(FlSpot(i.toDouble(), splayTime));
+        _treapSpots.add(FlSpot(i.toDouble(), treapTime));
+      });
+    }
+
+    setState(() {
+      _isRunning = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Benchmarking')),
+      appBar: AppBar(
+        title: const Text('Performance Benchmark'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    const Text('ConfiguraÃ§Ãµes', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: const [
-                         ChoiceChip(label: Text('1k'), selected: false),
-                         ChoiceChip(label: Text('10k'), selected: true),
-                         ChoiceChip(label: Text('100k'), selected: false),
-                      ],
+            // Panel for Settings
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.border),
+              ),
+              child: Column(
+                children: [
+                  const Text('Settings', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      const Text('Max Elements:'),
+                      Expanded(
+                        child: Slider(
+                          value: _maxElements.toDouble(),
+                          min: 1000,
+                          max: 50000,
+                          divisions: 49,
+                          label: _maxElements.toString(),
+                          activeColor: AppColors.primary,
+                          onChanged: _isRunning ? null : (val) {
+                            setState(() => _maxElements = val.toInt());
+                          },
+                        ),
+                      ),
+                      Text('$_maxElements'),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton.icon(
+                    onPressed: _isRunning ? null : _runBenchmark,
+                    icon: _isRunning 
+                      ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                      : const Icon(Icons.play_arrow),
+                    label: Text(_isRunning ? 'Running...' : 'Run Benchmark'),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size.fromHeight(48)
                     ),
-                    const SizedBox(height: 16),
-                    ElevatedButton.icon(
-                      onPressed: _isRunning ? null : _runBenchmark,
-                      icon: _isRunning 
-                          ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                          : const Icon(Icons.play_arrow),
-                      label: Text(_isRunning ? 'Rodando...' : 'Executar Benchmark'),
-                    ),
-                    if (_isRunning) ...[
-                      const SizedBox(height: 16),
-                      LinearProgressIndicator(value: _progress),
-                    ]
-                  ],
-                ),
+                  )
+                ],
               ),
             ),
             
             const SizedBox(height: 24),
+            const Text('Insertion Time vs Size', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            const SizedBox(height: 16),
             
-            if (_results.isNotEmpty) ...[
-              const Text('Tempo de InserÃ§Ã£o vs Tamanho', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-              const SizedBox(height: 16),
-              Expanded(
-                child: LineChart(
-                  LineChartData(
-                    gridData: const FlGridData(show: true),
-                    titlesData: const FlTitlesData(show: true),
-                    borderData: FlBorderData(show: true),
-                    lineBarsData: [
-                      LineChartBarData(
-                        spots: const [FlSpot(1, 0.012), FlSpot(10, 0.035)],
-                        isCurved: false,
-                        color: AppColors.splayNode,
-                        barWidth: 3,
+            Expanded(
+              child: _splaySpots.isEmpty 
+                ? const Center(child: Text('No results yet. Run the benchmark.', style: TextStyle(color: AppColors.textDisabled)))
+                : Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: AppColors.border),
+                    ),
+                    child: LineChart(
+                      LineChartData(
+                        gridData: const FlGridData(show: true),
+                        titlesData: const FlTitlesData(
+                          topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                          rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                        ),
+                        borderData: FlBorderData(show: true, border: Border.all(color: AppColors.border)),
+                        lineBarsData: [
+                          LineChartBarData(
+                            spots: _splaySpots,
+                            isCurved: true,
+                            color: AppColors.splayNode,
+                            barWidth: 3,
+                            dotData: const FlDotData(show: false),
+                          ),
+                          LineChartBarData(
+                            spots: _treapSpots,
+                            isCurved: true,
+                            color: AppColors.treapNode,
+                            barWidth: 3,
+                            dotData: const FlDotData(show: false),
+                          ),
+                        ],
                       ),
-                      LineChartBarData(
-                        spots: const [FlSpot(1, 0.010), FlSpot(10, 0.028)],
-                        isCurved: false,
-                        color: AppColors.treapNode,
-                        barWidth: 3,
-                      ),
-                    ],
+                    ),
                   ),
+            ),
+            
+            if (_splaySpots.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _LegendItem(color: AppColors.splayNode, label: 'Splay Tree'),
+                    const SizedBox(width: 24),
+                    _LegendItem(color: AppColors.treapNode, label: 'Treap'),
+                  ],
                 ),
-              ),
-              const SizedBox(height: 16),
-              OutlinedButton.icon(
-                onPressed: () {
-                  // TODO: path_provider -> salvar .csv no celular
-                }, 
-                icon: const Icon(Icons.download), 
-                label: const Text('Exportar CSV')
               )
-            ] else 
-              const Expanded(child: Center(child: Text('Nenhum resultado ainda. Execute o benchmark.', style: TextStyle(color: Colors.grey)))),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _LegendItem extends StatelessWidget {
+  final Color color;
+  final String label;
+
+  const _LegendItem({required this.color, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(width: 16, height: 16, color: color),
+        const SizedBox(width: 8),
+        Text(label, style: const TextStyle(fontWeight: FontWeight.w500)),
+      ],
     );
   }
 }
