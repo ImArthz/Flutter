@@ -94,7 +94,7 @@ Toda a lógica de Domínio (Business Logic) e de interface gráfica foi constru�
 \subsection{Sistema de Snapshots}
 Para cumprir a exigência da demonstração interativa passo a passo das operações, desenvolveu-se a classe \texttt{TreeSnapshot}. Durante todas as operações modificadoras de estado (Insert, Delete), uma transcrição visual (`toMap()`) da árvore é instanciada e alocada na memória de histórico da respectiva classe de domínio.
 
-\begin{lstlisting}[language=Java, caption=Captura do Estado em Snapshot nas operações]
+\begin{lstlisting}[language=Java, caption=Captura do Estado em Snapshot nas operacoes]
 void _recordHistory(String operation, T key) {
     history.add(TreeSnapshot(
       step: history.length + 1,
@@ -102,7 +102,7 @@ void _recordHistory(String operation, T key) {
       key: key,
       rootKey: root?.key,
       treeMap: root?.toMap(),
-      inorder: inorder(), // Armazena a listagem em-ordem dinâmica
+      inorder: inorder(), // Armazena a listagem em-ordem dinamica
     ));
 }
 \end{lstlisting}
