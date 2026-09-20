@@ -1,4 +1,4 @@
-﻿name: Build APK, Windows & LaTeX PDF
+name: Build APK, Windows, Linux & LaTeX PDF
 
 on:
   push:
@@ -77,7 +77,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: "v1.0.3"
-          name: "Versão Final 1.0.3 (AED2)"
+          name: "Advanced Trees v1.0.3 (AED2)"
           files: |
             arvores_app-v1.0.3.apk
             artigo_arvores.pdf
@@ -120,7 +120,54 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: "v1.0.3"
-          name: "Versão Final 1.0.3 (AED2)"
+          name: "Advanced Trees v1.0.3 (AED2)"
           files: arvores_app_windows.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-linux:
+    name: Build Linux App
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install Linux Build Dependencies
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y ninja-build libgtk-3-dev
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+
+      - name: Generate Flutter Shell (Linux)
+        run: |
+          cd projeto_arvores_avancadas/app_flutter
+          flutter create --org com.arthur.arvores --project-name arvores_app .
+
+      - name: Flutter Pub Get
+        run: |
+          cd projeto_arvores_avancadas/app_flutter
+          flutter pub get
+
+      - name: Build Linux
+        run: |
+          cd projeto_arvores_avancadas/app_flutter
+          flutter build linux --release
+
+      - name: Zip Output
+        run: |
+          cd projeto_arvores_avancadas/app_flutter/build/linux/x64/release/bundle
+          tar -czf $GITHUB_WORKSPACE/arvores_app_linux.tar.gz *
+
+      - name: Release Linux App
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "v1.0.3"
+          name: "Advanced Trees v1.0.3 (AED2)"
+          files: arvores_app_linux.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
