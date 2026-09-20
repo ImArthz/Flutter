@@ -54,7 +54,7 @@ jobs:
 
       - name: Rename APK
         run: |
-          mv projeto_arvores_avancadas/app_flutter/build/app/outputs/flutter-apk/app-release.apk arvores_app-release.apk
+          mv projeto_arvores_avancadas/app_flutter/build/app/outputs/flutter-apk/app-release.apk arvores_app-v1.0.1.apk
 
       # --- 2. COMPILE LATEX ---
       - name: Compile LaTeX Document (PT-BR)
@@ -89,7 +89,7 @@ jobs:
           tag_name: ${{ env.RELEASE_TAG }}
           name: "Latest Auto-Build (${{ env.RELEASE_TAG }})"
           files: |
-            arvores_app-release.apk
+            arvores_app-v1.0.1.apk
             artigo_arvores.pdf
             article_trees.pdf
         env:
