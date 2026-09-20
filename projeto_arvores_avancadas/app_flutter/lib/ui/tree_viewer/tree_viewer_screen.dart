@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
-import '../../domain/structures/tree_snapshot.dart';
+import '../../domain/structures/tree_structure.dart';
 import '../../domain/structures/splay_tree.dart';
 import '../../domain/structures/treap.dart';
 import '../../domain/structures/trie.dart';
 import '../../domain/structures/patricia_tree.dart';
 import '../../domain/structures/kd_tree.dart';
+import '../../domain/structures/tree_snapshot.dart';
 import 'tree_painter.dart';
 
 class TreeViewerScreen extends StatefulWidget {
   final TreeStructure structure;
+
   const TreeViewerScreen({super.key, required this.structure});
 
   @override
@@ -17,12 +19,11 @@ class TreeViewerScreen extends StatefulWidget {
 }
 
 class _TreeViewerScreenState extends State<TreeViewerScreen> {
-  final TextEditingController _inputController = TextEditingController();
-  final TextEditingController _inputYController = TextEditingController(); // For KD-Tree Y value
-  int _currentStep = 0;
-  
-  // Generic wrapper to hold the chosen structure
   dynamic _treeInstance;
+  final TextEditingController _inputController = TextEditingController();
+  final TextEditingController _inputYController = TextEditingController(); // Apenas para KD-Tree
+  int _currentStep = 0;
+  bool _isSimulating = false;
 
   @override
   void initState() {
@@ -63,20 +64,16 @@ class _TreeViewerScreenState extends State<TreeViewerScreen> {
     });
   }
 
-  dynamic _parseInput() {
-    final text = _inputController.text.trim();
+  dynamic _parseInput(String text, [String? textY]) {
     if (text.isEmpty) return null;
-    
     if (widget.structure == TreeStructure.kdTree) {
-      final textY = _inputYController.text.trim();
       final x = double.tryParse(text);
-      final y = double.tryParse(textY);
+      final y = double.tryParse(textY ?? '');
       if (x != null && y != null) {
         return Point2D(x, y);
       }
       return null;
     }
-    
     if (widget.structure.isStringBased) {
       return text;
     } else {
@@ -85,7 +82,7 @@ class _TreeViewerScreenState extends State<TreeViewerScreen> {
   }
 
   void _onInsert() {
-    final val = _parseInput();
+    final val = _parseInput(_inputController.text.trim(), _inputYController.text.trim());
     if (val == null) return;
     _treeInstance!.insert(val);
     _inputController.clear();
@@ -94,14 +91,14 @@ class _TreeViewerScreenState extends State<TreeViewerScreen> {
   }
 
   void _onSearch() {
-    final val = _parseInput();
+    final val = _parseInput(_inputController.text.trim(), _inputYController.text.trim());
     if (val == null) return;
     _treeInstance!.search(val);
     _syncStep();
   }
 
   void _onDelete() {
-    final val = _parseInput();
+    final val = _parseInput(_inputController.text.trim(), _inputYController.text.trim());
     if (val == null) return;
     _treeInstance!.delete(val);
     _inputController.clear();
@@ -109,49 +106,61 @@ class _TreeViewerScreenState extends State<TreeViewerScreen> {
     _syncStep();
   }
 
-  void _simulateExample() {
+  void _simulateExample() async {
+    if (_isSimulating) return;
     setState(() {
+      _isSimulating = true;
       _initTree();
       _currentStep = 0;
     });
-    
-    if (widget.structure == TreeStructure.kdTree) {
-      _treeInstance!.insert(Point2D(5, 5));
-      _treeInstance!.insert(Point2D(3, 2));
-      _treeInstance!.insert(Point2D(7, 8));
-      _treeInstance!.insert(Point2D(2, 3));
-      _treeInstance!.insert(Point2D(8, 1));
-    } else if (widget.structure.isStringBased) {
-      _treeInstance!.insert('flutter');
-      _treeInstance!.insert('flutuante');
-      _treeInstance!.insert('arvore');
-      _treeInstance!.insert('arte');
-      _treeInstance!.insert('dart');
-    } else {
-      _treeInstance!.insert(50);
-      _treeInstance!.insert(30);
-      _treeInstance!.insert(70);
-      _treeInstance!.insert(20);
-      _treeInstance!.insert(40);
-      _treeInstance!.insert(60);
-      _treeInstance!.insert(80);
-    }
-    _syncStep();
-  }
 
-  void _showInfoDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Sobre: ${widget.structure.title}'),
-        content: Text(widget.structure.subtitle + '\n\n' +
-            'Complexidade Média: ${widget.structure.avgComplexity}\n\n' +
-            'Pressione "Simular Exemplo" para ver uma demonstração de inserções automáticas.'),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Entendi'))
-        ],
-      ),
-    );
+    List<Map<String, dynamic>> operations = [];
+    if (widget.structure == TreeStructure.kdTree) {
+      operations = [
+        {'op': 'ins', 'val': Point2D(5, 5)},
+        {'op': 'ins', 'val': Point2D(3, 2)},
+        {'op': 'ins', 'val': Point2D(7, 8)},
+        {'op': 'ins', 'val': Point2D(2, 3)},
+        {'op': 'del', 'val': Point2D(3, 2)},
+      ];
+    } else if (widget.structure.isStringBased) {
+      operations = [
+        {'op': 'ins', 'val': 'flutter'},
+        {'op': 'ins', 'val': 'flutuante'},
+        {'op': 'ins', 'val': 'arvore'},
+        {'op': 'ins', 'val': 'arte'},
+        {'op': 'del', 'val': 'arvore'},
+      ];
+    } else {
+      operations = [
+        {'op': 'ins', 'val': 50},
+        {'op': 'ins', 'val': 30},
+        {'op': 'ins', 'val': 70},
+        {'op': 'ins', 'val': 20},
+        {'op': 'ins', 'val': 40},
+        {'op': 'del', 'val': 30},
+        {'op': 'ins', 'val': 60},
+      ];
+    }
+
+    for (var step in operations) {
+      if (!mounted || !_isSimulating) break;
+      await Future.delayed(const Duration(seconds: 2));
+      if (!mounted || !_isSimulating) break;
+      
+      if (step['op'] == 'ins') {
+        _treeInstance!.insert(step['val']);
+      } else if (step['op'] == 'del') {
+        _treeInstance!.delete(step['val']);
+      }
+      _syncStep();
+    }
+    
+    if (mounted) {
+      setState(() {
+        _isSimulating = false;
+      });
+    }
   }
 
   @override
@@ -162,21 +171,24 @@ class _TreeViewerScreenState extends State<TreeViewerScreen> {
       appBar: AppBar(
         title: Text(widget.structure.title),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.info_outline),
-            tooltip: 'Informações',
-            onPressed: _showInfoDialog,
-          ),
-          IconButton(
-            icon: const Icon(Icons.play_circle_outline),
-            tooltip: 'Simular Exemplo',
-            onPressed: _simulateExample,
-          ),
+          if (_isSimulating)
+            IconButton(
+              icon: const Icon(Icons.stop_circle_outlined, color: Colors.amberAccent),
+              tooltip: 'Parar Simulação',
+              onPressed: () => setState(() => _isSimulating = false),
+            )
+          else
+            IconButton(
+              icon: const Icon(Icons.play_circle_outline),
+              tooltip: 'Simular Exemplo (Automático)',
+              onPressed: _simulateExample,
+            ),
           IconButton(
             icon: const Icon(Icons.refresh),
-            tooltip: 'Reiniciar Árvore',
+            tooltip: 'Limpar Árvore',
             onPressed: () {
               setState(() {
+                _isSimulating = false;
                 _initTree();
                 _currentStep = 0;
               });
@@ -186,7 +198,7 @@ class _TreeViewerScreenState extends State<TreeViewerScreen> {
       ),
       body: Column(
         children: [
-          // 🌲🌲 VISUALIZADOR DA ÁRVORE (InteractiveViewer) 🌲🌲
+          // ÁREA DE DESENHO (Interactive Viewer)
           Expanded(
             child: Container(
               margin: const EdgeInsets.all(16),
@@ -202,17 +214,19 @@ class _TreeViewerScreenState extends State<TreeViewerScreen> {
                 borderRadius: BorderRadius.circular(16),
                 child: InteractiveViewer(
                   constrained: false,
-                  boundaryMargin: const EdgeInsets.all(500),
+                  boundaryMargin: const EdgeInsets.all(1000),
                   minScale: 0.1,
                   maxScale: 2.0,
                   child: Center(
                     child: currentSnapshot?.treeMap == null || currentSnapshot?.treeMap!.isEmpty == true
                       ? const Padding(
                           padding: EdgeInsets.all(64.0),
-                          child: Text('Árvore Vazia. Digite um valor ou clique em Simular Exemplo.', style: TextStyle(color: AppColors.textDisabled, fontSize: 18)),
+                          child: Text('Árvore Vazia.\nDigite um valor e insira\nou aperte Play no topo.', 
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: AppColors.textDisabled, fontSize: 18)),
                         )
                       : CustomPaint(
-                          size: const Size(800, 800), // Base size, can pan around
+                          size: const Size(1200, 1200), // Base canvas size
                           painter: TreePainter(
                             treeMap: currentSnapshot!.treeMap, 
                             nodeColor: widget.structure.color
@@ -224,66 +238,92 @@ class _TreeViewerScreenState extends State<TreeViewerScreen> {
             ),
           ),
           
-          // 🌲🌲 HISTÓRICO E CONTROLES 🌲🌲
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            color: AppColors.surfaceAlt,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.first_page),
-                  onPressed: _currentStep > 0 ? () => setState(() => _currentStep = 0) : null,
-                ),
-                IconButton(
-                  icon: const Icon(Icons.chevron_left),
-                  onPressed: _currentStep > 0 ? () => setState(() => _currentStep--) : null,
-                ),
-                Text('Passo ${_currentStep} / ${_history.length > 0 ? _history.length - 1 : 0}', 
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
-                IconButton(
-                  icon: const Icon(Icons.chevron_right),
-                  onPressed: _currentStep < _history.length - 1 ? () => setState(() => _currentStep++) : null,
-                ),
-                IconButton(
-                  icon: const Icon(Icons.last_page),
-                  onPressed: _currentStep < _history.length - 1 ? () => setState(() => _currentStep = _history.length - 1) : null,
-                ),
-              ],
-            ),
-          ),
-          
-          // 🌲🌲 INFO DO PASSO 🌲🌲
+          // INFO DO PASSO ATUAL (Painel Moderno)
           if (currentSnapshot != null)
             Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
               padding: const EdgeInsets.all(12),
-              width: double.infinity,
-              color: Colors.white,
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.border),
+              ),
               child: Column(
                 children: [
-                  Text('Operação: ${currentSnapshot.operation.toUpperCase()} | Chave: ${currentSnapshot.key}', 
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        currentSnapshot.operation == 'insert' ? Icons.add_circle :
+                        currentSnapshot.operation == 'delete' ? Icons.remove_circle : Icons.search,
+                        color: currentSnapshot.operation == 'insert' ? AppColors.secondary :
+                               currentSnapshot.operation == 'delete' ? AppColors.error : AppColors.primary,
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      Text('Operação: ${currentSnapshot.operation.toUpperCase()} | Chave: ${currentSnapshot.key}', 
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                    ],
+                  ),
                   if (currentSnapshot.inorder.isNotEmpty)
-                    Text('Em-ordem: ${currentSnapshot.inorder.join(", ")}', 
-                      style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Text('Em-ordem: ${currentSnapshot.inorder.join(", ")}', 
+                        style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                 ],
               ),
             ),
             
-          // 🌲🌲 INPUT (Insert / Search / Delete) 🌲🌲
-          Padding(
-            padding: const EdgeInsets.all(16.0),
+          // CONTROLES DE HISTÓRICO
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.first_page),
+                  onPressed: _currentStep > 0 && !_isSimulating ? () => setState(() => _currentStep = 0) : null,
+                ),
+                IconButton(
+                  icon: const Icon(Icons.chevron_left),
+                  onPressed: _currentStep > 0 && !_isSimulating ? () => setState(() => _currentStep--) : null,
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text('Passo ${_currentStep} / ${_history.length > 0 ? _history.length - 1 : 0}', 
+                    style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.primary)),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.chevron_right),
+                  onPressed: _currentStep < _history.length - 1 && !_isSimulating ? () => setState(() => _currentStep++) : null,
+                ),
+                IconButton(
+                  icon: const Icon(Icons.last_page),
+                  onPressed: _currentStep < _history.length - 1 && !_isSimulating ? () => setState(() => _currentStep = _history.length - 1) : null,
+                ),
+              ],
+            ),
+          ),
+            
+          // INPUT CONTROLS (Modernos)
+          Container(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: _inputController,
+                    enabled: !_isSimulating,
                     decoration: InputDecoration(
-                      hintText: widget.structure == TreeStructure.kdTree ? 'X...' : 'Digite o valor...',
-                      isDense: true,
+                      hintText: widget.structure == TreeStructure.kdTree ? 'X...' : 'Valor...',
                     ),
                     keyboardType: widget.structure.isStringBased ? TextInputType.text : const TextInputType.numberWithOptions(decimal: true),
                   ),
@@ -293,20 +333,30 @@ class _TreeViewerScreenState extends State<TreeViewerScreen> {
                   Expanded(
                     child: TextField(
                       controller: _inputYController,
-                      decoration: const InputDecoration(
-                        hintText: 'Y...',
-                        isDense: true,
-                      ),
+                      enabled: !_isSimulating,
+                      decoration: const InputDecoration(hintText: 'Y...'),
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
                     ),
                   ),
                 ],
                 const SizedBox(width: 8),
-                ElevatedButton(onPressed: _onInsert, child: const Text('Ins')),
+                ElevatedButton(
+                  onPressed: _isSimulating ? null : _onInsert, 
+                  style: ElevatedButton.styleFrom(backgroundColor: AppColors.secondary, padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14)),
+                  child: const Text('Ins'),
+                ),
                 const SizedBox(width: 4),
-                OutlinedButton(onPressed: _onSearch, child: const Text('Bus')),
+                OutlinedButton(
+                  onPressed: _isSimulating ? null : _onSearch,
+                  style: OutlinedButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14)),
+                  child: const Text('Bus'),
+                ),
                 const SizedBox(width: 4),
-                TextButton(onPressed: _onDelete, child: const Text('Del', style: TextStyle(color: AppColors.error))),
+                TextButton(
+                  onPressed: _isSimulating ? null : _onDelete,
+                  style: TextButton.styleFrom(foregroundColor: AppColors.error, padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14)),
+                  child: const Text('Del'),
+                ),
               ],
             ),
           )

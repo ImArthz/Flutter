@@ -19,7 +19,7 @@ Este projeto Ã© um estudo prÃ¡tico e detalhado sobre Estruturas de Dados Ava
 5. KD-Tree
 
 O repositÃ³rio contÃ©m trÃªs partes principais organizadas nesta pasta:
-- ðŸ“± `app_flutter/`: Aplicativo interativo em Flutter que renderiza as Ã¡rvores e permite operÃ¡-las passo a passo com um simulador.
+- ðŸ“± `app_flutter/`: Aplicativo interativo em Flutter que renderiza as Ã¡rvores e permite operÃ¡-las passo a passo com um simulador automÃ¡tico.
 - ðŸ“ˆ `scripts_benchmark/`: Scripts Python utilizados para gerar os testes de estresse, complexidade de tempo e memÃ³ria.
 - ðŸ“„ `artigo_academico/`: Artigo cientÃ­fico completo escrito em LaTeX e grÃ¡ficos plotados do benchmark.
 
@@ -29,7 +29,7 @@ O repositÃ³rio contÃ©m trÃªs partes principais organizadas nesta pasta:
 
 VocÃª nÃ£o precisa compilar o projeto para testar ou ler. Todos os arquivos sÃ£o gerados automaticamente pelo GitHub Actions!
 
-- **[ðŸ“± Baixar APK do Aplicativo (Android)](https://github.com/ImArthz/Flutter/releases/latest/download/arvores_app-v1.0.1.apk)**
+- **[ðŸ“± Baixar APK do Aplicativo (Android)](https://github.com/ImArthz/Flutter/releases/latest/download/arvores_app-v1.0.2.apk)**
 - **[ðŸ“„ Baixar Artigo CientÃ­fico em PDF (PT-BR)](https://github.com/ImArthz/Flutter/releases/latest/download/artigo_arvores.pdf)**
 - **[ðŸ“„ Baixar Artigo CientÃ­fico em PDF (InglÃªs)](https://github.com/ImArthz/Flutter/releases/latest/download/article_trees.pdf)**
 

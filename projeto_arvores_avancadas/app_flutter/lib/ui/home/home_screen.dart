@@ -3,6 +3,8 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../core/theme/app_theme.dart';
 import '../tree_viewer/tree_viewer_screen.dart';
 import '../benchmark/benchmark_screen.dart';
+import '../about/about_author_screen.dart';
+import '../about/tree_theory_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -13,159 +15,150 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Árvores Avançadas — Visualizador'),
+        title: const Text('Árvores Avançadas', style: TextStyle(fontWeight: FontWeight.w600)),
         centerTitle: true,
       ),
       drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
+        child: Column(
           children: [
-            const UserAccountsDrawerHeader(
-              decoration: BoxDecoration(
-                color: AppColors.primary,
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.only(top: 60, bottom: 20),
+              decoration: const BoxDecoration(color: AppColors.primary),
+              child: const Column(
+                children: [
+                  Icon(Icons.park, size: 64, color: Colors.white),
+                  SizedBox(height: 12),
+                  Text('Árvores Avançadas', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+                  Text('Visualizador e Simulador', style: TextStyle(color: Colors.white70, fontSize: 14)),
+                ],
               ),
-              accountName: Text('Arthur de Oliveira Mendonça', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-              accountEmail: Text('Engenharia da Computação - CEFET-MG'),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage('https://github.com/ImArthz.png'),
-                backgroundColor: Colors.white,
+            ),
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.school, color: AppColors.primary),
+                    title: const Text('Sobre o Autor', style: TextStyle(fontWeight: FontWeight.w500)),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const AboutAuthorScreen()));
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.menu_book, color: AppColors.secondary),
+                    title: const Text('Teoria das Árvores', style: TextStyle(fontWeight: FontWeight.w500)),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const TreeTheoryScreen()));
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.speed, color: AppColors.error),
+                    title: const Text('Benchmarking', style: TextStyle(fontWeight: FontWeight.w500)),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const BenchmarkScreen()));
+                    },
+                  ),
+                  const Divider(),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Text('Recursos Acadêmicos', style: TextStyle(color: AppColors.textDisabled, fontSize: 12, fontWeight: FontWeight.bold)),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.picture_as_pdf, color: Colors.redAccent),
+                    title: const Text('Artigo Científico (PT-BR)'),
+                    onTap: () => launchUrl(Uri.parse('https://github.com/ImArthz/Flutter/releases/latest/download/artigo_arvores.pdf')),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.picture_as_pdf, color: Colors.redAccent),
+                    title: const Text('Scientific Article (EN)'),
+                    onTap: () => launchUrl(Uri.parse('https://github.com/ImArthz/Flutter/releases/latest/download/article_trees.pdf')),
+                  ),
+                ],
               ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.speed, color: AppColors.primary),
-              title: const Text('Rodar Benchmarks Internos'),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.of(context).push(MaterialPageRoute(builder: (_) => const BenchmarkScreen()));
-              },
-            ),
-            const Divider(),
-            ListTile(
-              leading: const Icon(Icons.code),
-              title: const Text('Repositório no GitHub'),
-              onTap: () {
-                launchUrl(Uri.parse('https://github.com/ImArthz/Flutter'));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.picture_as_pdf, color: Colors.redAccent),
-              title: const Text('Artigo Científico (PT-BR)'),
-              onTap: () {
-                launchUrl(Uri.parse('https://github.com/ImArthz/Flutter/releases/latest/download/artigo_arvores.pdf'));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.picture_as_pdf, color: Colors.redAccent),
-              title: const Text('Scientific Article (EN)'),
-              onTap: () {
-                launchUrl(Uri.parse('https://github.com/ImArthz/Flutter/releases/latest/download/article_trees.pdf'));
-              },
             ),
           ],
         ),
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Selecione uma Estrutura',
-                style: Theme.of(context).textTheme.displayMedium,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Explore o comportamento visual de árvores especializadas passo a passo.',
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              const SizedBox(height: 32),
-              Expanded(
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 16,
-                    crossAxisSpacing: 16,
-                    childAspectRatio: 0.75,
-                  ),
-                  itemCount: structures.length,
-                  itemBuilder: (context, index) {
-                    final structure = structures[index];
-                    return _StructureCard(structure: structure);
-                  },
-                ),
-              ),
-            ],
+      body: Container(
+        color: AppColors.background,
+        child: GridView.builder(
+          padding: const EdgeInsets.all(16),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+            childAspectRatio: 0.75, // Ajustado para evitar overflow
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _StructureCard extends StatelessWidget {
-  final TreeStructure structure;
-
-  const _StructureCard({required this.structure});
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => TreeViewerScreen(structure: structure),
-          ),
-        );
-      },
-      borderRadius: BorderRadius.circular(16),
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: structure.lightColor,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  structure.icon,
-                  style: TextStyle(fontSize: 24, color: structure.color),
-                ),
+          itemCount: structures.length,
+          itemBuilder: (context, index) {
+            final struct = structures[index];
+            return Card(
+              color: AppColors.surface,
+              elevation: 4,
+              shadowColor: struct.color.withOpacity(0.4),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+                side: BorderSide(color: struct.color.withOpacity(0.3), width: 1.5),
               ),
-              const Spacer(),
-              Text(
-                structure.title,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 16),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                structure.subtitle,
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(fontSize: 12),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.surfaceAlt,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Text(
-                  structure.avgComplexity,
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: AppColors.textSecondary,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 11,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(16),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TreeViewerScreen(structure: struct),
+                    ),
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.account_tree, size: 48, color: struct.color),
+                      const SizedBox(height: 16),
+                      Text(
+                        struct.title,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary,
+                        ),
                       ),
+                      const SizedBox(height: 8),
+                      Text(
+                        struct.subtitle,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                      ),
+                      const Spacer(),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: struct.color.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: struct.color.withOpacity(0.5)),
+                        ),
+                        child: Text(
+                          struct.avgComplexity,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: struct.color,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              )
-            ],
-          ),
+              ),
+            );
+          },
         ),
       ),
     );
