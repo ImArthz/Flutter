@@ -218,8 +218,6 @@ class DeckCard {
       'charizard ex',
       'charmander',
       'charmeleon',
-      'pidgeot ex',
-      'pidgey',
       'dragapult ex',
       'drakloak',
       'dreepy',

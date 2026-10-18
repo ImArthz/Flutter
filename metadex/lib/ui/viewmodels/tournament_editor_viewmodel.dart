@@ -233,7 +233,7 @@ class TournamentEditorViewModel extends ChangeNotifier {
         1,
         0.642,
         0.598,
-        _sampleGardevoirDeck(),
+        _sampleTerapagosDeck(),
       ),
       (
         3,
@@ -744,8 +744,8 @@ class TournamentEditorViewModel extends ChangeNotifier {
 3 Charizard ex OBF 125
 1 Charmeleon PAF 8
 4 Charmander OBF 26
-2 Pidgeot ex OBF 164
-2 Pidgey OBF 162
+2 Noctowl SCR 115
+2 Hoothoot SCR 114
 2 Dusknoir SFA 20
 2 Dusclops SFA 19
 1 Duskull SFA 18
@@ -771,35 +771,35 @@ Energy: 6
 6 Basic Fire Energy SVE 2''';
   }
 
-  static String _sampleGardevoirDeck() {
-    return '''Pokémon: 16
-3 Gardevoir ex SVI 86
-4 Kirlia SVI 85
-4 Ralts SVI 84
-1 Munkidori TWM 95
-1 Scream Tail PAR 86
-1 Drifloon SVI 89
-1 Flutter Mane TEF 78
+  static String _sampleTerapagosDeck() {
+    return '''Pokémon: 14
+3 Terapagos ex SCR 128
+3 Noctowl SCR 115
+3 Hoothoot SCR 114
+2 Bouffalant SCR 119
+1 Fan Rotom SCR 118
 1 Fezandipiti ex SFA 38
+1 Teal Mask Ogerpon ex TWM 25
 
-Trainer: 34
+Trainer: 35
 4 Buddy-Buddy Poffin TEF 144
-4 Iono PAL 185
-4 Arven SVI 166
+4 Area Zero Underdepths SCR 131
+4 Nest Ball SVI 181
 4 Ultra Ball SVI 196
-2 Super Rod PAL 188
-2 Counter Catcher PAR 160
-3 Earthen Vessel PAR 163
-2 Bravery Charm PAL 173
+4 Arven SVI 166
+3 Iono PAL 185
 2 Boss's Orders PAL 172
 2 Night Stretcher SFA 61
-3 Nest Ball SVI 181
-1 Unfair Stamp TWM 165
-1 Professor Turo's Scenario PAR 171
+2 Super Rod PAL 188
+2 Counter Catcher PAR 160
+2 Crispin SCR 133
+1 Prime Catcher TEF 157
+1 Briar SCR 132
 
-Energy: 10
-8 Basic Psychic Energy SVE 5
-2 Basic Darkness Energy SVE 7''';
+Energy: 11
+5 Basic Grass Energy SVE 1
+3 Basic Water Energy SVE 3
+3 Basic Lightning Energy SVE 4''';
   }
 
   static String _sampleDragapultDeck({int variant = 1}) {
@@ -808,8 +808,8 @@ Energy: 10
 3 Dragapult ex TWM 130
 4 Drakloak TWM 129
 4 Dreepy TWM 128
-2 Pidgeot ex OBF 164
-2 Pidgey OBF 162
+2 Noctowl SCR 115
+2 Hoothoot SCR 114
 1 Fezandipiti ex SFA 38
 1 Dusknoir SFA 20
 
@@ -860,36 +860,5 @@ Energy: 12
 6 Basic Grass Energy SVE 1
 3 Basic Fighting Energy SVE 6
 3 Basic Lightning Energy SVE 4''';
-  }
-
-  static String _sampleTerapagosDeck() {
-    return '''Pokémon: 16
-3 Terapagos ex SCR 128
-3 Noctowl SCR 115
-3 Hoothoot SCR 114
-2 Pidgeot ex OBF 164
-2 Pidgey OBF 162
-1 Fan Rotom SCR 118
-1 Bouffalant SCR 119
-1 Fezandipiti ex SFA 38
-
-Trainer: 36
-4 Buddy-Buddy Poffin TEF 144
-4 Ultra Ball SVI 196
-4 Nest Ball SVI 181
-4 Arven SVI 166
-3 Iono PAL 185
-3 Area Zero Underdepths SCR 131
-3 Rare Candy SVI 191
-2 Boss's Orders PAL 172
-2 Night Stretcher SFA 61
-2 Super Rod PAL 188
-2 Counter Catcher PAR 160
-1 Prime Catcher TEF 157
-1 Briar SCR 132
-1 Professor Turo's Scenario PAR 171
-
-Energy: 8
-8 Basic Water Energy SVE 3''';
   }
 }

@@ -4,11 +4,14 @@ import '../viewmodels/tournament_editor_viewmodel.dart';
 import '../widgets/podium.dart';
 import '../widgets/metagame_chart.dart';
 import '../widgets/decklist_view.dart';
+import 'package:flutter/services.dart';
+import 'package:file_picker/file_picker.dart';
 import '../../domain/models/tournament.dart';
 import '../../domain/models/player.dart';
 import '../../domain/models/deck.dart';
 import '../../domain/services/deck_validator.dart';
 import '../../data/services/pdf_export_service.dart';
+import '../../data/services/pdf_decklist_extractor.dart';
 import 'start_menu_screen.dart';
 
 class TournamentEditorScreen extends StatefulWidget {
@@ -778,7 +781,7 @@ class _PlayersTabState extends State<_PlayersTab> with AutomaticKeepAliveClientM
                 color: const Color(0xFF1A1A1A),
                 margin: const EdgeInsets.only(bottom: 10),
                 child: ExpansionTile(
-                  key: PageStorageKey('exp_player_${player.id}'),
+                  key: ValueKey('exp_player_${player.id}'),
                   title: Text(
                     '${player.placement}º - ${player.displayName}',
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
@@ -894,15 +897,93 @@ class _PlayersTabState extends State<_PlayersTab> with AutomaticKeepAliveClientM
                       ),
                     ),
                     const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: const Color(0xFFFF7A00),
+                              side: const BorderSide(color: Color(0xFFFF7A00)),
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                            ),
+                            onPressed: () async {
+                              final files = await FilePicker.pickFiles(
+                                type: FileType.custom,
+                                allowedExtensions: ['pdf', 'txt'],
+                              );
+                              if (files.isNotEmpty) {
+                                final file = files.first;
+                                final bytes = await file.xFile.readAsBytes();
+                                if (context.mounted) {
+                                  final text = PdfDecklistExtractor.extractDeckText(bytes);
+                                  if (text.trim().isNotEmpty) {
+                                    context.read<TournamentEditorViewModel>().importPlayerDecklist(
+                                          index,
+                                          text,
+                                          isBulkAction: true,
+                                        );
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Decklist importada com sucesso de "${file.name}"!'),
+                                        backgroundColor: const Color(0xFF009E73),
+                                      ),
+                                    );
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text('Não foi possível extrair a decklist deste arquivo.'),
+                                        backgroundColor: Colors.redAccent,
+                                      ),
+                                    );
+                                  }
+                                }
+                              }
+                            },
+                            icon: const Icon(Icons.picture_as_pdf, size: 16),
+                            label: const Text('Carregar Arquivo (PDF / TXT)', style: TextStyle(fontSize: 11)),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: Colors.white70,
+                              side: const BorderSide(color: Colors.white24),
+                              padding: const EdgeInsets.symmetric(vertical: 8),
+                            ),
+                            onPressed: () async {
+                              final data = await Clipboard.getData(Clipboard.kTextPlain);
+                              if (data?.text != null && data!.text!.trim().isNotEmpty && context.mounted) {
+                                context.read<TournamentEditorViewModel>().importPlayerDecklist(
+                                      index,
+                                      data.text!,
+                                      isBulkAction: true,
+                                    );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Decklist colada da área de transferência!'),
+                                    backgroundColor: Color(0xFF009E73),
+                                  ),
+                                );
+                              }
+                            },
+                            icon: const Icon(Icons.content_paste, size: 16),
+                            label: const Text('Colar Clipboard', style: TextStyle(fontSize: 11)),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
                     TextFormField(
                       key: ValueKey('p_dl_${player.id}_$gen'),
                       initialValue: player.decklist?.rawText ?? '',
-                      maxLines: 4,
+                      maxLines: 5,
                       onChanged: (val) {
                         context.read<TournamentEditorViewModel>().importPlayerDecklist(index, val);
                       },
                       decoration: const InputDecoration(
                         labelText: 'Colar Decklist (PTCG Live PT-BR ou EN)',
+                        hintText: 'Pokémon: 18\n3 Charizard ex...\n\nTrainer: 36\n...\n\nEnergy: 6\n...',
                         alignLabelWithHint: true,
                         border: OutlineInputBorder(),
                       ),
@@ -941,7 +1022,36 @@ class _JudgeCurationTabState extends State<_JudgeCurationTab> with AutomaticKeep
           'PAINEL DA JUÍZA (PROFESSOR) - VALIDAÇÃO & CURADORIA',
           style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFFFFA24D)),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 6),
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: const Color(0xFF1E1E1E),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: const Color(0xFF333333)),
+          ),
+          child: const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(Icons.info_outline, size: 16, color: Color(0xFFFF7A00)),
+                  SizedBox(width: 8),
+                  Text(
+                    'O QUE É A CURADORIA?',
+                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFFFF7A00)),
+                  ),
+                ],
+              ),
+              SizedBox(height: 4),
+              Text(
+                'É a mesa de decisão oficial da Juíza (Pokémon Professor). Sempre que uma decklist possui erros de regras (ex: cartas fora do formato como Marca G no Standard H-I-J, mais de 60 cartas ou 2 ACE SPECs) ou um arquétipo desconhecido ("Rogue"), ela entra nesta fila para o juiz auditar, corrigir o nome do arquétipo ou registrar a infração antes de gerar o relatório oficial.',
+                style: TextStyle(fontSize: 11, color: Colors.white70, height: 1.35),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 12),
         Row(
           children: [
             Expanded(

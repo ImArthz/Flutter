@@ -244,10 +244,22 @@ Energy: 56
       await tester.pumpAndSettle();
       expect(find.textContaining('CARTAS MAIS USADAS'), findsOneWidget);
 
-      // Navega para a aba CONSENSO & DIFF no Viewport
-      await tester.tap(find.text('CONSENSO & DIFF'));
+      // Navega para a aba JOGADORES no Painel de Comando
+      await tester.tap(find.text('JOGADORES'));
       await tester.pumpAndSettle();
-      expect(find.textContaining('LISTA CONSENSO 60 CARTAS'), findsOneWidget);
+      expect(find.text('+ Adicionar Jogador'), findsOneWidget);
+
+      // Clica no primeiro jogador para expandir
+      final playerTile = find.textContaining('1º -');
+      expect(playerTile, findsOneWidget);
+      await tester.tap(playerTile);
+      await tester.pumpAndSettle();
+
+      // Verifica se todos os campos do jogador expandido estão visíveis
+      expect(find.widgetWithText(TextFormField, 'Nome Completo do Jogador'), findsOneWidget);
+      expect(find.widgetWithText(DropdownButtonFormField<DivisaoEtaria>, 'Divisão Etária'), findsOneWidget);
+      expect(find.widgetWithText(TextFormField, 'Nome do Deck / Arquétipo'), findsOneWidget);
+      expect(find.widgetWithText(TextFormField, 'Colar Decklist (PTCG Live PT-BR ou EN)'), findsOneWidget);
 
       await tester.binding.setSurfaceSize(null);
     });

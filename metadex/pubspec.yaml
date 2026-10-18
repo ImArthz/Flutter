@@ -16,6 +16,7 @@ dependencies:
   pdf: ^3.11.0 # Para geração do PDF de exportação
   printing: ^5.11.1 # Para salvar/compartilhar o PDF
   http: ^1.2.0 # Para a API do pokemontcg.io
+  file_picker: ^13.1.0
 
 dev_dependencies:
   flutter_test:
