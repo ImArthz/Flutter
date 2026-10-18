@@ -1,4 +1,4 @@
-name: Build APK, Windows, Linux & LaTeX PDF
+name: Build APK, Windows, Linux, Web & LaTeX PDF
 
 on:
   push:
@@ -11,8 +11,185 @@ permissions:
   contents: write
 
 jobs:
+  # ============================================================================
+  # META-DEX TCG STUDIO (Android APK + Web Bundle + Windows EXE + Linux Desktop)
+  # ============================================================================
+  build-metadex-android-web:
+    name: MetaDex - Build Android APK & Web
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter (Stable 3.47.7)
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.7'
+          channel: 'stable'
+
+      - name: Ensure Android Platform & Internet Permission
+        run: |
+          cd metadex
+          flutter create --platforms=android,web --org com.arthur.metadex --project-name metadex .
+          grep -q "android.permission.INTERNET" android/app/src/main/AndroidManifest.xml || \
+            sed -i '/<application/i \    <uses-permission android:name="android.permission.INTERNET" />' android/app/src/main/AndroidManifest.xml
+
+      - name: Flutter Pub Get
+        run: |
+          cd metadex
+          flutter pub get
+
+      - name: Build Android APK
+        run: |
+          cd metadex
+          flutter build apk --release
+          cp build/app/outputs/flutter-apk/app-release.apk $GITHUB_WORKSPACE/metadex-v1.0.0.apk
+
+      - name: Build Web Bundle
+        run: |
+          cd metadex
+          flutter build web --release
+          cd build/web
+          zip -r $GITHUB_WORKSPACE/metadex_web.zip .
+
+      - name: Publish MetaDex APK & Web to Release (metadex-v1.0.0)
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "metadex-v1.0.0"
+          name: "MetaDex TCG Studio v1.0.0 — Pokémon TCG Metagame & Tournament Report"
+          make_latest: true
+          files: |
+            metadex-v1.0.0.apk
+            metadex_web.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Attach MetaDex APK & Web to v1.0.3
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "v1.0.3"
+          files: |
+            metadex-v1.0.0.apk
+            metadex_web.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-metadex-windows:
+    name: MetaDex - Build Windows EXE
+    runs-on: windows-2022
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter (Stable 3.47.7)
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.7'
+          channel: 'stable'
+
+      - name: Ensure Windows Platform
+        run: |
+          cd metadex
+          flutter create --platforms=windows --org com.arthur.metadex --project-name metadex .
+
+      - name: Flutter Pub Get
+        run: |
+          cd metadex
+          flutter pub get
+
+      - name: Build Windows EXE
+        run: |
+          cd metadex
+          flutter build windows --release
+
+      - name: Zip Windows Release
+        run: Compress-Archive -Path metadex\build\windows\x64\runner\Release\* -DestinationPath metadex_windows.zip -Force
+
+      - name: Publish MetaDex Windows ZIP to Release (metadex-v1.0.0)
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "metadex-v1.0.0"
+          name: "MetaDex TCG Studio v1.0.0 — Pokémon TCG Metagame & Tournament Report"
+          make_latest: true
+          files: metadex_windows.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Attach MetaDex Windows ZIP to v1.0.3
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "v1.0.3"
+          files: metadex_windows.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-metadex-linux:
+    name: MetaDex - Build Linux Desktop
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Linux Dependencies
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y ninja-build libgtk-3-dev
+
+      - name: Setup Flutter (Stable 3.47.7)
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.7'
+          channel: 'stable'
+
+      - name: Ensure Linux Platform
+        run: |
+          cd metadex
+          flutter create --platforms=linux --org com.arthur.metadex --project-name metadex .
+
+      - name: Flutter Pub Get
+        run: |
+          cd metadex
+          flutter pub get
+
+      - name: Build Linux App
+        run: |
+          cd metadex
+          flutter build linux --release
+
+      - name: Archive Linux Bundle
+        run: |
+          cd metadex/build/linux/x64/release/bundle
+          tar -czf $GITHUB_WORKSPACE/metadex_linux.tar.gz *
+
+      - name: Publish MetaDex Linux to Release (metadex-v1.0.0)
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "metadex-v1.0.0"
+          name: "MetaDex TCG Studio v1.0.0 — Pokémon TCG Metagame & Tournament Report"
+          make_latest: true
+          files: metadex_linux.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Attach MetaDex Linux to v1.0.3
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "v1.0.3"
+          files: metadex_linux.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ============================================================================
+  # PROJETO ARVORES AVANCADAS (AED2) - Mantido para preservar assets no latest
+  # ============================================================================
   build-android-pdf:
-    name: Build APK and LaTeX
+    name: Build APK and LaTeX (Arvores)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -76,8 +253,7 @@ jobs:
       - name: Release APK and PDFs
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: "v1.0.3"
-          name: "Advanced Trees v1.0.3 (AED2)"
+          tag_name: "metadex-v1.0.0"
           files: |
             arvores_app-v1.0.3.apk
             artigo_arvores.pdf
@@ -86,7 +262,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-windows:
-    name: Build Windows EXE
+    name: Build Windows EXE (Arvores)
     runs-on: windows-2022
     steps:
       - name: Checkout Code
@@ -119,14 +295,13 @@ jobs:
       - name: Release Windows App
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: "v1.0.3"
-          name: "Advanced Trees v1.0.3 (AED2)"
+          tag_name: "metadex-v1.0.0"
           files: arvores_app_windows.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-linux:
-    name: Build Linux App
+    name: Build Linux App (Arvores)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -166,8 +341,7 @@ jobs:
       - name: Release Linux App
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: "v1.0.3"
-          name: "Advanced Trees v1.0.3 (AED2)"
+          tag_name: "metadex-v1.0.0"
           files: arvores_app_linux.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
