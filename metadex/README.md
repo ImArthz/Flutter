@@ -83,12 +83,25 @@ O **MetaDex TCG Studio** resolve a fragmentação operacional de torneios locais
 ## 🧮 Fundamentos Matemáticos Implementados
 
 1. **Intervalo de Confiança de Wilson (95%, $z = 1.96$):**
-   $$\text{IC}_{95\%} = \frac{\hat{p} + \frac{z^2}{2n} \pm z\sqrt{\frac{\hat{p}(1-\hat{p})}{n} + \frac{z^2}{4n^2}}}{1 + \frac{z^2}{n}}$$
+
+```math
+\mathrm{IC}_{0.95} = \frac{\hat{p} + \frac{z^2}{2n} \pm z\sqrt{\frac{\hat{p}(1-\hat{p})}{n} + \frac{z^2}{4n^2}}}{1 + \frac{z^2}{n}}
+```
+
 2. **Similaridade de Jaccard Ponderada ($J_w$):**
-   $$J_w(\mathbf{x}, \mathbf{c}_A) = \frac{\sum_{i} w_i \min(x_i, c_{A,i})}{\sum_{i} w_i \max(x_i, c_{A,i})}$$
+
+```math
+J_w(\mathbf{x}, \mathbf{c}_A) = \frac{\sum_{i} w_i \min(x_i, c_{A,i})}{\sum_{i} w_i \max(x_i, c_{A,i})}
+```
+
    com pesos hierárquicos por papel funcional: Pokémon Atacante Principal ($w = 3.0$), Suporte / Engine ($w = 2.0$), *ACE SPEC* ($w = 2.5$), Trainers ($w = 1.0$) e Energias Básicas ($w = 0.5$).
+
 3. **Taxa de Inclusão Ponderada por Desempenho (DCG):**
-   $$p_d = \frac{1}{\log_2(\text{colocacao}_d + 1)}, \qquad \text{IR}_w(c) = \frac{\sum_{d \in D_A(c)} p_d}{\sum_{d \in D_A} p_d}$$
+
+```math
+p_d = \frac{1}{\log_2(\mathrm{colocacao}_d + 1)}, \qquad \mathrm{IR}_w(c) = \frac{\sum_{d \in D_A(c)} p_d}{\sum_{d \in D_A} p_d}
+```
+
 
 ---
 
