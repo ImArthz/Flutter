@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../domain/models/player.dart';
+import '../../domain/models/tournament.dart';
 
 class PodiumWidget extends StatelessWidget {
   final List<Player> players;
   final bool isTop8;
+  final TopCut? topCut;
   final int? selectedPlayerIndex;
   final ValueChanged<int>? onSelectPlayer;
 
@@ -11,18 +13,60 @@ class PodiumWidget extends StatelessWidget {
     super.key,
     required this.players,
     this.isTop8 = false,
+    this.topCut,
     this.selectedPlayerIndex,
     this.onSelectPlayer,
   });
+
+  TopCut get _effectiveTopCut => topCut ?? (isTop8 ? TopCut.top8 : TopCut.top4);
 
   @override
   Widget build(BuildContext context) {
     if (players.isEmpty) return const SizedBox.shrink();
 
+    final String headerText;
+    switch (_effectiveTopCut) {
+      case TopCut.none:
+        headerText = 'CLASSIFICAÇÃO FINAL • SUÍÇO DIRETO (SEM CORTE / CHALLENGE)';
+        break;
+      case TopCut.top4:
+        headerText = 'PÓDIO OFICIAL • CORTE TOP 4';
+        break;
+      case TopCut.top8:
+        headerText = 'PÓDIO OFICIAL • CORTE TOP 8 (LEAGUE CUP)';
+        break;
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
       children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 10.0),
+          child: Row(
+            children: [
+              Icon(
+                _effectiveTopCut == TopCut.none ? Icons.format_list_numbered : Icons.emoji_events,
+                color: const Color(0xFFFF7A00),
+                size: 16,
+              ),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  headerText,
+                  style: const TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 1.0,
+                    color: Color(0xFFFFA24D),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+        ),
         _buildTopTwo(),
         const SizedBox(height: 12),
         _buildRest(),
@@ -53,8 +97,10 @@ class PodiumWidget extends StatelessWidget {
   }
 
   Widget _buildRest() {
-    final restCount = isTop8 ? 6 : 2;
-    if (players.length <= 2) return const SizedBox.shrink();
+    final restCount = _effectiveTopCut == TopCut.top4
+        ? 2
+        : (_effectiveTopCut == TopCut.top8 ? 6 : (players.length - 2).clamp(0, 14));
+    if (players.length <= 2 || restCount <= 0) return const SizedBox.shrink();
 
     final endIdx = players.length.clamp(2, 2 + restCount);
     final remainingPlayers = players.sublist(2, endIdx);

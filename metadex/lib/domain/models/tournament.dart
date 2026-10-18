@@ -2,7 +2,7 @@ import 'player.dart';
 import 'metagame.dart';
 import '../services/deck_validator.dart';
 
-enum TopCut { top4, top8 }
+enum TopCut { none, top4, top8 }
 
 enum TipoTorneio { ligaLocal, leagueChallenge, leagueCup, regional }
 
@@ -129,6 +129,10 @@ class Tournament {
             ),
         formato = formato ?? Formato.standardAtual();
 
+  String get storeName => loja.nome;
+  String get storeCity => loja.cidade;
+  String get storeUf => loja.uf;
+
   /// RN-03: Embargo ativo durante o torneio (Rascunho, Inscrições Abertas, Em Andamento)
   bool get isEmbargoActive =>
       estado == EstadoTorneio.rascunho ||
@@ -164,6 +168,17 @@ class Tournament {
         return 'League Cup';
       case TipoTorneio.regional:
         return 'Regional / Especial';
+    }
+  }
+
+  String get topCutLabel {
+    switch (topCut) {
+      case TopCut.none:
+        return 'Suíço Direto (Sem Corte)';
+      case TopCut.top4:
+        return 'Corte Top 4';
+      case TopCut.top8:
+        return 'Corte Top 8';
     }
   }
 }

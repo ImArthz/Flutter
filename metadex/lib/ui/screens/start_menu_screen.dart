@@ -120,6 +120,76 @@ class StartMenuScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                if (viewModel.savedTournaments.isNotEmpty) ...[
+                  const SizedBox(height: 24),
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'TORNEIOS SALVOS NESTA SESSÃO',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFFA24D),
+                        letterSpacing: 1.2,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  ...viewModel.savedTournaments.map(
+                    (saved) => Container(
+                      margin: const EdgeInsets.only(bottom: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1A1A1A),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: const Color(0xFF2D2D2D)),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.emoji_events, color: Color(0xFFFF7A00), size: 20),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  saved.name,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Text(
+                                  '${saved.storeName} (${saved.storeCity}-${saved.storeUf}) • ${saved.formato.nome} • ${saved.topCutLabel} • ${saved.players.length} Jogadores',
+                                  style: const TextStyle(fontSize: 11, color: Colors.white60),
+                                ),
+                              ],
+                            ),
+                          ),
+                          TextButton.icon(
+                            onPressed: () {
+                              context.read<TournamentEditorViewModel>().loadSavedTournament(saved);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (_) => const TournamentEditorScreen()),
+                              );
+                            },
+                            icon: const Icon(Icons.folder_open, size: 16, color: Color(0xFFFF7A00)),
+                            label: const Text(
+                              'ABRIR',
+                              style: TextStyle(
+                                color: Color(0xFFFF7A00),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
                 const SizedBox(height: 16),
                 const Text(
                   'Projeto de fã não oficial • Conformidade LGPD (Art. 14) & Proteção Anti-Scouting (Embargo RN-03)',

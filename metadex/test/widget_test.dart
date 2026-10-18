@@ -3,14 +3,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:metadex/main.dart';
 import 'package:metadex/domain/models/deck.dart';
 import 'package:metadex/domain/models/player.dart';
+import 'package:metadex/domain/models/tournament.dart';
 import 'package:metadex/domain/services/deck_validator.dart';
 import 'package:metadex/domain/services/archetype_classifier.dart';
 import 'package:metadex/domain/services/tom_tdf_parser.dart';
 import 'package:metadex/domain/services/analytics_engine.dart';
+import 'package:metadex/data/services/pdf_export_service.dart';
 import 'package:metadex/ui/viewmodels/tournament_editor_viewmodel.dart';
 
 void main() {
-  group('Fase 4 & 6 - Parser PTCG Live, Carta Canônica e Validador de Legalidade', () {
+  group('Fase 4 & 6 - Parser PTCG Live, Carta Canônica e Validador de Legalidade (Standard H-I-J & Expanded)', () {
     test('Agrupa reimpressões na mesma Carta Canônica e detecta violação de 5 cópias (US-06 / RN-02)', () {
       const deckText = '''Pokémon: 4
 4 Charmander OBF 26
@@ -31,6 +33,28 @@ Energy: 51
 
       expect(result.isValida, isFalse);
       expect(result.violacoes.any((v) => v.codigo == 'QUATRO_COPIAS'), isTrue);
+    });
+
+    test('Valida rotação Standard (H-I-J): carta G pura reprova no Standard H-I-J mas aprova no Expanded', () {
+      const gOnlyDeck = '''Pokémon: 4
+4 Gardevoir ex SVI 86
+
+Trainer: 4
+4 Buddy-Buddy Poffin TEF 144
+
+Energy: 52
+52 Basic Psychic Energy SVE 5''';
+
+      final deck = PtcgLiveParser.parse(gOnlyDeck);
+      final validator = ValidadorDeDecklist();
+
+      final stdHijResult = validator.validar(deck, Formato.standardAtual());
+      expect(Formato.standardAtual().marcasPermitidas, equals({'H', 'I', 'J'}));
+      expect(stdHijResult.isValida, isFalse);
+      expect(stdHijResult.violacoes.any((v) => v.codigo == 'FORA_DO_FORMATO'), isTrue);
+
+      final expandedResult = validator.validar(deck, Formato.expanded());
+      expect(expandedResult.isValida, isTrue);
     });
 
     test('Detecta múltiplas ACE SPECs, múltiplos Radiantes e carta rotacionada (Marca F)', () {
@@ -144,8 +168,8 @@ Energy: 56
     });
   });
 
-  group('Fase 6.5 - Motor Analítico, Intervalo de Wilson e Lista Consenso de 60 Cartas', () {
-    test('Calcula Metagame, Presença de Cartas e Lista Consenso com exatamente 60 cartas', () {
+  group('Fase 6.5 - Motor Analítico, Sem Corte (Suíço), Persistência Manual e Exportação PDF/Infográfico', () {
+    test('Calcula Metagame, Presença de Cartas, Lista Consenso 60 Cartas e preserva edições ao trocar Corte/Salvar', () async {
       final vm = TournamentEditorViewModel()..initPlayers();
 
       expect(vm.metagame, isNotEmpty);
@@ -157,11 +181,37 @@ Energy: 56
       final (low, high) = AnalyticsEngine.calcularIntervaloWilson(0.75, 20);
       expect(low, greaterThan(0.50));
       expect(high, lessThan(0.95));
+
+      // Edita manualmente o jogador 1 e alterna para Sem Corte (League Challenge)
+      vm.updatePlayer(0, vm.players[0].copyWith(name: 'Campeão Manual Challenge'));
+      vm.updateTopCut(TopCut.none);
+      expect(vm.topCut, equals(TopCut.none));
+      expect(vm.players[0].name, equals('Campeão Manual Challenge'));
+
+      // Salva manualmente o torneio
+      vm.saveCurrentTournament();
+      expect(vm.savedTournaments.length, equals(1));
+      expect(vm.savedTournaments.first.name, equals(vm.tournamentName));
+
+      // Testa geração dos dois PDFs (Relatório Oficial A4 e Infográfico Visual A4 Paisagem)
+      final pdfService = PdfExportService();
+      final reportBytes = await pdfService.generateTournamentReport(
+        vm.currentTournament,
+        cardPresence: vm.cardPresence,
+        consensusDeck: vm.consensusDeck,
+      );
+      final infographicBytes = await pdfService.generateVisualInfographicPdf(
+        vm.currentTournament,
+        cardPresence: vm.cardPresence,
+        consensusDeck: vm.consensusDeck,
+      );
+      expect(reportBytes.length, greaterThan(1000));
+      expect(infographicBytes.length, greaterThan(1000));
     });
   });
 
-  group('Fase 7 - Testes de UI, Navegação e Embargo Anti-Scouting (Zero Overflow)', () {
-    testWidgets('Renderiza StartMenuScreen, abre TournamentEditorScreen e valida abas e Embargo',
+  group('Fase 7 - Testes de UI, Digitação Contínua sem Perda de Foco, Abas e Embargo Anti-Scouting', () {
+    testWidgets('Digita texto completo sem perder foco, preserva estado entre abas e valida UI',
         (WidgetTester tester) async {
       await tester.binding.setSurfaceSize(const Size(1440, 900));
       await tester.pumpWidget(const MetaDexApp());
@@ -178,6 +228,17 @@ Energy: 56
       expect(find.text('METAGAME'), findsOneWidget);
       expect(find.text('TOP CARTAS'), findsOneWidget);
 
+      // Digita múltiplos caracteres no campo "Nome do Torneio" e verifica que não perde o foco após 1 letra
+      final nameField = find.widgetWithText(TextFormField, 'Nome do Torneio');
+      expect(nameField, findsOneWidget);
+      await tester.enterText(nameField, 'League Challenge Outubro H-I-J');
+      await tester.pumpAndSettle();
+      expect(find.text('LEAGUE CHALLENGE OUTUBRO H-I-J'), findsOneWidget);
+
+      // Clica no botão SALVAR do Painel de Comando
+      await tester.tap(find.text('SALVAR'));
+      await tester.pumpAndSettle();
+
       // Navega para a aba TOP CARTAS no Viewport
       await tester.tap(find.text('TOP CARTAS'));
       await tester.pumpAndSettle();
@@ -192,3 +253,4 @@ Energy: 56
     });
   });
 }
+

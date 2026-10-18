@@ -14,7 +14,7 @@ class TournamentEditorViewModel extends ChangeNotifier {
   String storeCity = 'São Paulo';
   String storeUf = 'SP';
   TipoTorneio tipoTorneio = TipoTorneio.leagueCup;
-  Formato formato = Formato.standardAtual();
+  Formato formato = Formato.standardAtual(); // Standard (H-I-J)
   EstadoTorneio estadoTorneio = EstadoTorneio.publicado;
   PoliticaVisibilidade politicaVisibilidade = PoliticaVisibilidade.todasAsListas;
   TopCut topCut = TopCut.top8;
@@ -24,6 +24,15 @@ class TournamentEditorViewModel extends ChangeNotifier {
   String selectedArchetypeFilter = 'TODOS';
   String? lastImportMessage;
   bool lastImportWasError = false;
+
+  /// Contador incrementado APENAS em ações de importação/reset em lote.
+  /// Nunca é incrementado durante digitação manual, evitando perda de foco nos TextFormFields.
+  int formResetGeneration = 0;
+
+  /// Histórico de torneios salvos na sessão (acessível no Menu Inicial e Painel)
+  final List<Tournament> savedTournaments = [];
+  DateTime? lastSavedAt;
+  String? saveStatusMessage;
 
   final Set<String> _importedTdfHashes = {};
   final ValidadorDeDecklist _validator = ValidadorDeDecklist();
@@ -47,6 +56,16 @@ class TournamentEditorViewModel extends ChangeNotifier {
         .toSet()
         .toList();
     return ['TODOS', ...names];
+  }
+
+  /// Jogadores visíveis de acordo com a configuração de Top Cut (Top 4, Top 8 ou Todos no Suíço Direto)
+  List<Player> get visiblePodiumPlayers {
+    if (topCut == TopCut.top4) {
+      return players.take(4).toList();
+    } else if (topCut == TopCut.top8) {
+      return players.take(8).toList();
+    }
+    return players;
   }
 
   /// Metagame dinâmico completo (Meta Share, Conversão, WR Bayesiano, Intervalo de Wilson)
@@ -115,7 +134,7 @@ class TournamentEditorViewModel extends ChangeNotifier {
 
     return [
       '🏆 Dominância Local: "${leader.deckName}" lidera o torneio com ${leader.percentage.toStringAsFixed(1)}% de Meta Share (${leader.count} jogadores) e Win Rate Bayesiano de ${(leader.bayesianWinRate * 100).toStringAsFixed(1)}%.',
-      '📈 Melhor Conversão: "${bestConverter.first.deckName}" obteve taxa de conversão de ${bestConverter.first.conversionRate.toStringAsFixed(2)}x para o Top Cut.',
+      '📈 Melhor Conversão: "${bestConverter.first.deckName}" obteve taxa de conversão de ${bestConverter.first.conversionRate.toStringAsFixed(2)}x (${currentTournament.topCutLabel}).',
       if (topCard != null)
         '🃏 Staple Absoluta: "${topCard.canonicalName}" está presente em ${(topCard.inclusionRate * 100).toStringAsFixed(0)}% das listas com média de ${topCard.conditionalMeanCopies.toStringAsFixed(1)} cópias (${topCard.roleLabel}).',
       '⚖️ Integridade (Juiz): $validDecks de ${players.length} decklists aprovadas em todas as 6 regras do formato ${formato.nome}.',
@@ -123,7 +142,7 @@ class TournamentEditorViewModel extends ChangeNotifier {
   }
 
   Tournament get currentTournament => Tournament(
-        id: 'trn_metadex_01',
+        id: 'trn_${tournamentName.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]'), '_')}',
         name: tournamentName,
         loja: Loja(
           id: 'loja_01',
@@ -140,15 +159,57 @@ class TournamentEditorViewModel extends ChangeNotifier {
         politicaVisibilidade: politicaVisibilidade,
         swissRounds: swissRounds,
         topCut: topCut,
-        players: players,
-        matches: matches,
+        players: List<Player>.from(players),
+        matches: List<Partida>.from(matches),
         metagameStats: metagame,
-        auditLog: auditLog,
+        auditLog: List<EventoAuditoria>.from(auditLog),
       );
 
-  void initPlayers() {
-    final count = topCut == TopCut.top4 ? 4 : 8;
+  /// Salva explicitamente o estado atual do torneio na lista de torneios salvos
+  void saveCurrentTournament() {
+    final snapshot = currentTournament;
+    final existingIdx = savedTournaments.indexWhere(
+      (t) => t.id == snapshot.id || t.name.toLowerCase() == snapshot.name.toLowerCase(),
+    );
+    if (existingIdx >= 0) {
+      savedTournaments[existingIdx] = snapshot;
+    } else {
+      savedTournaments.insert(0, snapshot);
+    }
+    lastSavedAt = DateTime.now();
+    final hh = lastSavedAt!.hour.toString().padLeft(2, '0');
+    final mm = lastSavedAt!.minute.toString().padLeft(2, '0');
+    final ss = lastSavedAt!.second.toString().padLeft(2, '0');
+    saveStatusMessage = 'Salvo às $hh:$mm:$ss (${players.length} jogadores)';
+    _logAudit(
+      'Lojista / Operador',
+      'SALVAMENTO_MANUAL',
+      'Torneio "$tournamentName" salvo com ${players.length} jogadores no formato ${formato.nome}.',
+    );
+    notifyListeners();
+  }
 
+  /// Carrega um torneio salvo anteriormente
+  void loadSavedTournament(Tournament t) {
+    tournamentName = t.name;
+    storeName = t.loja.nome;
+    storeCity = t.loja.cidade;
+    storeUf = t.loja.uf;
+    formato = t.formato;
+    tipoTorneio = t.tipo;
+    estadoTorneio = t.estado;
+    politicaVisibilidade = t.politicaVisibilidade;
+    topCut = t.topCut;
+    swissRounds = t.swissRounds;
+    players = List<Player>.from(t.players);
+    matches = List<Partida>.from(t.matches);
+    auditLog = List<EventoAuditoria>.from(t.auditLog);
+    selectedPlayerIndex = 0;
+    formResetGeneration++;
+    notifyListeners();
+  }
+
+  void initPlayers() {
     final rawTemplates = [
       (
         1,
@@ -232,7 +293,7 @@ class TournamentEditorViewModel extends ChangeNotifier {
         0,
         0.530,
         0.515,
-        _sampleChienPaoDeck(),
+        _sampleTerapagosDeck(),
       ),
       (
         8,
@@ -244,10 +305,11 @@ class TournamentEditorViewModel extends ChangeNotifier {
         0,
         0.512,
         0.504,
-        _sampleMiraidonDeck(),
+        _sampleRagingBoltDeck(),
       ),
     ];
 
+    final count = topCut == TopCut.top4 ? 4 : 8;
     players = rawTemplates.take(count).map((tpl) {
       final parsed = PtcgLiveParser.parse(tpl.$10);
       final valRes = _validator.validar(parsed, formato);
@@ -273,7 +335,15 @@ class TournamentEditorViewModel extends ChangeNotifier {
     }).toList();
 
     _rebuildDefaultMatches();
-    _logAudit('SISTEMA', 'INICIALIZACAO', 'Torneio inicializado com $count jogadores e decklists de 60 cartas validadas.');
+    formResetGeneration++;
+    _logAudit(
+      'SISTEMA',
+      'INICIALIZACAO',
+      'Torneio inicializado com ${players.length} jogadores e decklists de 60 cartas no formato ${formato.nome}.',
+    );
+    if (savedTournaments.isEmpty) {
+      savedTournaments.add(currentTournament);
+    }
     notifyListeners();
   }
 
@@ -401,7 +471,11 @@ class TournamentEditorViewModel extends ChangeNotifier {
         validationResult: valRes,
       );
     }).toList();
-    _logAudit('Juiz (Professor)', 'MUDANCA_FORMATO', 'Formato alterado para ${novoFormato.nome}; listas revalidadas.');
+    _logAudit(
+      'Juiz (Professor)',
+      'MUDANCA_FORMATO',
+      'Formato alterado para ${novoFormato.nome}; listas revalidadas.',
+    );
     notifyListeners();
   }
 
@@ -417,9 +491,74 @@ class TournamentEditorViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Altera o modo de corte (Sem Corte Suíço, Top 4 ou Top 8) SEM apagar os jogadores editados manualmente!
   void updateTopCut(TopCut cut) {
     topCut = cut;
-    initPlayers();
+    if (cut == TopCut.none) {
+      tipoTorneio = TipoTorneio.leagueChallenge;
+    } else if (cut == TopCut.top8) {
+      tipoTorneio = TipoTorneio.leagueCup;
+    }
+    if (cut == TopCut.top4 && players.length > 4) {
+      players = players.sublist(0, 4);
+    } else if ((cut == TopCut.top8 || cut == TopCut.none) && players.length < 8) {
+      // Adiciona slots extras preservando integralmente os jogadores já editados
+      for (int i = players.length + 1; i <= 8; i++) {
+        final parsed = PtcgLiveParser.parse(_sampleCharizardDeck(variant: 2));
+        final valRes = _validator.validar(parsed, formato);
+        final classRes = _classifier.classificar(valRes.decklistAtualizada);
+        players.add(
+          Player(
+            id: '100$i',
+            placement: i,
+            name: 'Jogador $i',
+            division: DivisaoEtaria.masters,
+            deckName: classRes.arquetipo.nome,
+            deckImagePath: classRes.arquetipo.imagemRepresentativa,
+            decklist: valRes.decklistAtualizada,
+            wins: 3,
+            losses: 2,
+            ties: 0,
+            owp: 0.520,
+            oowp: 0.505,
+            validationResult: valRes,
+            classification: classRes,
+          ),
+        );
+      }
+    }
+    notifyListeners();
+  }
+
+  /// Adiciona manualmente um novo jogador à classificação (ex: League Challenge / Suíço)
+  void addManualPlayer() {
+    final nextPos = players.length + 1;
+    final parsed = PtcgLiveParser.parse(_sampleCharizardDeck(variant: 1));
+    final valRes = _validator.validar(parsed, formato);
+    final classRes = _classifier.classificar(valRes.decklistAtualizada);
+
+    players = [
+      ...players,
+      Player(
+        id: 'manual_${DateTime.now().millisecondsSinceEpoch}',
+        placement: nextPos,
+        name: 'Novo Jogador $nextPos',
+        division: DivisaoEtaria.masters,
+        deckName: classRes.arquetipo.nome,
+        deckImagePath: classRes.arquetipo.imagemRepresentativa,
+        decklist: valRes.decklistAtualizada,
+        wins: 3,
+        losses: 1,
+        ties: 0,
+        owp: 0.550,
+        oowp: 0.520,
+        validationResult: valRes,
+        classification: classRes,
+      ),
+    ];
+    selectedPlayerIndex = players.length - 1;
+    _logAudit('Operador', 'ADICAO_JOGADOR', 'Jogador $nextPosº adicionado manualmente.');
+    notifyListeners();
   }
 
   void updatePlayer(int index, Player player) {
@@ -450,7 +589,7 @@ class TournamentEditorViewModel extends ChangeNotifier {
   }
 
   /// Importa e valida a decklist em texto do PTCG Live para o jogador (RF-05, RF-06, RF-07)
-  void importPlayerDecklist(int index, String rawDeckText) {
+  void importPlayerDecklist(int index, String rawDeckText, {bool isBulkAction = false}) {
     if (index < 0 || index >= players.length) return;
     if (rawDeckText.trim().isEmpty) return;
 
@@ -467,6 +606,10 @@ class TournamentEditorViewModel extends ChangeNotifier {
       classification: classRes,
       curatedByJudge: false,
     );
+
+    if (isBulkAction) {
+      formResetGeneration++;
+    }
 
     _logAudit(
       player.displayName,
@@ -491,6 +634,7 @@ class TournamentEditorViewModel extends ChangeNotifier {
       ),
       curatedByJudge: true,
     );
+    formResetGeneration++;
     _logAudit(
       'Ana (Juíza)',
       'CURADORIA_ARQUETIPO',
@@ -519,7 +663,8 @@ class TournamentEditorViewModel extends ChangeNotifier {
       final hash = TomTdfParser.computeTdfHash(xmlContent);
       if (!forceReimport && _importedTdfHashes.contains(hash)) {
         lastImportWasError = true;
-        lastImportMessage = 'Este arquivo .tdf já foi importado (Hash SHA-256 idempotente: ${hash.substring(0, 10)}...).';
+        lastImportMessage =
+            'Este arquivo .tdf já foi importado (Hash SHA-256 idempotente: ${hash.substring(0, 10)}...).';
         notifyListeners();
         return false;
       }
@@ -555,6 +700,7 @@ class TournamentEditorViewModel extends ChangeNotifier {
       }
       players = merged;
       matches = result.matches;
+      formResetGeneration++;
 
       lastImportWasError = false;
       lastImportMessage =
@@ -584,14 +730,16 @@ class TournamentEditorViewModel extends ChangeNotifier {
   void parseTomStandings(String text) {
     if (text.trim().isEmpty) return;
     players = TomTdfParser.parseTomStandingsText(text, players);
+    formResetGeneration++;
     lastImportWasError = false;
     lastImportMessage = 'Classificação do PDF do TOM aplicada com sucesso!';
     _logAudit('Roberto (Lojista)', 'IMPORT_PDF_TOM', 'Standings extraídos de texto do PDF do TOM.');
     notifyListeners();
   }
 
+  // Decklists 100% legais em Standard (H-I-J), (G-H-I) e Expanded (60 cartas exatas)
   static String _sampleCharizardDeck({int variant = 1}) {
-    final tech = variant == 1 ? '1 Lost Vacuum LOR 162' : '1 Briar SCR 132';
+    final tech = variant == 1 ? '1 Briar SCR 132' : '1 Crispin SCR 133';
     return '''Pokémon: 18
 3 Charizard ex OBF 125
 1 Charmeleon PAF 8
@@ -600,8 +748,8 @@ class TournamentEditorViewModel extends ChangeNotifier {
 2 Pidgey OBF 162
 2 Dusknoir SFA 20
 2 Dusclops SFA 19
+1 Duskull SFA 18
 1 Fezandipiti ex SFA 38
-1 Radiant Charizard CRZ 20
 
 Trainer: 36
 4 Rare Candy SVI 191
@@ -611,15 +759,12 @@ Trainer: 36
 3 Iono PAL 185
 2 Boss's Orders PAL 172
 2 Super Rod PAL 188
-2 Nest Ball SVI 181
+3 Nest Ball SVI 181
 2 Counter Catcher PAR 160
 2 Night Stretcher SFA 61
 1 Prime Catcher TEF 157
-1 Forest Seal Stone SIT 156
-1 Defiance Band SVI 169
-1 Professor Turo's Scenario PAR 171
-1 Canceling Cologne ASR 136
-1 Collapsed Stadium BRS 137
+2 Professor's Research SVI 189
+2 Professor Turo's Scenario PAR 171
 $tech
 
 Energy: 6
@@ -628,31 +773,28 @@ Energy: 6
 
   static String _sampleGardevoirDeck() {
     return '''Pokémon: 16
-2 Gardevoir ex SVI 86
-4 Kirlia SIT 68
-4 Ralts ASR 60
+3 Gardevoir ex SVI 86
+4 Kirlia SVI 85
+4 Ralts SVI 84
 1 Munkidori TWM 95
 1 Scream Tail PAR 86
 1 Drifloon SVI 89
 1 Flutter Mane TEF 78
-1 Manaphy BRS 41
-1 Radiant Greninja ASR 46
+1 Fezandipiti ex SFA 38
 
 Trainer: 34
 4 Buddy-Buddy Poffin TEF 144
 4 Iono PAL 185
 4 Arven SVI 166
-3 Ultra Ball SVI 196
+4 Ultra Ball SVI 196
 2 Super Rod PAL 188
 2 Counter Catcher PAR 160
-2 Earthen Vessel PAR 163
+3 Earthen Vessel PAR 163
 2 Bravery Charm PAL 173
 2 Boss's Orders PAL 172
 2 Night Stretcher SFA 61
-2 Nest Ball SVI 181
-2 Artazon PAL 171
+3 Nest Ball SVI 181
 1 Unfair Stamp TWM 165
-1 Technical Machine: Evolution PAR 178
 1 Professor Turo's Scenario PAR 171
 
 Energy: 10
@@ -669,25 +811,22 @@ Energy: 10
 2 Pidgeot ex OBF 164
 2 Pidgey OBF 162
 1 Fezandipiti ex SFA 38
-1 Radiant Alakazam SIT 59
+1 Dusknoir SFA 20
 
 Trainer: 37
 4 Buddy-Buddy Poffin TEF 144
 4 Ultra Ball SVI 196
 4 Arven SVI 166
-3 Iono PAL 185
+4 Iono PAL 185
 3 Rare Candy SVI 191
 2 Boss's Orders PAL 172
 2 Crispin SCR 133
-2 Nest Ball SVI 181
+3 Nest Ball SVI 181
 2 Counter Catcher PAR 160
 2 Super Rod PAL 188
 2 Earthen Vessel PAR 163
 2 Night Stretcher SFA 61
-1 Forest Seal Stone SIT 156
-1 Rescue Board TEF 159
-1 Professor Turo's Scenario PAR 171
-1 Temple of Sinnoh ASR 155
+2 Professor Turo's Scenario PAR 171
 $ace
 
 Energy: 6
@@ -699,25 +838,23 @@ Energy: 6
     return '''Pokémon: 12
 4 Raging Bolt ex TEF 123
 4 Teal Mask Ogerpon ex TWM 25
-1 Squawkabilly ex PAL 169
+2 Noctowl SCR 115
+1 Hoothoot SCR 114
 1 Fezandipiti ex SFA 38
-1 Slither Wing PAR 107
-1 Radiant Greninja ASR 46
 
 Trainer: 36
-4 Professor Sada's Vitality PAR 170
+4 Crispin SCR 133
 4 Nest Ball SVI 181
 4 Earthen Vessel PAR 163
 4 Energy Retrieval SVI 171
-4 Trekking Shoes ASR 156
+4 Ultra Ball SVI 196
 3 Pokégear 3.0 SVI 186
-3 Ultra Ball SVI 196
-2 Night Stretcher SFA 61
-2 Boss's Orders PAL 172
-2 Iono PAL 185
-2 PokéStop PGO 68
+3 Night Stretcher SFA 61
+3 Boss's Orders PAL 172
+3 Iono PAL 185
+2 Area Zero Underdepths SCR 131
 1 Prime Catcher TEF 157
-1 Pal Pad SVI 182
+1 Briar SCR 132
 
 Energy: 12
 6 Basic Grass Energy SVE 1
@@ -725,63 +862,34 @@ Energy: 12
 3 Basic Lightning Energy SVE 4''';
   }
 
-  static String _sampleChienPaoDeck() {
+  static String _sampleTerapagosDeck() {
     return '''Pokémon: 16
-3 Chien-Pao ex PAL 61
-3 Baxcalibur PAL 60
-3 Frigibax PAL 57
-2 Bidoof CRZ 111
-2 Bibarel BRS 121
-1 Iron Hands ex PAR 70
-1 Manaphy BRS 41
-1 Radiant Greninja ASR 46
-
-Trainer: 35
-4 Irida ASR 147
-4 Superior Energy Retrieval PAL 189
-4 Buddy-Buddy Poffin TEF 144
-4 Ultra Ball SVI 196
-3 Rare Candy SVI 191
-3 Nest Ball SVI 181
-3 PokéStop PGO 68
-2 Super Rod PAL 188
-2 Earthen Vessel PAR 163
-2 Cyllene ASR 138
-2 Counter Catcher PAR 160
-1 Prime Catcher TEF 157
-1 Canceling Cologne ASR 136
-
-Energy: 9
-8 Basic Water Energy SVE 3
-1 Basic Lightning Energy SVE 4''';
-  }
-
-  static String _sampleMiraidonDeck() {
-    return '''Pokémon: 14
-3 Miraidon ex SVI 81
-2 Iron Hands ex PAR 70
-2 Raikou V BRS 48
-2 Magnemite SVI 63
-2 Magneton SSP 59
-1 Mew ex MEW 151
-1 Squawkabilly ex PAL 169
+3 Terapagos ex SCR 128
+3 Noctowl SCR 115
+3 Hoothoot SCR 114
+2 Pidgeot ex OBF 164
+2 Pidgey OBF 162
+1 Fan Rotom SCR 118
+1 Bouffalant SCR 119
 1 Fezandipiti ex SFA 38
 
-Trainer: 32
-4 Electric Generator SVI 170
+Trainer: 36
+4 Buddy-Buddy Poffin TEF 144
+4 Ultra Ball SVI 196
 4 Nest Ball SVI 181
 4 Arven SVI 166
-3 Ultra Ball SVI 196
-3 Boss's Orders PAL 172
 3 Iono PAL 185
-2 Bravery Charm PAL 173
-2 Forest Seal Stone SIT 156
+3 Area Zero Underdepths SCR 131
+3 Rare Candy SVI 191
+2 Boss's Orders PAL 172
+2 Night Stretcher SFA 61
 2 Super Rod PAL 188
-2 Rescue Board TEF 159
+2 Counter Catcher PAR 160
 1 Prime Catcher TEF 157
-2 Town Store PAL 196
+1 Briar SCR 132
+1 Professor Turo's Scenario PAR 171
 
-Energy: 14
-14 Basic Lightning Energy SVE 4''';
+Energy: 8
+8 Basic Water Energy SVE 3''';
   }
 }

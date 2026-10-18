@@ -22,29 +22,44 @@ class Formato {
     return !data.isBefore(vigenteDe) && !data.isAfter(vigenteAte);
   }
 
-  /// Formato Standard atual (Marcas G, H, I)
+  /// Formato Standard atual 2026+ (Marcas H, I, J — Marca G rotacionada)
   factory Formato.standardAtual() {
     return Formato(
-      id: 'fmt_std_ghi',
-      nome: 'Standard (G-H-I)',
-      vigenteDe: DateTime(2025, 4, 1),
-      vigenteAte: DateTime(2027, 4, 1),
-      marcasPermitidas: const {'G', 'H', 'I'},
+      id: 'fmt_std_hij',
+      nome: 'Standard (H-I-J)',
+      vigenteDe: DateTime(2026, 4, 1),
+      vigenteAte: DateTime(2028, 4, 1),
+      marcasPermitidas: const {'H', 'I', 'J'},
       banlist: const {'Scoop Up Net', 'Shaymin EX', 'Lysandre\'s Trump Card'},
     );
   }
 
-  /// Formato Standard anterior (Marcas F, G, H) para torneios históricos
-  factory Formato.standardFGH() {
+  /// Formato Standard Anterior (Marcas G, H, I) para torneios históricos pré-rotação 2026
+  factory Formato.standardGHI() {
     return Formato(
-      id: 'fmt_std_fgh',
-      nome: 'Standard (F-G-H)',
-      vigenteDe: DateTime(2024, 4, 1),
-      vigenteAte: DateTime(2025, 3, 31),
-      marcasPermitidas: const {'F', 'G', 'H', 'I'},
-      banlist: const {'Scoop Up Net'},
+      id: 'fmt_std_ghi',
+      nome: 'Standard Anterior (G-H-I)',
+      vigenteDe: DateTime(2025, 4, 1),
+      vigenteAte: DateTime(2026, 3, 31),
+      marcasPermitidas: const {'G', 'H', 'I', 'J'},
+      banlist: const {'Scoop Up Net', 'Shaymin EX', 'Lysandre\'s Trump Card'},
     );
   }
+
+  /// Formato Expanded (Marcas D, E, F, G, H, I, J — inclui G e blocos anteriores)
+  factory Formato.expanded() {
+    return Formato(
+      id: 'fmt_expanded',
+      nome: 'Expanded (F-G-H-I-J)',
+      vigenteDe: DateTime(2020, 1, 1),
+      vigenteAte: DateTime(2030, 12, 31),
+      marcasPermitidas: const {'D', 'E', 'F', 'G', 'H', 'I', 'J'},
+      banlist: const {'Scoop Up Net', 'Shaymin EX', 'Lysandre\'s Trump Card'},
+    );
+  }
+
+  /// Alias de compatibilidade
+  factory Formato.standardFGH() => Formato.expanded();
 }
 
 class ViolacaoLegalidade {

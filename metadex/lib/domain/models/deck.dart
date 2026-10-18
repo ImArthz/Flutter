@@ -56,6 +56,8 @@ class CartaCanonica {
     );
   }
 
+  String get canonicalKey => name.toLowerCase();
+
   static String _normalizeCardName(String rawName) {
     var cleaned = rawName.trim();
     // Normaliza variações de energia básica do PTCG Live (ex: "Basic {R} Energy" -> "Basic Fire Energy")
@@ -172,20 +174,87 @@ class DeckCard {
 
   static String _inferRegulationMark(String? setCode, String name, CardType type) {
     final canon = CartaCanonica.fromCardDetails(name: name, type: type);
-    if (canon.isBasicEnergy) return 'G';
-    if (setCode == null) return 'G';
-    final code = setCode.toUpperCase();
-    // Sets pré-rotação (marcas D, E, F)
-    const fSets = {'BRS', 'ASR', 'PGO', 'LOR', 'SIT', 'CRZ', 'FST', 'EVS', 'CRE', 'BST', 'SHF', 'VIV', 'CPA', 'DAA', 'RCL', 'SSH'};
-    const gSets = {'SVI', 'SV1', 'PAL', 'OBF', 'MEW', 'PAR', 'PAF', 'SVE', 'PR-SV'};
-    const hSets = {'TEF', 'TWM', 'SFA', 'SCR', 'SSP', 'PRE'};
-    const iSets = {'JTG', 'DRI'};
+    if (canon.isBasicEnergy) return 'H';
 
-    if (fSets.contains(code)) return 'F';
-    if (gSets.contains(code)) return 'G';
-    if (hSets.contains(code)) return 'H';
+    final code = setCode?.toUpperCase() ?? '';
+    // Sets Sword & Shield (marcas D, E, F - válidas apenas no Expanded)
+    const fSets = {
+      'BRS', 'ASR', 'PGO', 'LOR', 'SIT', 'CRZ', 'FST', 'EVS',
+      'CRE', 'BST', 'SHF', 'VIV', 'CPA', 'DAA', 'RCL', 'SSH',
+    };
+    if (fSets.contains(code) || canon.isRadiant) return 'F';
+
+    // Sets com marca J (2026+)
+    const jSets = {'MEG', 'asc', 'J01', 'J02', 'SV11', 'SV12'};
+    if (jSets.contains(code)) return 'J';
+
+    // Sets com marca I (2025-2026)
+    const iSets = {'JTG', 'DRI', 'PRE', 'SV9', 'SV10'};
     if (iSets.contains(code)) return 'I';
-    return 'G';
+
+    // Sets com marca H (TEF, TWM, SFA, SCR, SSP)
+    const hSets = {'TEF', 'TWM', 'SFA', 'SCR', 'SSP', 'SV5', 'SV6', 'SV7', 'SV8'};
+    if (hSets.contains(code)) return 'H';
+
+    // Equivalência Funcional (RN-02): Staples de Treinadores reimpressos no bloco H-I-J
+    // permanecem válidos em Standard (H-I-J) mesmo usando print antigo (ex: Ultra Ball SVI)
+    const reprintedInHIJ = {
+      'ultra ball',
+      'nest ball',
+      'rare candy',
+      'buddy-buddy poffin',
+      'arven',
+      'iono',
+      "boss's orders",
+      "professor's research",
+      'super rod',
+      'counter catcher',
+      'earthen vessel',
+      "professor turo's scenario",
+      'night stretcher',
+      'prime catcher',
+      'unfair stamp',
+      'fezandipiti ex',
+      'charizard ex',
+      'charmander',
+      'charmeleon',
+      'pidgeot ex',
+      'pidgey',
+      'dragapult ex',
+      'drakloak',
+      'dreepy',
+      'dusknoir',
+      'dusclops',
+      'duskull',
+      'raging bolt ex',
+      'teal mask ogerpon ex',
+      'munkidori',
+      'scream tail',
+      'flutter mane',
+      'bravery charm',
+      'terapagos ex',
+      'noctowl',
+      'hoothoot',
+      'fan rotom',
+      'bouffalant',
+      'area zero underdepths',
+      'briar',
+      'crispin',
+      'sandy shocks ex',
+      'pokégear 3.0',
+      'energy retrieval',
+      'superior energy retrieval',
+      'switch',
+    };
+    if (reprintedInHIJ.contains(canon.canonicalKey)) {
+      return 'H';
+    }
+
+    // Demais cartas exclusivas do bloco G (rotacionadas do Standard H-I-J, válidas em Expanded / G-H-I)
+    const gSets = {'SVI', 'SV1', 'PAL', 'OBF', 'MEW', 'PAR', 'PAF', 'SVE', 'PR-SV'};
+    if (gSets.contains(code)) return 'G';
+
+    return 'H';
   }
 
   /// Resolve deterministicamente a URL de imagem da API pokemontcg.io

@@ -1,9 +1,4 @@
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/tournament_editor_viewmodel.dart';
 import '../widgets/podium.dart';
@@ -14,6 +9,7 @@ import '../../domain/models/player.dart';
 import '../../domain/models/deck.dart';
 import '../../domain/services/deck_validator.dart';
 import '../../data/services/pdf_export_service.dart';
+import 'start_menu_screen.dart';
 
 class TournamentEditorScreen extends StatefulWidget {
   const TournamentEditorScreen({super.key});
@@ -26,30 +22,15 @@ class _TournamentEditorScreenState extends State<TournamentEditorScreen> {
   final GlobalKey _viewportKey = GlobalKey();
   final PdfExportService _pdfService = PdfExportService();
 
-  Future<void> _exportViewportSnapshotAsPdf() async {
+  Future<void> _exportVisualInfographicPdf(TournamentEditorViewModel vm) async {
     try {
-      final ctx = _viewportKey.currentContext;
-      if (ctx == null) return;
-      final boundary = ctx.findRenderObject() as RenderRepaintBoundary;
-      final image = await boundary.toImage(pixelRatio: 2.0);
-      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-      final pngBytes = byteData!.buffer.asUint8List();
-
-      final pdf = pw.Document();
-      final pdfImage = pw.MemoryImage(pngBytes);
-
-      pdf.addPage(
-        pw.Page(
-          pageFormat: PdfPageFormat.a4.landscape,
-          build: (pw.Context context) {
-            return pw.Center(child: pw.Image(pdfImage));
-          },
-        ),
+      await _pdfService.shareVisualInfographicPdf(
+        vm.currentTournament,
+        cardPresence: vm.cardPresence,
+        consensusDeck: vm.consensusDeck,
       );
-
-      await Printing.sharePdf(bytes: await pdf.save(), filename: 'metadex_card_social.pdf');
     } catch (e) {
-      debugPrint('Erro ao exportar imagem do viewport: $e');
+      debugPrint('Erro ao exportar infográfico visual em PDF: $e');
     }
   }
 
@@ -86,10 +67,10 @@ class _TournamentEditorScreenState extends State<TournamentEditorScreen> {
           const SizedBox(width: 12),
           FloatingActionButton.extended(
             heroTag: 'btn_pdf_card',
-            onPressed: _exportViewportSnapshotAsPdf,
+            onPressed: () => _exportVisualInfographicPdf(vm),
             icon: const Icon(Icons.download, color: Colors.black),
             label: const Text(
-              'Exportar Gráfico',
+              'Exportar Infográfico',
               style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
             ),
             backgroundColor: const Color(0xFFFF7A00),
@@ -161,23 +142,36 @@ class _EditorPanelState extends State<_EditorPanel> with SingleTickerProviderSta
     return Column(
       children: [
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           color: const Color(0xFF161616),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Expanded(
+              Expanded(
                 child: Row(
                   children: [
-                    Icon(Icons.shield_outlined, color: Color(0xFFFF7A00), size: 20),
-                    SizedBox(width: 8),
-                    Flexible(
+                    IconButton(
+                      icon: const Icon(Icons.home_outlined, color: Color(0xFFFF7A00), size: 20),
+                      tooltip: 'Voltar ao Menu Inicial',
+                      visualDensity: VisualDensity.compact,
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                      onPressed: () {
+                        vm.saveCurrentTournament();
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => const StartMenuScreen()),
+                        );
+                      },
+                    ),
+                    const SizedBox(width: 8),
+                    const Flexible(
                       child: Text(
                         'PAINEL DE COMANDO',
                         style: TextStyle(
                           fontWeight: FontWeight.w900,
-                          letterSpacing: 1.2,
-                          fontSize: 13,
+                          letterSpacing: 1.1,
+                          fontSize: 12,
                           color: Colors.white,
                         ),
                         maxLines: 1,
@@ -187,18 +181,52 @@ class _EditorPanelState extends State<_EditorPanel> with SingleTickerProviderSta
                   ],
                 ),
               ),
-              if (pendingCuration > 0)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: Colors.redAccent,
-                    borderRadius: BorderRadius.circular(10),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (pendingCuration > 0)
+                    Container(
+                      margin: const EdgeInsets.only(right: 6),
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: Colors.redAccent,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        '$pendingCuration Juiz',
+                        style: const TextStyle(
+                          fontSize: 9.5,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF00C853),
+                      foregroundColor: Colors.black,
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    onPressed: () {
+                      context.read<TournamentEditorViewModel>().saveCurrentTournament();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Torneio e decklists salvos com sucesso!'),
+                          backgroundColor: Color(0xFF009E73),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.save, size: 14),
+                    label: const Text(
+                      'SALVAR',
+                      style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.w900),
+                    ),
                   ),
-                  child: Text(
-                    '$pendingCuration alerta(s) Juiz',
-                    style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white),
-                  ),
-                ),
+                ],
+              ),
             ],
           ),
         ),
@@ -232,23 +260,55 @@ class _EditorPanelState extends State<_EditorPanel> with SingleTickerProviderSta
   }
 }
 
-class _GeneralTab extends StatelessWidget {
+class _GeneralTab extends StatefulWidget {
   const _GeneralTab();
 
   @override
+  State<_GeneralTab> createState() => _GeneralTabState();
+}
+
+class _GeneralTabState extends State<_GeneralTab> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final viewModel = context.watch<TournamentEditorViewModel>();
+    final gen = viewModel.formResetGeneration;
 
     return ListView(
       padding: const EdgeInsets.all(20),
       children: [
+        if (viewModel.saveStatusMessage != null)
+          Container(
+            margin: const EdgeInsets.only(bottom: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: const Color(0xFF0E2F20),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: const Color(0xFF00E676)),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.check_circle, color: Color(0xFF00E676), size: 16),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    viewModel.saveStatusMessage!,
+                    style: const TextStyle(fontSize: 11, color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ),
         const Text(
           'CONFIGURAÇÃO DO TORNEIO & LOJA (TENANT)',
           style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Color(0xFFFFA24D)),
         ),
         const SizedBox(height: 12),
         TextFormField(
-          key: ValueKey('trn_name_${viewModel.tournamentName}'),
+          key: ValueKey('trn_name_$gen'),
           initialValue: viewModel.tournamentName,
           onChanged: (val) => context.read<TournamentEditorViewModel>().updateTournamentName(val),
           decoration: const InputDecoration(
@@ -265,7 +325,7 @@ class _GeneralTab extends StatelessWidget {
             Expanded(
               flex: 3,
               child: TextFormField(
-                key: ValueKey('store_${viewModel.storeName}'),
+                key: ValueKey('store_$gen'),
                 initialValue: viewModel.storeName,
                 onChanged: (val) =>
                     context.read<TournamentEditorViewModel>().updateStoreInfo(nome: val),
@@ -282,7 +342,7 @@ class _GeneralTab extends StatelessWidget {
             Expanded(
               flex: 2,
               child: TextFormField(
-                key: ValueKey('city_${viewModel.storeCity}'),
+                key: ValueKey('city_$gen'),
                 initialValue: viewModel.storeCity,
                 onChanged: (val) =>
                     context.read<TournamentEditorViewModel>().updateStoreInfo(cidade: val),
@@ -306,15 +366,25 @@ class _GeneralTab extends StatelessWidget {
                 isExpanded: true,
                 initialValue: viewModel.topCut,
                 decoration: const InputDecoration(
-                  labelText: 'Corte (Top Cut)',
+                  labelText: 'Modo / Corte (Top Cut)',
                   border: OutlineInputBorder(),
                   isDense: true,
                   filled: true,
                   fillColor: Color(0xFF1A1A1A),
                 ),
                 items: const [
-                  DropdownMenuItem(value: TopCut.top4, child: Text('Top 4', overflow: TextOverflow.ellipsis)),
-                  DropdownMenuItem(value: TopCut.top8, child: Text('Top 8', overflow: TextOverflow.ellipsis)),
+                  DropdownMenuItem(
+                    value: TopCut.none,
+                    child: Text('Sem Corte / Suíço (Challenge)', overflow: TextOverflow.ellipsis),
+                  ),
+                  DropdownMenuItem(
+                    value: TopCut.top4,
+                    child: Text('Top 4', overflow: TextOverflow.ellipsis),
+                  ),
+                  DropdownMenuItem(
+                    value: TopCut.top8,
+                    child: Text('Top 8 (League Cup)', overflow: TextOverflow.ellipsis),
+                  ),
                 ],
                 onChanged: (val) {
                   if (val != null) context.read<TournamentEditorViewModel>().updateTopCut(val);
@@ -328,7 +398,7 @@ class _GeneralTab extends StatelessWidget {
                 isExpanded: true,
                 initialValue: viewModel.formato.id,
                 decoration: const InputDecoration(
-                  labelText: 'Formato (RN-01)',
+                  labelText: 'Formato Vigente (RN-01)',
                   border: OutlineInputBorder(),
                   isDense: true,
                   filled: true,
@@ -336,19 +406,25 @@ class _GeneralTab extends StatelessWidget {
                 ),
                 items: const [
                   DropdownMenuItem(
-                    value: 'fmt_std_ghi',
-                    child: Text('Standard (G-H-I)', overflow: TextOverflow.ellipsis),
+                    value: 'fmt_std_hij',
+                    child: Text('Standard (H-I-J) [Atual]', overflow: TextOverflow.ellipsis),
                   ),
                   DropdownMenuItem(
-                    value: 'fmt_std_fgh',
-                    child: Text('Standard (F-G-H)', overflow: TextOverflow.ellipsis),
+                    value: 'fmt_std_ghi',
+                    child: Text('Standard Anterior (G-H-I)', overflow: TextOverflow.ellipsis),
+                  ),
+                  DropdownMenuItem(
+                    value: 'fmt_expanded',
+                    child: Text('Expanded (F-G-H-I-J)', overflow: TextOverflow.ellipsis),
                   ),
                 ],
                 onChanged: (val) {
-                  if (val == 'fmt_std_ghi') {
+                  if (val == 'fmt_std_hij') {
                     context.read<TournamentEditorViewModel>().updateFormato(Formato.standardAtual());
-                  } else if (val == 'fmt_std_fgh') {
-                    context.read<TournamentEditorViewModel>().updateFormato(Formato.standardFGH());
+                  } else if (val == 'fmt_std_ghi') {
+                    context.read<TournamentEditorViewModel>().updateFormato(Formato.standardGHI());
+                  } else if (val == 'fmt_expanded') {
+                    context.read<TournamentEditorViewModel>().updateFormato(Formato.expanded());
                   }
                 },
               ),
@@ -423,7 +499,33 @@ class _GeneralTab extends StatelessWidget {
             }
           },
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 14),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFFFF7A00),
+              foregroundColor: Colors.black,
+              padding: const EdgeInsets.symmetric(vertical: 12),
+            ),
+            onPressed: () {
+              context.read<TournamentEditorViewModel>().saveCurrentTournament();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Configurações e torneio salvos com sucesso!'),
+                  backgroundColor: Color(0xFF009E73),
+                  duration: Duration(seconds: 2),
+                ),
+              );
+            },
+            icon: const Icon(Icons.save_alt, size: 18),
+            label: const Text(
+              'SALVAR CONFIGURAÇÕES & TORNEIO',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+            ),
+          ),
+        ),
+        const SizedBox(height: 18),
         Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
@@ -477,9 +579,12 @@ class _ImportTomTab extends StatefulWidget {
   State<_ImportTomTab> createState() => _ImportTomTabState();
 }
 
-class _ImportTomTabState extends State<_ImportTomTab> {
+class _ImportTomTabState extends State<_ImportTomTab> with AutomaticKeepAliveClientMixin {
   final TextEditingController _tdfController = TextEditingController();
   final TextEditingController _pdfStandingsController = TextEditingController();
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void dispose() {
@@ -490,6 +595,7 @@ class _ImportTomTabState extends State<_ImportTomTab> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final vm = context.watch<TournamentEditorViewModel>();
 
     return ListView(
@@ -598,29 +704,66 @@ class _ImportTomTabState extends State<_ImportTomTab> {
   }
 }
 
-class _PlayersTab extends StatelessWidget {
+class _PlayersTab extends StatefulWidget {
   const _PlayersTab();
 
   @override
+  State<_PlayersTab> createState() => _PlayersTabState();
+}
+
+class _PlayersTabState extends State<_PlayersTab> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final viewModel = context.watch<TournamentEditorViewModel>();
+    final gen = viewModel.formResetGeneration;
+
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-          child: TextField(
-            maxLines: 2,
-            onChanged: (val) {
-              context.read<TournamentEditorViewModel>().parseTomStandings(val);
-            },
-            decoration: const InputDecoration(
-              labelText: 'Importação Rápida de Standings (PDF TOM)',
-              hintText: 'Cole as linhas da tabela do PDF aqui...',
-              isDense: true,
-              border: OutlineInputBorder(),
-              filled: true,
-              fillColor: Color(0xFF1A1A1A),
-            ),
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 6),
+          child: Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: () {
+                    context.read<TournamentEditorViewModel>().addManualPlayer();
+                  },
+                  icon: const Icon(Icons.person_add_alt_1, color: Color(0xFFFF7A00), size: 16),
+                  label: const Text(
+                    '+ Adicionar Jogador',
+                    style: TextStyle(fontSize: 11, color: Colors.white),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFFF7A00),
+                    foregroundColor: Colors.black,
+                  ),
+                  onPressed: () {
+                    context.read<TournamentEditorViewModel>().saveCurrentTournament();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Jogadores e decklists salvos!'),
+                        backgroundColor: Color(0xFF009E73),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.save, size: 16),
+                  label: const Text(
+                    'Salvar Jogadores',
+                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         Expanded(
@@ -635,6 +778,7 @@ class _PlayersTab extends StatelessWidget {
                 color: const Color(0xFF1A1A1A),
                 margin: const EdgeInsets.only(bottom: 10),
                 child: ExpansionTile(
+                  key: PageStorageKey('exp_player_${player.id}'),
                   title: Text(
                     '${player.placement}º - ${player.displayName}',
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
@@ -654,7 +798,7 @@ class _PlayersTab extends StatelessWidget {
                   },
                   children: [
                     TextFormField(
-                      key: ValueKey('p_name_${player.id}'),
+                      key: ValueKey('p_name_${player.id}_$gen'),
                       initialValue: player.name,
                       onChanged: (val) {
                         final updated = player.copyWith(name: val);
@@ -723,7 +867,7 @@ class _PlayersTab extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     TextFormField(
-                      key: ValueKey('p_deck_${player.id}_${player.deckName}'),
+                      key: ValueKey('p_deck_${player.id}_$gen'),
                       initialValue: player.deckName,
                       onChanged: (val) {
                         final updated = player.copyWith(deckName: val);
@@ -737,7 +881,7 @@ class _PlayersTab extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     TextFormField(
-                      key: ValueKey('p_img_${player.id}_${player.deckImagePath}'),
+                      key: ValueKey('p_img_${player.id}_$gen'),
                       initialValue: player.deckImagePath ?? '',
                       onChanged: (val) {
                         final updated = player.copyWith(deckImagePath: val);
@@ -751,7 +895,7 @@ class _PlayersTab extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     TextFormField(
-                      key: ValueKey('p_dl_${player.id}_v${player.decklist?.version ?? 1}'),
+                      key: ValueKey('p_dl_${player.id}_$gen'),
                       initialValue: player.decklist?.rawText ?? '',
                       maxLines: 4,
                       onChanged: (val) {
@@ -774,11 +918,20 @@ class _PlayersTab extends StatelessWidget {
   }
 }
 
-class _JudgeCurationTab extends StatelessWidget {
+class _JudgeCurationTab extends StatefulWidget {
   const _JudgeCurationTab();
 
   @override
+  State<_JudgeCurationTab> createState() => _JudgeCurationTabState();
+}
+
+class _JudgeCurationTabState extends State<_JudgeCurationTab> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final vm = context.watch<TournamentEditorViewModel>();
 
     return ListView(
@@ -794,7 +947,7 @@ class _JudgeCurationTab extends StatelessWidget {
             Expanded(
               child: OutlinedButton.icon(
                 onPressed: () {
-                  // Simula uma lista ilegal com 5 cópias de Ultra Ball (reimpressões SVI + PAF) e 2 ACE SPECs
+                  // Simula uma lista ilegal com 5 cópias de Ultra Ball (reimpressões SVI + PAF), 2 ACE SPECs e Radiant rotacionado
                   const illegalList = '''Pokémon: 15
 3 Charizard ex OBF 125
 4 Charmander OBF 26
@@ -816,7 +969,9 @@ Trainer: 38
 
 Energy: 6
 6 Basic Fire Energy SVE 2''';
-                  context.read<TournamentEditorViewModel>().importPlayerDecklist(0, illegalList);
+                  context
+                      .read<TournamentEditorViewModel>()
+                      .importPlayerDecklist(0, illegalList, isBulkAction: true);
                 },
                 icon: const Icon(Icons.bug_report, color: Colors.redAccent, size: 16),
                 label: const Text('Testar Deck Ilegal (1º)', style: TextStyle(fontSize: 11)),
@@ -992,7 +1147,7 @@ class _Viewport extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      '${viewModel.storeName} (${viewModel.storeCity}-${viewModel.storeUf}) • Formato ${viewModel.formato.nome} • ${viewModel.players.length} Jogadores',
+                      '${viewModel.storeName} (${viewModel.storeCity}-${viewModel.storeUf}) • ${viewModel.formato.nome} • ${viewModel.currentTournament.topCutLabel} • ${viewModel.players.length} Jogadores',
                       style: const TextStyle(fontSize: 13, color: Color(0xFFFFA24D)),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -1085,13 +1240,14 @@ class _Viewport extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Coluna Esquerda: Pódio Top Cut interativo
+                  // Coluna Esquerda: Pódio Top Cut / Suíço interativo
                   Expanded(
                     flex: 5,
                     child: SingleChildScrollView(
                       padding: const EdgeInsets.only(right: 12),
                       child: PodiumWidget(
                         players: viewModel.players,
+                        topCut: viewModel.topCut,
                         isTop8: viewModel.topCut == TopCut.top8,
                         selectedPlayerIndex: viewModel.selectedPlayerIndex,
                         onSelectPlayer: (idx) {
